@@ -1,0 +1,80 @@
+@import '../../../../assets/styles/main';
+@import '../../style.scss';
+
+.WeightDrawer {
+	.input-weight {
+		@include font(30px, bold);
+		color: $color-dark;
+	}
+
+	.btn-input-texcode {
+		width: 100%;
+	}
+}
+
+.TextcodeModal {
+	.textcode-numbers {
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		column-gap: 10px;
+		row-gap: 10px;
+		grid-template-areas:
+			'input input btn-clear'
+			'number-7 number-8 number-9'
+			'number-4 number-5 number-6'
+			'number-1 number-2 number-3'
+			'number-0 number-0 number-0';
+
+		.input {
+			text-align: center;
+			@include font(40px, bold);
+			color: $color-dark;
+			grid-area: input;
+		}
+
+		.number-9 {
+			grid-area: number-9;
+		}
+
+		.number-8 {
+			grid-area: number-8;
+		}
+
+		.number-7 {
+			grid-area: number-7;
+		}
+
+		.number-6 {
+			grid-area: number-6;
+		}
+
+		.number-5 {
+			grid-area: number-5;
+		}
+
+		.number-4 {
+			grid-area: number-4;
+		}
+
+		.number-3 {
+			grid-area: number-3;
+		}
+
+		.number-2 {
+			grid-area: number-2;
+		}
+
+		.number-1 {
+			grid-area: number-1;
+		}
+
+		.number-0 {
+			grid-area: number-0;
+		}
+	}
+
+	.custom-footer {
+		margin-top: 30px !important;
+	}
+}

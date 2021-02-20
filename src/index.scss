@@ -1,0 +1,85 @@
+@import '~antd/dist/antd.css';
+@import './assets/styles/main';
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap');
+
+html,
+body {
+	overflow-x: hidden;
+}
+
+body {
+	background-color: #fff;
+	font-family: $font-primary;
+	color: $color-dark;
+
+	@include flex(center, center);
+}
+
+#root {
+	width: 1366px;
+	height: 768px;
+}
+
+.ml-10 {
+	margin-left: 10px;
+}
+
+.mr-10 {
+	margin-right: 10px;
+}
+
+.ant-modal-root {
+	.ant-modal {
+		margin-top: 25px;
+	}
+
+	.ant-modal-header {
+		.ant-modal-title {
+			@include font(25px, bold);
+		}
+	}
+
+	.ant-modal.modal-large {
+		width: 100% !important;
+		min-width: 350px !important;
+		max-width: 1100px !important;
+
+		.ant-modal-content {
+			margin: 25px;
+			border-radius: 10px;
+			max-height: 85vh;
+			overflow: hidden;
+
+			.ant-modal-body {
+				overflow-y: auto;
+				max-height: 70vh;
+			}
+		}
+	}
+}
+
+.ant-modal {
+	.custom-footer {
+		margin-top: 25px;
+		display: flex;
+		align-items: center !important;
+		justify-content: center !important;
+
+		.btn-cancel {
+			margin-right: 20px;
+		}
+	}
+}
+
+.quantity-container {
+	@include flex();
+
+	& > *:first-child {
+		margin-right: 8px;
+	}
+
+	select {
+		width: 80px;
+		font-size: 12px;
+	}
+}

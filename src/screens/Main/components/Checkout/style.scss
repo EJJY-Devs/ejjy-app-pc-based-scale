@@ -1,0 +1,19 @@
+@import '../../../../assets/styles/main';
+
+.PaymentModal {
+	.form {
+		.quantity-label {
+			font-size: 20px;
+
+			&.space-top {
+				margin-top: 25px;
+			}
+		}
+
+		.amount-due-input {
+			text-align: center;
+			@include font(80px, bold);
+			color: $color-dark;
+		}
+	}
+}
