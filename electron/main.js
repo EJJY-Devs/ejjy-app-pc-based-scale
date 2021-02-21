@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
+const isDev = require('electron-is-dev');
 const { Menu, MenuItem } = require('electron');
 
 let mainWindow;
@@ -10,8 +11,10 @@ function createWindow() {
 		height: 600,
 		show: false,
 	});
-	// const startURL = `file://${path.join(__dirname, '../build/index.html')}`;
-	const startURL = 'http://localhost:3004'; // DEV
+
+	const startURL = isDev
+		? 'http://localhost:3005'
+		: `file://${path.join(__dirname, '../build/index.html')}`;
 	mainWindow.loadURL(startURL);
 
 	mainWindow.once('ready-to-show', () => {
@@ -23,22 +26,17 @@ function createWindow() {
 		mainWindow = null;
 	});
 
-	// Set menu
+	// Remove menu
+	// Remove menu
 	const menu = new Menu();
-	menu.append(
-		new MenuItem({
-			label: 'Electron',
-			submenu: [
-				{
-					role: 'help',
-					accelerator: process.platform === 'darwin' ? 'Alt+Cmd+I' : 'Alt+Shift+I',
-					click: () => {
-						console.log('Electron rocks!');
-					},
-				},
-			],
-		}),
-	);
+	if (isDev) {
+		menu.append(
+			new MenuItem({
+				label: 'Dev',
+				submenu: [{ role: 'toggleDevTools' }, { role: 'forceReload' }],
+			}),
+		);
+	}
 
 	Menu.setApplicationMenu(menu);
 }
