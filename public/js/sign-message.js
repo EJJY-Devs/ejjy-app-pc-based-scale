@@ -38,34 +38,34 @@
  *
  *     4. Remove or comment out any other references to "setSignaturePromise"
  */
-var privateKey = "-----BEGIN PRIVATE KEY-----\n" +
-   "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC0z9FeMynsC8+u\n" +
-   "dvX+LciZxnh5uRj4C9S6tNeeAlIGCfQYk0zUcNFCoCkTknNQd/YEiawDLNbxBqut\n" +
-   "bMDZ1aarys1a0lYmUeVLCIqvzBkPJTSQsCopQQ9V8WuT252zzNzs68dVGNdCJd5J\n" +
-   "NRQykpwexmnjPPv0mvj7i8XgG379TyW6P+WWV5okeUkXJ9eJS2ouDYdR2SM9BoVW\n" +
-   "+FgxDu6BmXhozW5EfsnajFp7HL8kQClI0QOc79yuKl3492rH6bzFsFn2lfwWy9ic\n" +
-   "7cP8EpCTeFp1tFaD+vxBhPZkeTQ1HKx6hQ5zeHIB5ySJJZ7af2W8r4eTGYzbdRW2\n" +
-   "4DDHCPhZAgMBAAECggEATvofR3gtrY8TLe+ET3wMDS8l3HU/NMlmKA9pxvjYfw7F\n" +
-   "8h4VBw4oOWPfzU7A07syWJUR72kckbcKMfw42G18GbnBrRQG0UIgV3/ppBQQNg9Y\n" +
-   "QILSR6bFXhLPnIvm/GxVa58pOEBbdec4it2Gbvie/MpJ4hn3K8atTqKk0djwxQ+b\n" +
-   "QNBWtVgTkyIqMpUTFDi5ECiVXaGWZ5AOVK2TzlLRNQ5Y7US8lmGxVWzt0GONjXSE\n" +
-   "iO/eBk8A7wI3zknMx5o1uZa/hFCPQH33uKeuqU5rmphi3zS0BY7iGY9EoKu/o+BO\n" +
-   "HPwLQJ3wCDA3O9APZ3gmmbHFPMFPr/mVGeAeGP/BAQKBgQDaPELRriUaanWrZpgT\n" +
-   "VnKKrRSqPED3anAVgmDfzTQwuR/3oD506F3AMBzloAo3y9BXmDfe8qLn6kgdZQKy\n" +
-   "SFNLz888at96oi+2mEKPpvssqiwE6F3OtEM6yv4DP9KJHaHmXaWv+/sjwjzpFNjs\n" +
-   "wGThBxFvrTWRJqBYsM1XNJJ2EQKBgQDUGbTSwHKqRCYWhQ1GPCZKE98l5UtMKvUb\n" +
-   "hyWWOXoyoeYbJEMfG1ynX4JeXIkl6YtBjYCqszv9PjHa1rowTZaAPJ0V70zyhTcF\n" +
-   "t581ii9LpiejIGrELHvJnW87QmjjStkjwGIqgKLp7Qe6CDjHI9HP1NM0uav/IQLW\n" +
-   "pB6wyEz1yQKBgQCuxPut+Ax2rzM05KB9PAnWzO1zt3U/rtm8IAF8uVVGf7r+EDJ0\n" +
-   "ZXJO6zj5G8WTEYHz5E86GI4ltBW0lKQoKouqdu27sMrv5trXG/CSImOcTVubQot9\n" +
-   "chc1CkOKTp5IeJajafO6j817wZ4N+0gNsbYYEBUCnm/7ojdfT5ficpOoQQKBgQDB\n" +
-   "PgKPmaNfGeQR1Ht5qEfCakR/RF/ML79Nq15FdmytQPBjfjBhYQ6Tt+MRkgGqtxOX\n" +
-   "UBMQc2iOnGHT3puYcrhScec1GufidhjhbqDxqMrag7HNYDWmMlk+IeA7/4+Mtp8L\n" +
-   "gbZuvvCvbLQDfIYueaYpUuBzQ08/jZYGdVU4/+WOcQKBgAGUN0kIB6EM1K/iZ0TN\n" +
-   "jlt8P5UEV3ZCyATWFiGZRhhE2WAh8gv1jx4J26pcUs1n8sd2a1h6ZuBSqsyIlNSp\n" +
-   "xtKsm3bqQFDHRrPcsBX4nanrw9DzkpH1k/I3WMSdGqkDAR3DtL7yXTJXJo2Sbrp5\n" +
-   "EjzSn7DcDE1tL2En/tSVXeUY\n" +
-   "-----END PRIVATE KEY-----";
+var privateKey = "-----BEGIN PRIVATE KEY-----\n" + 
+"MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDHXB4SiY+0iLgR\n" + 
+"MFapxKPOiVRBW2w7PWanwr3W1VIiZmyVcbu3SamVVqtzik3DujWEPiGafutqDcmE\n" + 
+"s4muSRnThZBTMqlGuRSe5V/bqHGOqgqNI/eBSTbaPfG5gxEN8E31C/Luqz1epH0l\n" + 
+"PsoJx7duDFmlR2g58rY3qxxmMKQ2wfXOozWyj9oMSQAXYd7YGkyD3GitZuYMDRB7\n" + 
+"YcXd+yUJtPLMBr2qrvLdHD/IOFpDsXSX/sPiEFGD/dYauO/BRybs4toLyEBw/xX9\n" + 
+"jWKzb4zxPFBnkExlH3kJLDerIY374zDaW84oET9wqZOzrjGgyfrATroQawkmTEY5\n" + 
+"pnLcCr6PAgMBAAECggEAMZ+LWL/nBmAVuSmYGM/6mjlywIX6LdC90bpWuLgGpstp\n" + 
+"8dUKjbgHP0YAjVT6wGKEWbOBd8xp2s8tvxtVhQ1rIUyYvSzaF+GP8XFU5/9IrONE\n" + 
+"lxdBz2ui/LX4il3Gi/qp3PopcSEsuHcnM3MqpT6SORFX6x0YI3x3wOmVuxYWeg5i\n" + 
+"gbJe5ApfiGT9vjQx1voL+lSqB/7zZyXNFWZV38Xj29poTvE8nUOdN0qkMtryQ++I\n" + 
+"erDzpZmPKSldlArrk01/Uxd7WtufgTn0pObFFI91/G8H08LmaSFbpTVV0lV1PaRt\n" + 
+"1w+bSfHSdXVlh37dLFw6iZU4CZtf3OsKzmW4qlVX2QKBgQD7GbUkEwbKlcy1QFm/\n" + 
+"nFK/n0FFxRORS/b2HwcRl03Sz9UUJOIKEW5coy4lnDQ6AZJm8lJEMnqvgbe2adxT\n" + 
+"Kr817EEMOm8YlkCYWLCG+ifxBDVRHB9b9nXGoFnLQqNkUIxtbYtJat/ayKjYh9c0\n" + 
+"5nw5DKPtdhlrwt4UwBKz0vKWvQKBgQDLP/TKuz6+udjtDjWVfknJjmTtUjzmRSDh\n" + 
+"ZFnmSbmlXyQlwJ7IzscNepprYB1XwCetjiy0kAnP2j+dgs+Hmlvloak4QhJLyzds\n" + 
+"UjeEXw1ZG1JJxub+tmIv+dtmPvr92lQ2qrNjBZVB1D5jnyVU90vP9DtmicmgpeBJ\n" + 
+"JhUCL16VOwKBgBEF5iTi8VPsoesryKnX1DhPeKJdQP1ZtA1tfxIvOsRu+JgcBAMA\n" + 
+"uYWoPmmoVFYWYzF9fhxHe8/IMIc6WAh/XmUudh55G60ECq8JXDZaYTjSuzabfHjE\n" + 
+"lal4l33TL7aOS2bjxUyd5T0021WKqAlbEtLfS4G+vuxyUpH/j4UHaRDVAoGARBrC\n" + 
+"I8xqUe5kScqhGd6fSvJzzzHnRiGTyvKdTRUXJ9qheiT5D8B54oJai/BA5M52fSlO\n" + 
+"wZIiN4uiFV1nvMB0WpW45ij9iHgnshw6jhhrmJgXErGbZW4nqHvIkJI5+CXYYhkA\n" + 
+"0wVj5hMAdNE26SmUNbJY1RsGfNYYOWqRT5If11ECgYEAkx/dZN9+lPqec/mvZ3pD\n" + 
+"/E8jbhGG3G1cg0Er9uAziQFK7yjT3/a1ZqOqyFVaumy/h95nNe8heri2A8fLCF7P\n" + 
+"34oBls+A5w3QFuiQEV6J3tWYXiV0+6dQ7oH7stJrwkVTJ9B27zPlb6SL8zOW4XWr\n" + 
+"bGCgokcPTXoY67gAObx53Vs=\n" + 
+"-----END PRIVATE KEY-----";
 
 qz.security.setSignatureAlgorithm("SHA512"); // Since 2.1
 qz.security.setSignaturePromise(function(toSign) {
