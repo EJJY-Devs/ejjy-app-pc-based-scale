@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container } from '../../components';
+import { usePc } from '../../hooks/usePc';
 import { PaymentModal } from './components/Checkout/PaymentModal';
 import { MainButtons } from './components/MainButtons/MainButtons';
 import { ProductTable } from './components/ProductTable/ProductTable';
@@ -11,6 +12,18 @@ const Main = () => {
 	// STATES
 	const [paymentModalVisible, setPaymentModalVisible] = useState(false);
 	const [drawerVisible, setDrawerVisible] = useState(false);
+
+	// CUSTOM HOOKS
+	const {weight, getWeight} = usePc();
+	
+	// METHODS
+	useEffect(() => {
+		getWeight();
+	}, []);
+
+	useEffect(() => {
+		setDrawerVisible(weight > 0);
+	}, [weight]);
 
 	return (
 		<Container>

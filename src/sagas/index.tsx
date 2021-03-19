@@ -3,6 +3,7 @@ import authSagas from './auth';
 import branchMachinesSagas from './branch-machines';
 import branchProductsSagas from './branch-products';
 import cashBreakdownsSagas from './cash-breakdowns';
+import pcSagas from './pc';
 import reportsSagas from './reports';
 import sessionsSagas from './session';
 import siteSettingsSagas from './site-settings';
@@ -15,6 +16,7 @@ export default function* rootSaga() {
 		...branchMachinesSagas,
 		...branchProductsSagas,
 		...cashBreakdownsSagas,
+		...pcSagas,
 		...reportsSagas,
 		...sessionsSagas,
 		...siteSettingsSagas,

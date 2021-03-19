@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Label } from '../../../../components/elements';
 import ControlledInput from '../../../../components/elements/ControlledInput/ControlledInput';
 import { TableWeightProducts } from '../../../../components/TableWeightProducts/TableWeightProducts';
+import { usePc } from '../../../../hooks/usePc';
 import { MainButton } from '../MainButtons/MainButton';
 import './style.scss';
 import { TextcodeModal } from './TextcodeModal';
@@ -52,10 +53,12 @@ const assortedDataSource = [
 
 export const WeightDrawer = ({ visible, onClose }) => {
 	// STATES
-	const [weight, setWeight] = useState('1.500');
 	const [selectedProduct, setSelectedProduct] = useState(null);
 	const [dataSource, setDataSource] = useState([]);
 	const [textcodeModalVisible, setTextcodeModalVisible] = useState(false);
+
+	// CUSTOM HOOKS
+	const {weight} = usePc();
 
 	return (
 		<Drawer
@@ -70,8 +73,8 @@ export const WeightDrawer = ({ visible, onClose }) => {
 			<Label id="weight" label="Weight" spacing />
 			<ControlledInput
 				classNames="input-weight"
-				value={weight}
-				onChange={(value) => setWeight(value)}
+				value={weight?.toFixed(3)}
+				onChange={() => null}
 				disabled
 			/>
 

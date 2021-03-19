@@ -3,7 +3,8 @@ const path = require('path');
 const { Menu, MenuItem } = require('electron');
 require('../public/js/server');
 
-const isDev = process.env.APP_DEV ? process.env.APP_DEV.trim() == 'true' : false;
+let isDev = process.env.APP_DEV ? process.env.APP_DEV.trim() == 'true' : false;
+isDev = true;
 let mainWindow;
 
 function createWindow() {
@@ -16,7 +17,7 @@ function createWindow() {
 	});
 
 	const startURL = isDev
-		? 'http://localhost:3005'
+		? 'http://localhost:3000'
 		: `file://${path.join(__dirname, '../build/index.html')}`;
 	mainWindow.loadURL(startURL);
 
