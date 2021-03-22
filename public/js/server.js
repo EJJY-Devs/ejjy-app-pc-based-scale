@@ -4,6 +4,8 @@
   const express = require('express');
   const cors = require('cors')
   const app = express();
+  const fs = require('fs');
+  const path = require('path');
 
   app.use(cors())
 
@@ -11,14 +13,16 @@
     console.log(`Express server listening on port ${server.address().port}`);
   });
 
+  var scaleAndPrinterPath = path.join(__dirname, '..', 'publish', 'Scale and Printer.exe');
+
   app.get("/weight", cors(),(req, res, next) => {
-    var spawn = require('child_process').spawn;
-    var posProc = spawn("../publish/Scale and Printer.exe");
+    const spawn = require('child_process').spawn;
+    const posProc = spawn(scaleAndPrinterPath);
     posProc.stdin.write('getWeight\r\n');
     posProc.stdout.once('data', function(data) {
-      let weight = parseFloat(data.toString());
-      weight = Math.floor((Math.random() * 1) + 0);
-      res.json(weight);
+      const arrData = data.toString().split("\r\n");
+      const weight = parseFloat(arrData.length > 0 ? arrData[0] : '0');
+      res.json({weight, others: arrData});
     })
   });
   
