@@ -1,19 +1,22 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const { Menu, MenuItem } = require('electron');
-require('../public/js/server');
 
 let isDev = process.env.APP_DEV ? process.env.APP_DEV.trim() == 'true' : false;
 isDev = true;
-let mainWindow;
 
+if(isDev) {
+	require('../public/js/server');
+} else {
+	require('../build/js/server');
+}
+
+let mainWindow;
 function createWindow() {
 	mainWindow = new BrowserWindow({
 		width: 800,
 		height: 600,
 		show: false,
-		// frame: false,
-		fullscreen: !isDev, // Auto full screen only in production
 	});
 
 	const startURL = isDev
@@ -33,14 +36,14 @@ function createWindow() {
 	// Remove menu
 	const menu = new Menu();
 
-	if (isDev) {
+	// if (isDev) {
 		menu.append(
 			new MenuItem({
 				label: 'Dev',
 				submenu: [{ role: 'toggleDevTools' }, { role: 'forceReload' }],
 			}),
 		);
-	}
+	// }
 
 	Menu.setApplicationMenu(menu);
 }
