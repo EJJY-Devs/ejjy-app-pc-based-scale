@@ -2,8 +2,8 @@ import React from 'react';
 import { ButtonIcon } from '../elements';
 
 interface Props {
-	tooltip: string;
 	onClick: any;
+	tooltip?: string;
 	classNames?: any;
 }
 

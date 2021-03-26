@@ -1,7 +1,10 @@
 import axios from 'axios';
 import { IGetRequest } from '.';
 
+interface IGetShownForScaleList extends IGetRequest {
+	is_shown_in_scale_list: boolean;
+}
+
 export const service = {
-	listByBranch: async (params: IGetRequest) =>
-		axios.get('branches-products/with-branch-manager-details/', { params }),
+	list: async (params: IGetShownForScaleList) => axios.get('branches-products/', { params }),
 };

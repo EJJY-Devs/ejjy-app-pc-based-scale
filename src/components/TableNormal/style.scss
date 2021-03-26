@@ -1,28 +1,18 @@
 @import '../../assets/styles/main';
 
-.TableWeightProducts {
+.TableNormal {
 	width: 100%;
 	overflow-y: auto;
-	position: relative;
-	@include flex(center, center);
-
-	.placeholder {
-		width: 50%;
-		position: absolute;
-		z-index: 2;
-		opacity: 0.2;
-	}
 
 	table {
-		align-self: flex-start;
 		width: 100%;
 
 		thead {
 			th {
-				// position: sticky;
-				// top: 0;
+				position: sticky;
+				top: 0;
 				padding: 25px 15px;
-				@include font(18px, bold);
+				@include font(1rem, bold);
 				color: $color-dark;
 				background-color: $color-main-background;
 			}
@@ -30,21 +20,16 @@
 
 		tbody {
 			tr {
-				border-bottom: 1px solid $color-gray;
-				pointer-events: none;
+				border-bottom: 1px solid #f5f6fa;
+			}
 
-				&.active {
-					background-color: $color-primary-02;
-				}
+			td {
+				@include font(1rem, 600);
+				padding: 10px 15px;
+				color: $color-dark-gray;
 
-				td {
-					@include font(18px, 600);
-					padding: 10px 15px;
-					color: $color-dark-gray;
-
-					a {
-						color: $color-link !important;
-					}
+				a {
+					color: $color-link !important;
 				}
 			}
 		}

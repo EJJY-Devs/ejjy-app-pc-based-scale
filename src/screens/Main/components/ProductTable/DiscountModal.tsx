@@ -1,4 +1,4 @@
-import { Divider, message, Modal, Spin } from 'antd';
+import { Divider, message, Modal } from 'antd';
 import cn from 'classnames';
 import React, { useCallback, useRef, useState } from 'react';
 import KeyboardEventHandler from 'react-keyboard-event-handler';
@@ -8,7 +8,6 @@ import { request } from '../../../../global/types';
 import { useAuth } from '../../../../hooks/useAuth';
 import { useBranchProducts } from '../../../../hooks/useBranchProducts';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
-import { useTransactions } from '../../../../hooks/useTransactions';
 import { numberWithCommas } from '../../../../utils/function';
 import { DiscountForm } from './DiscountForm';
 import './style.scss';
@@ -32,13 +31,7 @@ export const DiscountModal = ({ product, visible, onClose }: Props) => {
 	// CUSTOM HOOKS
 	const { branchProducts } = useBranchProducts();
 	const { validateUser, status: authStatus, errors, reset } = useAuth();
-	const { updateTransaction, status } = useTransactions();
-	const {
-		transactionId,
-		transactionProducts,
-		editProduct,
-		setCurrentTransaction,
-	} = useCurrentTransaction();
+	const { transactionProducts, editProduct } = useCurrentTransaction();
 
 	// METHODS
 	const getInitialPrice = useCallback(() => {
@@ -68,47 +61,6 @@ export const DiscountModal = ({ product, visible, onClose }: Props) => {
 
 			closeModal();
 		};
-
-		if (transactionId) {
-			updateTransaction(
-				{
-					transactionId,
-					products: [
-						...transactionProducts
-							.filter(
-								({ transactionProductId }) => transactionProductId !== product.transactionProductId,
-							)
-							.map((item) => ({
-								transaction_product_id: item.transactionProductId,
-								product_id: item.productId,
-								price_per_piece: item.pricePerPiece,
-								discount_per_piece: item.discountPerPiece,
-								quantity: item.quantity,
-							})),
-						{
-							transaction_product_id: product.transactionProductId,
-							product_id: product.productId,
-							price_per_piece: discount > 0 ? discount : newPricePerPiece,
-							discount_per_piece: newDiscountPerPiece,
-							quantity: product.quantity,
-						},
-					],
-				},
-				({ status, transaction }) => {
-					if (status === request.SUCCESS) {
-						setCurrentTransaction({ transaction, branchProducts });
-						callback();
-					}
-				},
-			);
-		} else {
-			editProduct({
-				id: product.id,
-				pricePerPiece: discount > 0 ? discount : newPricePerPiece,
-				discountPerPiece: newDiscountPerPiece,
-			});
-			callback();
-		}
 	};
 
 	const onSetCustomDiscount = (data) => {
@@ -202,55 +154,53 @@ export const DiscountModal = ({ product, visible, onClose }: Props) => {
 				isDisabled={!visible}
 			/>
 
-			<Spin size="large" spinning={[status, authStatus].includes(request.REQUESTING)}>
-				<button
-					className={cn('other-button btn-no-discount spacing', {
-						disabled: !(product?.discountPerPiece > 0),
-					})}
-					onClick={() => onSelect(0)}
-				>
-					<span>No Discount</span>
-					<span className="shortcut-key position-right text-lg">[F1]</span>
-				</button>
+			<button
+				className={cn('other-button btn-no-discount spacing', {
+					disabled: !(product?.discountPerPiece > 0),
+				})}
+				onClick={() => onSelect(0)}
+			>
+				<span>No Discount</span>
+				<span className="shortcut-key position-right text-lg">[F1]</span>
+			</button>
 
-				<button
-					className={cn('other-button spacing', { disabled: !getDiscount().branchProduct })}
-					onClick={() => onSelect(getDiscount()?.discount1)}
-				>
-					{`₱${numberWithCommas(getDiscount()?.discount1?.toFixed(2) || EMPTY_CELL)}`}
-					<span className="shortcut-key position-right text-lg">[F2]</span>
-				</button>
+			<button
+				className={cn('other-button spacing', { disabled: !getDiscount().branchProduct })}
+				onClick={() => onSelect(getDiscount()?.discount1)}
+			>
+				{`₱${numberWithCommas(getDiscount()?.discount1?.toFixed(2) || EMPTY_CELL)}`}
+				<span className="shortcut-key position-right text-lg">[F2]</span>
+			</button>
 
-				<button
-					className={cn('other-button spacing', { disabled: !getDiscount().branchProduct })}
-					onClick={() => onSelect(getDiscount()?.discount2)}
-				>
-					{`₱${numberWithCommas(getDiscount()?.discount2?.toFixed(2) || EMPTY_CELL)}`}
-					<span className="shortcut-key position-right text-lg">[F3]</span>
-				</button>
+			<button
+				className={cn('other-button spacing', { disabled: !getDiscount().branchProduct })}
+				onClick={() => onSelect(getDiscount()?.discount2)}
+			>
+				{`₱${numberWithCommas(getDiscount()?.discount2?.toFixed(2) || EMPTY_CELL)}`}
+				<span className="shortcut-key position-right text-lg">[F3]</span>
+			</button>
 
-				<button className="other-button" onClick={onOpenCustomDiscount}>
-					Custom
-					<span className="shortcut-key position-right text-lg">[F4]</span>
-				</button>
+			<button className="other-button" onClick={onOpenCustomDiscount}>
+				Custom
+				<span className="shortcut-key position-right text-lg">[F4]</span>
+			</button>
 
-				{isCustomFieldsVisible && (
-					<>
-						<Divider dashed />
+			{isCustomFieldsVisible && (
+				<>
+					<Divider dashed />
 
-						{!!errors.length && errors.map((error) => <FieldError error={error} />)}
-						<DiscountForm
-							minQuantity={Number(product?.data?.cost_per_piece) || 0}
-							maxQuantity={getInitialPrice()}
-							onSubmit={onSetCustomDiscount}
-							usernameRef={usernameRef}
-							passwordRef={passwordRef}
-							discountRef={discountRef}
-							btnSubmitRef={btnSubmitRef}
-						/>
-					</>
-				)}
-			</Spin>
+					{!!errors.length && errors.map((error) => <FieldError error={error} />)}
+					<DiscountForm
+						minQuantity={Number(product?.data?.cost_per_piece) || 0}
+						maxQuantity={getInitialPrice()}
+						onSubmit={onSetCustomDiscount}
+						usernameRef={usernameRef}
+						passwordRef={passwordRef}
+						discountRef={discountRef}
+						btnSubmitRef={btnSubmitRef}
+					/>
+				</>
+			)}
 		</Modal>
 	);
 };

@@ -1,20 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { message, Modal, Spin } from 'antd';
-import React, { useEffect, useRef } from 'react';
+import { Modal, Spin } from 'antd';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Button, ControlledInput, Label } from '../../../../components/elements';
+import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { numberWithCommas } from '../../../../utils/function';
 import './style.scss';
 
 interface Props {
-	amountDue: any;
 	visible: boolean;
-	onSuccess: any;
 	onClose: any;
 }
 
-export const PaymentModal = ({ amountDue, visible, onClose, onSuccess }: Props) => {
+export const PaymentModal = ({ visible, onClose }: Props) => {
 	// STATES
 	const inputRef = useRef(null);
+
+	// CUSTOM HOOKS
+	const { transactionProducts, resetTransaction } = useCurrentTransaction();
 
 	// METHODS
 	useEffect(() => {
@@ -26,8 +28,23 @@ export const PaymentModal = ({ amountDue, visible, onClose, onSuccess }: Props) 
 		}
 	}, [visible, inputRef]);
 
-	const onSubmit = (formData) => {
-		message.success('Paid');
+	const getTotal = useCallback(
+		() =>
+			numberWithCommas(
+				Object.values(transactionProducts)
+					.reduce(
+						(prev: number, { weight, price_per_piece }) =>
+							Number(weight) * Number(price_per_piece) + prev,
+						0,
+					)
+					.toString(),
+			),
+		[transactionProducts],
+	);
+
+	const onSubmit = () => {
+		resetTransaction();
+		onClose();
 	};
 
 	return (
@@ -49,7 +66,7 @@ export const PaymentModal = ({ amountDue, visible, onClose, onSuccess }: Props) 
 					<Label classNames="quantity-label" label="Amount Due (₱)" spacing />
 					<ControlledInput
 						classNames="amount-due-input"
-						value={numberWithCommas(amountDue)}
+						value={getTotal()}
 						onChange={() => null}
 						disabled
 					/>
@@ -57,29 +74,12 @@ export const PaymentModal = ({ amountDue, visible, onClose, onSuccess }: Props) 
 					<div className="custom-footer">
 						<Button
 							type="button"
-							text={
-								<>
-									<span>Cancel</span>
-									<span className="shortcut-key">[ESC]</span>
-								</>
-							}
+							text="Cancel"
 							size="lg"
 							onClick={onClose}
 							classNames="btn-cancel"
-							hasShortcutKey
 						/>
-						<Button
-							type="submit"
-							text={
-								<>
-									<span>Submit</span>
-									<span className="shortcut-key">[ENTER]</span>
-								</>
-							}
-							size="lg"
-							variant="primary"
-							hasShortcutKey
-						/>
+						<Button type="submit" text="Proceed" size="lg" variant="primary" onClick={onSubmit} />
 					</div>
 				</div>
 			</Spin>

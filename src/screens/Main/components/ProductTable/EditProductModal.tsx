@@ -1,10 +1,8 @@
-import { Divider, message, Modal, Spin } from 'antd';
+import { Divider, message, Modal } from 'antd';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { DetailsRow, DetailsSingle } from '../../../../components';
-import { request } from '../../../../global/types';
 import { useBranchProducts } from '../../../../hooks/useBranchProducts';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
-import { useTransactions } from '../../../../hooks/useTransactions';
 import { EditProductForm } from './EditProductForm';
 import './style.scss';
 
@@ -16,13 +14,8 @@ interface Props {
 
 export const EditProductModal = ({ product, visible, onClose }: Props) => {
 	const { branchProducts } = useBranchProducts();
-	const { updateTransaction, status } = useTransactions();
-	const {
-		transactionId,
-		transactionProducts,
-		editProduct,
-		setCurrentTransaction,
-	} = useCurrentTransaction();
+
+	const { transactionProducts, editProduct } = useCurrentTransaction();
 
 	const inputRef = useRef(null);
 
@@ -56,41 +49,6 @@ export const EditProductModal = ({ product, visible, onClose }: Props) => {
 			message.success('Product sucessfully edited.');
 			onClose();
 		};
-
-		if (transactionId) {
-			updateTransaction(
-				{
-					transactionId,
-					products: [
-						...transactionProducts
-							.filter(
-								({ transactionProductId }) => transactionProductId !== product.transactionProductId,
-							)
-							.map((item) => ({
-								transaction_product_id: item.transactionProductId,
-								product_id: item.productId,
-								price_per_piece: item.pricePerPiece,
-								quantity: item.quantity,
-							})),
-						{
-							transaction_product_id: product.transactionProductId,
-							product_id: product.productId,
-							price_per_piece: product.pricePerPiece,
-							quantity,
-						},
-					],
-				},
-				({ status, transaction }) => {
-					if (status === request.SUCCESS) {
-						setCurrentTransaction({ transaction, branchProducts });
-						callback();
-					}
-				},
-			);
-		} else {
-			editProduct({ id: product.id, quantity });
-			callback();
-		}
 	};
 
 	return (
@@ -103,26 +61,24 @@ export const EditProductModal = ({ product, visible, onClose }: Props) => {
 			centered
 			closable
 		>
-			<Spin size="large" spinning={status === request.REQUESTING}>
-				<DetailsRow>
-					<DetailsSingle
-						classNamesLabel="label"
-						classNamesValue="value"
-						label="Product Name:"
-						value={product?.data?.name}
-					/>
-				</DetailsRow>
-
-				<Divider dashed />
-
-				<EditProductForm
-					inputRef={(el) => (inputRef.current = el)}
-					maxQuantity={getMaxQuantity()}
-					unitOfMeasurementType={product?.data?.unit_of_measurement}
-					onSubmit={onSubmit}
-					onClose={onClose}
+			<DetailsRow>
+				<DetailsSingle
+					classNamesLabel="label"
+					classNamesValue="value"
+					label="Product Name:"
+					value={product?.data?.name}
 				/>
-			</Spin>
+			</DetailsRow>
+
+			<Divider dashed />
+
+			<EditProductForm
+				inputRef={(el) => (inputRef.current = el)}
+				maxQuantity={getMaxQuantity()}
+				unitOfMeasurementType={product?.data?.unit_of_measurement}
+				onSubmit={onSubmit}
+				onClose={onClose}
+			/>
 		</Modal>
 	);
 };

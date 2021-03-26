@@ -19,11 +19,11 @@ const initialState = {
 const reducer = handleActions(
 	{
 		[types.ADD_PRODUCT]: (state, { payload }: any) => {
-			return { ...state, products: [payload.product, ...state.products] };
+			return { ...state, products: [payload, ...state.products] };
 		},
 
 		[types.REMOVE_PRODUCT]: (state, { payload }: any) => {
-			return { ...state, products: state.products.filter(({ id }) => id !== payload.id) };
+			return { ...state, products: state.products.filter(({ id }) => id !== payload) };
 		},
 
 		[types.EDIT_PRODUCT]: (state, { payload }: any) => {

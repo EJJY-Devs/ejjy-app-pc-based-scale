@@ -8,5 +8,5 @@ export * from './Details/DetailsRow';
 export * from './Details/DetailsSingle';
 export * from './Icons/Icons';
 export * from './Table/Table';
+export * from './TableNormal/TableNormal';
 export * from './TableProducts/TableProducts';
-export * from './TableWeightProducts/TableWeightProducts';

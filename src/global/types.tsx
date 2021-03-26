@@ -5,12 +5,6 @@ export const request = {
 	ERROR: 3,
 };
 
-export const productNavigation = {
-	RESET: 'reset',
-	NEXT: 'next',
-	PREV: 'prev',
-};
-
 export const userTypes = {
 	ADMIN: 'admin',
 	OFFICE_MANAGER: 'office_manager',
@@ -55,4 +49,11 @@ export const vatTypes = {
 export const unitOfMeasurementTypes = {
 	WEIGHING: 'weighing',
 	NON_WEIGHING: 'non_weighing',
+};
+
+export const productCategoryTypes = {
+	ASSORTED: 'assorted',
+	BABOY: 'baboy',
+	MANOK: 'manok',
+	NONE: 'none',
 };

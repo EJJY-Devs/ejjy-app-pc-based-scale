@@ -6,6 +6,7 @@ export const key = 'PC';
 export const types = {
 	SAVE: `${key}/SAVE`,
 	GET_WEIGHT: `${key}/GET_WEIGHT`,
+	PRINT_PRODUCT: `${key}/PRINT_PRODUCT`,
 };
 
 const initialState = {
@@ -34,6 +35,7 @@ const reducer = handleActions(
 export const actions = {
 	save: createAction(types.SAVE),
 	getWeight: createAction(types.GET_WEIGHT),
+	printProduct: createAction(types.PRINT_PRODUCT),
 };
 
 const selectState = (state: any) => state[key] || initialState;

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { actions, selectors, types } from '../ducks/pc';
 import { request } from '../global/types';
+import { modifiedExtraCallback } from '../utils/function';
 import { useActionDispatch } from './useActionDispatch';
 
 export const usePc = () => {
@@ -12,6 +13,7 @@ export const usePc = () => {
 	const weight = useSelector(selectors.selectWeight());
 
 	const getWeightAction = useActionDispatch(actions.getWeight);
+	const printProductAction = useActionDispatch(actions.printProduct);
 
 	const reset = () => {
 		resetError();
@@ -27,6 +29,14 @@ export const usePc = () => {
 		getWeightAction();
 	};
 
+	const printProduct = (data, extraCallback = null) => {
+		setRecentRequest(types.PRINT_PRODUCT);
+		printProductAction({
+			...data,
+			callback: modifiedExtraCallback(callback, extraCallback),
+		});
+	};
+
 	const callback = ({ status, errors = [] }) => {
 		setStatus(status);
 		setErrors(errors);
@@ -35,6 +45,7 @@ export const usePc = () => {
 	return {
 		weight,
 		getWeight,
+		printProduct,
 		status,
 		errors,
 		recentRequest,

@@ -10,16 +10,16 @@ function* list({ payload }: any) {
 	callback({ status: request.REQUESTING });
 
 	try {
-		const response = yield retry(MAX_RETRY, RETRY_INTERVAL_MS, service.listByBranch, {
+		const response = yield retry(MAX_RETRY, RETRY_INTERVAL_MS, service.list, {
 			page: 1,
 			page_size: MAX_PAGE_SIZE,
-			fields: 'id,product,price_per_piece,product_status',
+			is_shown_in_scale_list: true,
 		});
 
 		yield put(
 			actions.save({
 				type: types.LIST_BRANCH_PRODUCTS,
-				branchProducts: response.data,
+				branchProducts: response.data.results,
 			}),
 		);
 		callback({ status: request.SUCCESS });

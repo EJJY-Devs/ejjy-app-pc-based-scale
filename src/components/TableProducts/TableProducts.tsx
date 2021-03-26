@@ -1,8 +1,7 @@
 import { Spin, Tooltip } from 'antd';
 import cn from 'classnames';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { NO_INDEX_SELECTED, PRODUCT_LENGTH_PER_PAGE, ROW_HEIGHT } from '../../global/constants';
-import { useCurrentTransaction } from '../../hooks/useCurrentTransaction';
 import { calculateTableHeight } from '../../utils/function';
 import './style.scss';
 
@@ -26,7 +25,7 @@ interface Props {
 
 export const TableProducts = ({ columns, data, activeRow, onHover, onExit, loading }: Props) => {
 	// CUSTOM HOOKS
-	const { pageNumber } = useCurrentTransaction();
+	const [pageNumber, setPageNumber] = useState(-1);
 
 	// METHODS
 	const getStyleAlignment = (alignment) =>

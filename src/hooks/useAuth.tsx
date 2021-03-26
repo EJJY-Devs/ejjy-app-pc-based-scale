@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { actions, types } from '../ducks/auth';
+import { useSelector } from 'react-redux';
+import { actions, selectors, types } from '../ducks/auth';
 import { request } from '../global/types';
 import { modifiedExtraCallback } from '../utils/function';
 import { useActionDispatch } from './useActionDispatch';
@@ -9,7 +10,11 @@ export const useAuth = () => {
 	const [errors, setErrors] = useState<any>([]);
 	const [recentRequest, setRecentRequest] = useState<any>();
 
-	const validateUser = useActionDispatch(actions.validateUser);
+	const user = useSelector(selectors.selectUser());
+	const accessToken = useSelector(selectors.selectAccessToken());
+
+	const loginAction = useActionDispatch(actions.login);
+	const validateUserAction = useActionDispatch(actions.validateUser);
 
 	const reset = () => {
 		resetError();
@@ -20,9 +25,13 @@ export const useAuth = () => {
 
 	const resetStatus = () => setStatus(request.NONE);
 
-	const validateUserRequest = (data, extraCallback = null) => {
+	const login = (data) => {
+		loginAction({ ...data, callback });
+	};
+
+	const validateUser = (data, extraCallback = null) => {
 		setRecentRequest(types.VALIDATE_USER);
-		validateUser({ ...data, callback: modifiedExtraCallback(callback, extraCallback) });
+		validateUserAction({ ...data, callback: modifiedExtraCallback(callback, extraCallback) });
 	};
 
 	const callback = ({ status, errors = [] }) => {
@@ -31,7 +40,10 @@ export const useAuth = () => {
 	};
 
 	return {
-		validateUser: validateUserRequest,
+		user,
+		accessToken,
+		login,
+		validateUser,
 		status,
 		errors,
 		recentRequest,

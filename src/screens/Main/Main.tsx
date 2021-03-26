@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Container } from '../../components';
+import { request } from '../../global/types';
+import { useBranchProducts } from '../../hooks/useBranchProducts';
 import { usePc } from '../../hooks/usePc';
 import { PaymentModal } from './components/Checkout/PaymentModal';
 import { MainButtons } from './components/MainButtons/MainButtons';
@@ -14,11 +16,13 @@ const Main = () => {
 	const [drawerVisible, setDrawerVisible] = useState(false);
 
 	// CUSTOM HOOKS
-	const {weight, getWeight} = usePc();
-	
+	const { weight, getWeight } = usePc();
+	const { listBranchProducts, status } = useBranchProducts();
+
 	// METHODS
 	useEffect(() => {
 		getWeight();
+		listBranchProducts();
 	}, []);
 
 	useEffect(() => {
@@ -26,7 +30,7 @@ const Main = () => {
 	}, [weight]);
 
 	return (
-		<Container>
+		<Container loading={status === request.REQUESTING}>
 			<section className="Main">
 				<div className="main-content">
 					<ProductTable isLoading={false} />
@@ -37,12 +41,7 @@ const Main = () => {
 					<WeightDrawer visible={drawerVisible} onClose={() => setDrawerVisible(false)} />
 				</div>
 
-				<PaymentModal
-					amountDue="9999"
-					visible={paymentModalVisible}
-					onSuccess={null}
-					onClose={() => setPaymentModalVisible(false)}
-				/>
+				<PaymentModal visible={paymentModalVisible} onClose={() => setPaymentModalVisible(false)} />
 
 				<h1 className="store-title">EJ &amp; JY WET MARKET AND ENTERPRISES</h1>
 			</section>

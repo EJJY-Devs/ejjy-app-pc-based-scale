@@ -15,6 +15,7 @@ interface Props {
 	autoFocus?: boolean;
 	classNames?: any;
 	ref?: any;
+	step?: string;
 }
 
 const ControlledInput = React.forwardRef<HTMLInputElement, Props>(
@@ -31,6 +32,7 @@ const ControlledInput = React.forwardRef<HTMLInputElement, Props>(
 			disabled,
 			autoFocus,
 			value,
+			step,
 		}: Props,
 		ref,
 	) => (
@@ -50,6 +52,12 @@ const ControlledInput = React.forwardRef<HTMLInputElement, Props>(
 			}}
 			autoFocus={autoFocus}
 			value={value}
+			step={step}
+			onKeyDown={(evt) => {
+				if (type === 'number' && ['e', 'E', '+', '-'].includes(evt.key)) {
+					evt.preventDefault();
+				}
+			}}
 		/>
 	),
 );

@@ -1,9 +1,14 @@
-import { Divider, Drawer, Tabs } from 'antd';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Divider, Drawer, message, Spin, Tabs } from 'antd';
 import { startCase, toLower } from 'lodash';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { AddButtonIcon } from '../../../../components';
 import { Label } from '../../../../components/elements';
 import ControlledInput from '../../../../components/elements/ControlledInput/ControlledInput';
-import { TableWeightProducts } from '../../../../components/TableWeightProducts/TableWeightProducts';
+import { TableNormal } from '../../../../components/TableNormal/TableNormal';
+import { productCategoryTypes, request } from '../../../../global/types';
+import { useBranchProducts } from '../../../../hooks/useBranchProducts';
+import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
 import { MainButton } from '../MainButtons/MainButton';
 import './style.scss';
@@ -15,50 +20,70 @@ const tabs = {
 	ASSORTED: 'ASSORTED',
 };
 
-const columns = [{ name: 'Description' }];
-
-const baboyDataSource = [
-	['Baboy 1'],
-	['Baboy 2'],
-	['Baboy 3'],
-	['Baboy 1'],
-	['Baboy 2'],
-	['Baboy 3'],
-	['Baboy 1'],
-	['Baboy 2'],
-	['Baboy 3'],
-];
-const manokDataSource = [
-	['Manok 1'],
-	['Manok 2'],
-	['Manok 3'],
-	['Manok 1'],
-	['Manok 2'],
-	['Manok 3'],
-	['Manok 1'],
-	['Manok 2'],
-	['Manok 3'],
-];
-const assortedDataSource = [
-	['Assorted 1'],
-	['Assorted 2'],
-	['Assorted 3'],
-	['Assorted 1'],
-	['Assorted 2'],
-	['Assorted 3'],
-	['Assorted 1'],
-	['Assorted 2'],
-	['Assorted 3'],
-];
+const columns = [{ name: 'Description' }, { name: 'Action' }];
 
 export const WeightDrawer = ({ visible, onClose }) => {
 	// STATES
-	const [selectedProduct, setSelectedProduct] = useState(null);
-	const [dataSource, setDataSource] = useState([]);
 	const [textcodeModalVisible, setTextcodeModalVisible] = useState(false);
+	const [baboyDataSource, setBaboyDataSource] = useState([]);
+	const [manokDataSource, setManokDataSource] = useState([]);
+	const [assortedDataSource, setAssortedDataSource] = useState([]);
 
 	// CUSTOM HOOKS
-	const {weight} = usePc();
+	const { weight, printProduct, status } = usePc();
+	const { branchProducts } = useBranchProducts();
+	const { transactionProducts, addProduct } = useCurrentTransaction();
+
+	// METHODS
+	useEffect(() => {
+		const addedProductIds = transactionProducts.map(({ id }) => id);
+		const availableProducts = branchProducts.filter(
+			({ product }) => !addedProductIds.includes(product.id),
+		);
+
+		// TODO: Set proper product category
+		// Filter baboy
+		setBaboyDataSource(getProductsByCategory(availableProducts, productCategoryTypes.BABOY));
+
+		// Filter manok
+		setManokDataSource(getProductsByCategory(availableProducts, productCategoryTypes.MANOK));
+
+		// Filter assorted
+		setAssortedDataSource(getProductsByCategory(availableProducts, productCategoryTypes.ASSORTED));
+	}, [branchProducts, transactionProducts]);
+
+	const onSelectProduct = (product) => {
+		const foundProduct = transactionProducts.find(({ id }) => id === product.id);
+
+		if (!foundProduct) {
+			printProduct(
+				{
+					barcode: product.barcode,
+					weight,
+				},
+				({ status }) => {
+					if (status === request.SUCCESS) {
+						addProduct({ ...product, weight: weight.toFixed(3) });
+						onClose();
+						message.success('Product successfully added.');
+					} else if (status === request.ERROR) {
+						message.error('An error occurred while printing receipt.');
+					}
+				},
+			);
+		} else {
+			message.error('Product already in the list.');
+		}
+	};
+
+	const getProductsByCategory = (products, category) => {
+		return products
+			.filter(({ product }) => product?.product_category === category)
+			.map(({ product }) => [
+				product.name,
+				<AddButtonIcon onClick={() => onSelectProduct(product)} />,
+			]);
+	};
 
 	return (
 		<Drawer
@@ -70,60 +95,44 @@ export const WeightDrawer = ({ visible, onClose }) => {
 			closable={false}
 			maskClosable
 		>
-			<Label id="weight" label="Weight" spacing />
-			<ControlledInput
-				classNames="input-weight"
-				value={weight?.toFixed(3)}
-				onChange={() => null}
-				disabled
-			/>
+			<Spin size="large" spinning={status === request.REQUESTING}>
+				<Label id="weight" label="Weight" spacing />
+				<ControlledInput
+					classNames="input-weight"
+					value={weight?.toFixed(3)}
+					onChange={() => null}
+					disabled
+				/>
 
-			{selectedProduct === null ? (
-				<>
-					<Divider>SELECT PRODUCT</Divider>
+				<Divider>SELECT PRODUCT</Divider>
 
-					<Tabs defaultActiveKey={tabs.BABOY} type="card">
-						<Tabs.TabPane key={tabs.BABOY} tab={startCase(toLower(tabs.BABOY))}>
-							<TableWeightProducts
-								activeRow={-1}
-								columns={columns}
-								data={baboyDataSource}
-								loading={false}
-							/>
-						</Tabs.TabPane>
+				<Tabs defaultActiveKey={tabs.BABOY} type="card">
+					<Tabs.TabPane key={tabs.BABOY} tab={startCase(toLower(tabs.BABOY))}>
+						<TableNormal columns={columns} data={baboyDataSource} />
+					</Tabs.TabPane>
 
-						<Tabs.TabPane key={tabs.MANOK} tab={startCase(toLower(tabs.MANOK))}>
-							<TableWeightProducts
-								activeRow={-1}
-								columns={columns}
-								data={manokDataSource}
-								loading={false}
-							/>
-						</Tabs.TabPane>
+					<Tabs.TabPane key={tabs.MANOK} tab={startCase(toLower(tabs.MANOK))}>
+						<TableNormal columns={columns} data={manokDataSource} />
+					</Tabs.TabPane>
 
-						<Tabs.TabPane key={tabs.ASSORTED} tab={startCase(toLower(tabs.ASSORTED))}>
-							<TableWeightProducts
-								activeRow={-1}
-								columns={columns}
-								data={assortedDataSource}
-								loading={false}
-							/>
-						</Tabs.TabPane>
-					</Tabs>
+					<Tabs.TabPane key={tabs.ASSORTED} tab={startCase(toLower(tabs.ASSORTED))}>
+						<TableNormal columns={columns} data={assortedDataSource} />
+					</Tabs.TabPane>
+				</Tabs>
 
-					<Divider>TEXTCODE</Divider>
-					<MainButton
-						classNames="btn-input-texcode"
-						title="Input Textcode"
-						onClick={() => setTextcodeModalVisible(true)}
-					/>
-				</>
-			) : null}
+				<Divider>TEXTCODE</Divider>
+				<MainButton
+					classNames="btn-input-texcode"
+					title="Input Textcode"
+					onClick={() => setTextcodeModalVisible(true)}
+				/>
 
-			<TextcodeModal
-				visible={textcodeModalVisible}
-				onClose={() => setTextcodeModalVisible(false)}
-			/>
+				<TextcodeModal
+					visible={textcodeModalVisible}
+					onSelectProduct={onSelectProduct}
+					onClose={() => setTextcodeModalVisible(false)}
+				/>
+			</Spin>
 		</Drawer>
 	);
 };
