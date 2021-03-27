@@ -21,7 +21,7 @@ const Main = () => {
 
 	// METHODS
 	useEffect(() => {
-		// getWeight();
+		getWeight();
 		listBranchProducts();
 	}, []);
 
