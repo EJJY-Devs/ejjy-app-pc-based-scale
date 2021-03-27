@@ -20,12 +20,11 @@ function* getWeight() {
 }
 
 function* printProduct({ payload }: any) {
-	const { barcode, weight, callback } = payload;
+	const { name, weight, price, totalPrice, code, branch, callback } = payload;
 	callback({ status: request.REQUESTING });
 
 	try {
-		yield call(service.printProduct, { barcode, weight });
-
+		yield call(service.printProduct, { name, weight, price, totalPrice, code, branch });
 		callback({ status: request.SUCCESS });
 	} catch (e) {
 		callback({ status: request.ERROR, errors: e.errors });

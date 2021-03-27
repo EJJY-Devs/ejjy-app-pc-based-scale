@@ -1,7 +1,7 @@
 import { Spin, Tooltip } from 'antd';
 import cn from 'classnames';
-import React, { ReactNode, useState } from 'react';
-import { NO_INDEX_SELECTED, PRODUCT_LENGTH_PER_PAGE, ROW_HEIGHT } from '../../global/constants';
+import React, { ReactNode } from 'react';
+import { NO_INDEX_SELECTED, ROW_HEIGHT } from '../../global/constants';
 import { calculateTableHeight } from '../../utils/function';
 import './style.scss';
 
@@ -18,15 +18,11 @@ interface Props {
 	columns: Column[];
 	data: any;
 	activeRow?: number;
-	onHover: any;
-	onExit: any;
+	onClick: any;
 	loading?: any;
 }
 
-export const TableProducts = ({ columns, data, activeRow, onHover, onExit, loading }: Props) => {
-	// CUSTOM HOOKS
-	const [pageNumber, setPageNumber] = useState(-1);
-
+export const TableProducts = ({ columns, data, activeRow, onClick, loading }: Props) => {
 	// METHODS
 	const getStyleAlignment = (alignment) =>
 		({
@@ -57,12 +53,11 @@ export const TableProducts = ({ columns, data, activeRow, onHover, onExit, loadi
 						{data?.map((row, index) => (
 							<tr
 								className={cn({
-									active: activeRow === (pageNumber - 1) * PRODUCT_LENGTH_PER_PAGE + index,
+									active: activeRow === index,
 								})}
 								key={`tr-${index}`}
 								style={{ height: `${ROW_HEIGHT}px` }}
-								onMouseEnter={() => onHover(index)}
-								onMouseLeave={() => onExit()}
+								onClick={() => onClick(index)}
 							>
 								{row.map((item, index) => (
 									<td key={`td-${index}`} style={getStyleAlignment(columns?.[index]?.alignment)}>

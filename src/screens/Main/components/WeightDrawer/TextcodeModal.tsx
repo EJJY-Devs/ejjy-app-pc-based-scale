@@ -34,10 +34,20 @@ export const TextcodeModal = ({ visible, onSelectProduct, onClose }: Props) => {
 
 	const onSubmit = () => {
 		if (textcode.length > 0) {
-			const product = branchProducts.find(({ product }) => product.textcode === textcode)?.product;
+			const {
+				product,
+				discounted_price_per_piece1,
+				discounted_price_per_piece2,
+				price_per_piece,
+			} = branchProducts.find(({ product }) => product.textcode === textcode);
 
 			if (product) {
-				onSelectProduct(product);
+				onSelectProduct({
+					...product,
+					discounted_price_per_piece1: discounted_price_per_piece1,
+					discounted_price_per_piece2: discounted_price_per_piece2,
+					price_per_piece,
+				});
 				onClose();
 			} else {
 				message.error('Product does not exist.');

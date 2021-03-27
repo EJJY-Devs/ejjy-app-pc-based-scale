@@ -1,10 +1,13 @@
 import { cloneDeep } from 'lodash';
 import { createAction, handleActions } from 'redux-actions';
 import { createSelector } from 'reselect';
+import { NO_INDEX_SELECTED } from '../global/constants';
 
 export const key = 'CURRENT_TRANSACTION';
 
 export const types = {
+	SET_SELECTED_PRODUCT: `${key}/SET_SELECTED_PRODUCT`,
+
 	ADD_PRODUCT: `${key}/ADD_PRODUCT`,
 	REMOVE_PRODUCT: `${key}/REMOVE_PRODUCT`,
 	EDIT_PRODUCT: `${key}/EDIT_PRODUCT`,
@@ -14,6 +17,7 @@ export const types = {
 
 const initialState = {
 	products: [],
+	selectedProductIndex: NO_INDEX_SELECTED,
 };
 
 const reducer = handleActions(
@@ -44,6 +48,13 @@ const reducer = handleActions(
 			return { ...state, overallDiscount: payload };
 		},
 
+		[types.SET_SELECTED_PRODUCT]: (state, { payload }: any) => {
+			return {
+				...state,
+				selectedProductIndex: state.selectedProductIndex === payload ? NO_INDEX_SELECTED : payload,
+			};
+		},
+
 		[types.RESET_TRANSACTION]: () => initialState,
 	},
 	initialState,
@@ -55,11 +66,15 @@ export const actions = {
 	editProduct: createAction(types.EDIT_PRODUCT),
 	resetTransaction: createAction(types.RESET_TRANSACTION),
 	setDiscount: createAction(types.SET_DISCOUNT),
+
+	setSelectedProduct: createAction(types.SET_SELECTED_PRODUCT),
 };
 
 const selectState = (state: any) => state[key] || initialState;
 export const selectors = {
 	selectProducts: () => createSelector(selectState, (state) => state.products),
+	selectSelectedProductIndex: () =>
+		createSelector(selectState, (state) => state.selectedProductIndex),
 };
 
 export default reducer;

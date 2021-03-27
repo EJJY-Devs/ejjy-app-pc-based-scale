@@ -2,7 +2,7 @@
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { CancelButtonIcon, Table } from '../../../../components';
+import { CancelButtonIcon, TableProducts } from '../../../../components';
 import ControlledInput from '../../../../components/elements/ControlledInput/ControlledInput';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { numberWithCommas } from '../../../../utils/function';
@@ -25,10 +25,17 @@ export const ProductTable = ({ isLoading }: Props) => {
 	const [data, setData] = useState([]);
 
 	// CUSTOM HOOKS
-	const { transactionProducts, editProduct, removeProduct } = useCurrentTransaction();
+	const {
+		transactionProducts,
+		selectedProductIndex,
+		editProduct,
+		removeProduct,
+		setSelectedProduct,
+	} = useCurrentTransaction();
 
 	// METHODS
 	useEffect(() => {
+		console.log('transactionProducts', transactionProducts);
 		const formattedProducts = transactionProducts.map((product) => [
 			<CancelButtonIcon tooltip="Remove" onClick={() => onRemoveProductConfirmation(product)} />,
 			product.name,
@@ -37,8 +44,17 @@ export const ProductTable = ({ isLoading }: Props) => {
 				value={product.weight}
 				onChange={(value) => onEditProductWeight(product, value)}
 			/>,
-			`₱${numberWithCommas(Number(product.price_per_piece)?.toFixed(2))}`,
-			`₱${numberWithCommas((Number(product.weight) * Number(product.price_per_piece)).toFixed(2))}`,
+			product?.discount > 0 ? (
+				<div>
+					{`₱${numberWithCommas(product.price_per_piece?.toFixed(2))}`}
+					<span className="original-price">
+						{`₱${numberWithCommas((product.price_per_piece + product.discount)?.toFixed(2))}`}
+					</span>
+				</div>
+			) : (
+				`₱${numberWithCommas(product.price_per_piece.toFixed(2))}`
+			),
+			`₱${numberWithCommas((Number(product.weight) * product.price_per_piece)?.toFixed(3))}`,
 		]);
 
 		setData(formattedProducts);
@@ -64,7 +80,13 @@ export const ProductTable = ({ isLoading }: Props) => {
 
 	return (
 		<div className="ProductTable">
-			<Table columns={columns} data={data} />
+			<TableProducts
+				columns={columns}
+				data={data}
+				activeRow={selectedProductIndex}
+				onClick={setSelectedProduct}
+				loading={false}
+			/>
 
 			{/* 
 			<DiscountModal

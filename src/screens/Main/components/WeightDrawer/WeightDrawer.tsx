@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Divider, Drawer, message, Spin, Tabs } from 'antd';
 import { startCase, toLower } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { AddButtonIcon } from '../../../../components';
 import { Label } from '../../../../components/elements';
 import ControlledInput from '../../../../components/elements/ControlledInput/ControlledInput';
@@ -10,6 +10,7 @@ import { productCategoryTypes, request } from '../../../../global/types';
 import { useBranchProducts } from '../../../../hooks/useBranchProducts';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
+import { numberWithCommas } from '../../../../utils/function';
 import { MainButton } from '../MainButtons/MainButton';
 import './style.scss';
 import { TextcodeModal } from './TextcodeModal';
@@ -41,7 +42,6 @@ export const WeightDrawer = ({ visible, onClose }) => {
 			({ product }) => !addedProductIds.includes(product.id),
 		);
 
-		// TODO: Set proper product category
 		// Filter baboy
 		setBaboyDataSource(getProductsByCategory(availableProducts, productCategoryTypes.BABOY));
 
@@ -52,14 +52,32 @@ export const WeightDrawer = ({ visible, onClose }) => {
 		setAssortedDataSource(getProductsByCategory(availableProducts, productCategoryTypes.ASSORTED));
 	}, [branchProducts, transactionProducts]);
 
+	const getTotal = useCallback(
+		() =>
+			numberWithCommas(
+				Object.values(transactionProducts)
+					.reduce(
+						(prev: number, { weight, price_per_piece }) =>
+							Number(weight) * Number(price_per_piece) + prev,
+						0,
+					)
+					.toString(),
+			),
+		[transactionProducts],
+	);
+
 	const onSelectProduct = (product) => {
 		const foundProduct = transactionProducts.find(({ id }) => id === product.id);
 
 		if (!foundProduct) {
 			printProduct(
 				{
-					barcode: product.barcode,
-					weight,
+					name: product.name?.replace(/\s/g, ''),
+					weight: `${weight}kg`,
+					price: product.price_per_piece?.toFixed(2),
+					totalPrice: '99.99',
+					code: product.barcode,
+					branch: 'BRANCHNAME',
 				},
 				({ status }) => {
 					if (status === request.SUCCESS) {
@@ -79,10 +97,26 @@ export const WeightDrawer = ({ visible, onClose }) => {
 	const getProductsByCategory = (products, category) => {
 		return products
 			.filter(({ product }) => product?.product_category === category)
-			.map(({ product }) => [
-				product.name,
-				<AddButtonIcon onClick={() => onSelectProduct(product)} />,
-			]);
+			.map(
+				({
+					product,
+					discounted_price_per_piece1,
+					discounted_price_per_piece2,
+					price_per_piece,
+				}) => [
+					product.name,
+					<AddButtonIcon
+						onClick={() =>
+							onSelectProduct({
+								...product,
+								discounted_price_per_piece1: discounted_price_per_piece1,
+								discounted_price_per_piece2: discounted_price_per_piece2,
+								price_per_piece,
+							})
+						}
+					/>,
+				],
+			);
 	};
 
 	return (
