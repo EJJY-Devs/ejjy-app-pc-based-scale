@@ -29,10 +29,11 @@
   
   app.post("/print-product", cors(),(req, res, next) => {
     const {name, weight, price, totalPrice, code, branch} = req.body;
+    //console.log(`print ${name} ${weight} ${price} ${totalPrice} ${code} ${branch}\r\n`);
     const spawn = require('child_process').spawn;
     const posProc = spawn(scaleAndPrinterPath);
     posProc.stdout.once('data', function(data) {
-      return true; 
+      res.json(true);
     });
     posProc.stdin.write(`print ${name} ${weight} ${price} ${totalPrice} ${code} ${branch}\r\n`);
   });
