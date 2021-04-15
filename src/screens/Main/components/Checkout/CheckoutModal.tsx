@@ -11,7 +11,7 @@ interface Props {
 	onClose: any;
 }
 
-export const PaymentModal = ({ visible, onClose }: Props) => {
+export const CheckoutModal = ({ visible, onClose }: Props) => {
 	// STATES
 	const inputRef = useRef(null);
 
@@ -28,19 +28,15 @@ export const PaymentModal = ({ visible, onClose }: Props) => {
 		}
 	}, [visible, inputRef]);
 
-	const getTotal = useCallback(
-		() =>
-			numberWithCommas(
-				Object.values(transactionProducts)
-					.reduce(
-						(prev: number, { weight, price_per_piece }) =>
-							Number(weight) * Number(price_per_piece) + prev,
-						0,
-					)
-					.toString(),
-			),
-		[transactionProducts],
-	);
+	const getTotal = useCallback(() => {
+		const total = transactionProducts.reduce(
+			(prev: number, { weight, price_per_piece }) =>
+				Number(weight) * Number(price_per_piece) + prev,
+			0,
+		);
+
+		return numberWithCommas(total.toFixed(2));
+	}, [transactionProducts]);
 
 	const onSubmit = () => {
 		resetTransaction();
@@ -49,8 +45,8 @@ export const PaymentModal = ({ visible, onClose }: Props) => {
 
 	return (
 		<Modal
-			title="Pay"
-			className="PaymentModal"
+			title="Checkout"
+			className="CheckoutModal"
 			visible={visible}
 			footer={null}
 			onCancel={onClose}

@@ -14,6 +14,8 @@ export const usePc = () => {
 
 	const getWeightAction = useActionDispatch(actions.getWeight);
 	const printProductAction = useActionDispatch(actions.printProduct);
+	const printTransactionAction = useActionDispatch(actions.printTransaction);
+	const resetWeight = useActionDispatch(actions.resetWeight);
 
 	const reset = () => {
 		resetError();
@@ -37,6 +39,14 @@ export const usePc = () => {
 		});
 	};
 
+	const printTransaction = (data, extraCallback = null) => {
+		setRecentRequest(types.PRINT_TRANSACTION);
+		printTransactionAction({
+			...data,
+			callback: modifiedExtraCallback(callback, extraCallback),
+		});
+	};
+
 	const callback = ({ status, errors = [] }) => {
 		setStatus(status);
 		setErrors(errors);
@@ -44,8 +54,10 @@ export const usePc = () => {
 
 	return {
 		weight,
+		resetWeight,
 		getWeight,
 		printProduct,
+		printTransaction,
 		status,
 		errors,
 		recentRequest,

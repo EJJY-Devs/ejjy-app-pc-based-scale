@@ -7,6 +7,9 @@ export const types = {
 	SAVE: `${key}/SAVE`,
 	GET_WEIGHT: `${key}/GET_WEIGHT`,
 	PRINT_PRODUCT: `${key}/PRINT_PRODUCT`,
+	PRINT_TRANSACTION: `${key}/PRINT_TRANSACTION`,
+
+	RESET_WEIGHT: `${key}/RESET_WEIGHT`,
 };
 
 const initialState = {
@@ -28,6 +31,7 @@ const reducer = handleActions(
 
 			return { ...state, ...newData };
 		},
+		[types.RESET_WEIGHT]: () => initialState,
 	},
 	initialState,
 );
@@ -36,6 +40,8 @@ export const actions = {
 	save: createAction(types.SAVE),
 	getWeight: createAction(types.GET_WEIGHT),
 	printProduct: createAction(types.PRINT_PRODUCT),
+	printTransaction: createAction(types.PRINT_TRANSACTION),
+	resetWeight: createAction(types.RESET_WEIGHT),
 };
 
 const selectState = (state: any) => state[key] || initialState;

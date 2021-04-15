@@ -5,6 +5,7 @@ import branchProductsSagas from './branch-products';
 import pcSagas from './pc';
 import sessionsSagas from './session';
 import siteSettingsSagas from './site-settings';
+import transactionsSagas from './transactions';
 
 export default function* rootSaga() {
 	yield all([
@@ -14,5 +15,6 @@ export default function* rootSaga() {
 		...pcSagas,
 		...sessionsSagas,
 		...siteSettingsSagas,
+		...transactionsSagas,
 	]);
 }

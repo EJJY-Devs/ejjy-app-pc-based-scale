@@ -13,11 +13,13 @@ export const types = {
 	EDIT_PRODUCT: `${key}/EDIT_PRODUCT`,
 	RESET_TRANSACTION: `${key}/RESET_TRANSACTION`,
 	SET_DISCOUNT: `${key}/SET_DISCOUNT`,
+	SET_CURRENT_PRODUCT: `${key}/SET_CURRENT_PRODUCT`,
 };
 
 const initialState = {
 	products: [],
 	selectedProductIndex: NO_INDEX_SELECTED,
+	currentProduct: null,
 };
 
 const reducer = handleActions(
@@ -55,6 +57,13 @@ const reducer = handleActions(
 			};
 		},
 
+		[types.SET_CURRENT_PRODUCT]: (state, { payload }: any) => {
+			return {
+				...state,
+				currentProduct: payload,
+			};
+		},
+
 		[types.RESET_TRANSACTION]: () => initialState,
 	},
 	initialState,
@@ -68,6 +77,7 @@ export const actions = {
 	setDiscount: createAction(types.SET_DISCOUNT),
 
 	setSelectedProduct: createAction(types.SET_SELECTED_PRODUCT),
+	setCurrentProduct: createAction(types.SET_CURRENT_PRODUCT),
 };
 
 const selectState = (state: any) => state[key] || initialState;
@@ -75,6 +85,7 @@ export const selectors = {
 	selectProducts: () => createSelector(selectState, (state) => state.products),
 	selectSelectedProductIndex: () =>
 		createSelector(selectState, (state) => state.selectedProductIndex),
+	selectCurrentProduct: () => createSelector(selectState, (state) => state.currentProduct),
 };
 
 export default reducer;

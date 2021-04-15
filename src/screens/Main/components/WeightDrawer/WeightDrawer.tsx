@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Divider, Drawer, message, Spin, Tabs } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { Divider, Drawer, message, Modal, Spin, Tabs } from 'antd';
 import { startCase, toLower } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { AddButtonIcon } from '../../../../components';
@@ -18,6 +19,7 @@ import { TextcodeModal } from './TextcodeModal';
 const tabs = {
 	BABOY: 'BABOY',
 	MANOK: 'MANOK',
+	GULAY: 'GULAY',
 	ASSORTED: 'ASSORTED',
 };
 
@@ -28,12 +30,18 @@ export const WeightDrawer = ({ visible, onClose }) => {
 	const [textcodeModalVisible, setTextcodeModalVisible] = useState(false);
 	const [baboyDataSource, setBaboyDataSource] = useState([]);
 	const [manokDataSource, setManokDataSource] = useState([]);
+	const [gulayDataSource, setGulayDataSource] = useState([]);
 	const [assortedDataSource, setAssortedDataSource] = useState([]);
 
 	// CUSTOM HOOKS
 	const { weight, printProduct, status } = usePc();
 	const { branchProducts } = useBranchProducts();
-	const { transactionProducts, addProduct } = useCurrentTransaction();
+	const {
+		transactionProducts,
+		currentProduct,
+		setCurrentProduct,
+		addProduct,
+	} = useCurrentTransaction();
 
 	// METHODS
 	useEffect(() => {
@@ -47,6 +55,9 @@ export const WeightDrawer = ({ visible, onClose }) => {
 
 		// Filter manok
 		setManokDataSource(getProductsByCategory(availableProducts, productCategoryTypes.MANOK));
+
+		// Filter gulay
+		setGulayDataSource(getProductsByCategory(availableProducts, productCategoryTypes.GULAY));
 
 		// Filter assorted
 		setAssortedDataSource(getProductsByCategory(availableProducts, productCategoryTypes.ASSORTED));
@@ -70,28 +81,64 @@ export const WeightDrawer = ({ visible, onClose }) => {
 		const foundProduct = transactionProducts.find(({ id }) => id === product.id);
 
 		if (!foundProduct) {
-			printProduct(
-				{
-					name: product.name?.replace(/\s/g, ''),
-					weight: `${weight}kg`,
-					price: product.price_per_piece?.toFixed(2),
-					totalPrice: '99.99',
-					code: product.barcode,
-					branch: 'BRANCHNAME',
-				},
-				({ status }) => {
-					if (status === request.SUCCESS) {
-						addProduct({ ...product, weight: weight.toFixed(3) });
-						onClose();
-						message.success('Product successfully added.');
-					} else if (status === request.ERROR) {
-						message.error('An error occurred while printing receipt.');
-					}
-				},
-			);
+			setCurrentProduct({ ...product, isCheckedOut: false, weight: weight.toFixed(3) });
 		} else {
 			message.error('Product already in the list.');
 		}
+	};
+
+	const onAddCart = () => {
+		addProduct(currentProduct);
+		onClose();
+		message.success('Product successfully added.');
+		setCurrentProduct(null);
+	};
+
+	const onPrint = () => {
+		Modal.confirm({
+			className: 'EJJYModal',
+			title: 'Add To Cart',
+			icon: <ExclamationCircleOutlined />,
+			content: 'Do you want to add this product to the cart?',
+			okText: 'Yes',
+			cancelText: 'No',
+			onOk: () => {
+				addProduct(currentProduct);
+				onClose();
+			},
+		});
+
+		printProduct(
+			{
+				name: currentProduct.name?.replace(/\s/g, ''),
+				weight: `${weight}kg`,
+				price: currentProduct.price_per_piece?.toFixed(2),
+				totalPrice: '99.99',
+				code: currentProduct.barcode,
+				branch: 'BRANCHNAME',
+			},
+			({ status }) => {
+				if (status === request.SUCCESS) {
+					Modal.confirm({
+						className: 'EJJYModal',
+						title: 'Add To Cart',
+						icon: <ExclamationCircleOutlined />,
+						content: 'Do you want to add this product to the cart?',
+						okText: 'Yes',
+						cancelText: 'No',
+						onOk: () => {
+							addProduct(currentProduct);
+							setCurrentProduct(null);
+							onClose();
+						},
+					});
+
+					message.success('Product successfully added.');
+				} else if (status === request.ERROR) {
+					message.error('An error occurred while printing receipt.');
+				}
+			},
+		);
 	};
 
 	const getProductsByCategory = (products, category) => {
@@ -129,7 +176,7 @@ export const WeightDrawer = ({ visible, onClose }) => {
 			closable={false}
 			maskClosable
 		>
-			<Spin size="large" spinning={status === request.REQUESTING}>
+			<Spin size="large" spinning={status === request.REQUESTING} style={{ height: '100%' }}>
 				<Label id="weight" label="Weight" spacing />
 				<ControlledInput
 					classNames="input-weight"
@@ -138,28 +185,81 @@ export const WeightDrawer = ({ visible, onClose }) => {
 					disabled
 				/>
 
-				<Divider>SELECT PRODUCT</Divider>
+				{currentProduct ? (
+					<>
+						<div className="input-spacing-top">
+							<Label id="name" label="Name" spacing />
+							<ControlledInput
+								classNames="input-normal"
+								value={currentProduct.name}
+								onChange={() => null}
+								disabled
+							/>
+						</div>
 
-				<Tabs defaultActiveKey={tabs.BABOY} type="card">
-					<Tabs.TabPane key={tabs.BABOY} tab={startCase(toLower(tabs.BABOY))}>
-						<TableNormal columns={columns} data={baboyDataSource} />
-					</Tabs.TabPane>
+						<div className="input-spacing-top">
+							<Label id="price" label="Price" spacing />
+							<ControlledInput
+								classNames="input-normal"
+								value={`₱${numberWithCommas(currentProduct.price_per_piece?.toFixed(2))}`}
+								onChange={() => null}
+								disabled
+							/>
+						</div>
 
-					<Tabs.TabPane key={tabs.MANOK} tab={startCase(toLower(tabs.MANOK))}>
-						<TableNormal columns={columns} data={manokDataSource} />
-					</Tabs.TabPane>
+						<div className="input-spacing-top">
+							<Label id="total" label="TOTAL" spacing />
+							<ControlledInput
+								classNames="input-normal"
+								value={`₱${numberWithCommas(
+									(Number(currentProduct.weight) * currentProduct.price_per_piece)?.toFixed(2),
+								)}`}
+								onChange={() => null}
+								disabled
+							/>
+						</div>
 
-					<Tabs.TabPane key={tabs.ASSORTED} tab={startCase(toLower(tabs.ASSORTED))}>
-						<TableNormal columns={columns} data={assortedDataSource} />
-					</Tabs.TabPane>
-				</Tabs>
+						<div className="button-print-checkout">
+							<MainButton classNames="btn-print" title="Print" onClick={onPrint} />
+							<MainButton
+								classNames="btn-add-cart"
+								title={
+									<img src={require('../../../../assets/images/icon-add-cart.svg')} alt="icon" />
+								}
+								onClick={onAddCart}
+							/>
+						</div>
+					</>
+				) : (
+					<>
+						<Divider>SELECT PRODUCT</Divider>
 
-				<Divider>TEXTCODE</Divider>
-				<MainButton
-					classNames="btn-input-texcode"
-					title="Input Textcode"
-					onClick={() => setTextcodeModalVisible(true)}
-				/>
+						<Tabs defaultActiveKey={tabs.BABOY} type="card">
+							<Tabs.TabPane key={tabs.BABOY} tab={startCase(toLower(tabs.BABOY))}>
+								<TableNormal columns={columns} data={baboyDataSource} />
+							</Tabs.TabPane>
+
+							<Tabs.TabPane key={tabs.MANOK} tab={startCase(toLower(tabs.MANOK))}>
+								<TableNormal columns={columns} data={manokDataSource} />
+							</Tabs.TabPane>
+
+							<Tabs.TabPane key={tabs.GULAY} tab={startCase(toLower(tabs.GULAY))}>
+								<TableNormal columns={columns} data={gulayDataSource} />
+							</Tabs.TabPane>
+
+							<Tabs.TabPane key={tabs.ASSORTED} tab={startCase(toLower(tabs.ASSORTED))}>
+								<TableNormal columns={columns} data={assortedDataSource} />
+							</Tabs.TabPane>
+						</Tabs>
+
+						<Divider>TEXTCODE</Divider>
+						<MainButton
+							classNames="btn-input-texcode"
+							title="Input Textcode"
+							onClick={() => setTextcodeModalVisible(true)}
+						/>
+					</>
+				)}
 
 				<TextcodeModal
 					visible={textcodeModalVisible}

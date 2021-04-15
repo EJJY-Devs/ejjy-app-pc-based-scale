@@ -91,3 +91,28 @@ body {
 		}
 	}
 }
+
+.WeightDrawer > * {
+	transition-duration: 150ms, 150ms !important;
+}
+
+.EJJYModal {
+	.ant-modal-confirm-title {
+		font-size: 20px !important;
+	}
+
+	.ant-modal-confirm-content {
+		font-size: 16px !important;
+	}
+
+	.ant-modal-confirm-btns {
+		@include flex(center, center);
+		width: 100%;
+
+		.ant-btn {
+			flex: 1;
+			height: 45px !important;
+			font-size: 20px !important;
+		}
+	}
+}

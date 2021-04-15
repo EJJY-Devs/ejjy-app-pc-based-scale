@@ -1,32 +1,47 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Container } from '../../components';
 import { request } from '../../global/types';
 import { useBranchProducts } from '../../hooks/useBranchProducts';
 import { usePc } from '../../hooks/usePc';
-import { PaymentModal } from './components/Checkout/PaymentModal';
+import { CheckoutModal } from './components/Checkout/CheckoutModal';
+import { TemporaryCheckoutModal } from './components/Checkout/TemporaryCheckoutModal';
 import { MainButtons } from './components/MainButtons/MainButtons';
 import { ProductTable } from './components/ProductTable/ProductTable';
 import { WeightDrawer } from './components/WeightDrawer/WeightDrawer';
 import './style.scss';
 
+const DRAWER_CLOSE_TIME = 4000;
+
 const Main = () => {
 	// STATES
-	const [paymentModalVisible, setPaymentModalVisible] = useState(false);
+	const [checkoutModalVisible, setCheckoutModalVisible] = useState(false);
+	const [temporaryCheckoutModalVisible, setTemporaryCheckoutModalVisible] = useState(false);
 	const [drawerVisible, setDrawerVisible] = useState(false);
 
 	// CUSTOM HOOKS
-	const { weight, getWeight } = usePc();
+	const { weight, resetWeight, getWeight } = usePc();
 	const { listBranchProducts, status } = useBranchProducts();
+
+	// REFS
+	const refDrawerTimeout = useRef(null);
 
 	// METHODS
 	useEffect(() => {
+		resetWeight();
 		getWeight();
 		listBranchProducts();
 	}, []);
 
 	useEffect(() => {
-		setDrawerVisible(weight > 0);
+		if (weight > 0) {
+			setDrawerVisible(true);
+			clearTimeout(refDrawerTimeout.current);
+		} else {
+			refDrawerTimeout.current = setTimeout(() => {
+				setDrawerVisible(false);
+			}, DRAWER_CLOSE_TIME);
+		}
 	}, [weight]);
 
 	return (
@@ -35,15 +50,25 @@ const Main = () => {
 				<div className="main-content">
 					<ProductTable isLoading={false} />
 					<MainButtons
-						onOpenDrawerModal={() => setDrawerVisible(true)}
-						onOpenCheckoutModal={() => setPaymentModalVisible(true)}
+						onOpenCheckoutModal={() => setCheckoutModalVisible(true)}
+						onOpenTemporaryCheckoutModal={() => setTemporaryCheckoutModalVisible(true)}
 					/>
 					<WeightDrawer visible={drawerVisible} onClose={() => setDrawerVisible(false)} />
 				</div>
 
-				<PaymentModal visible={paymentModalVisible} onClose={() => setPaymentModalVisible(false)} />
+				<CheckoutModal
+					visible={checkoutModalVisible}
+					onClose={() => setCheckoutModalVisible(false)}
+				/>
 
-				<h1 className="store-title">EJ &amp; JY WET MARKET AND ENTERPRISES</h1>
+				<TemporaryCheckoutModal
+					visible={temporaryCheckoutModalVisible}
+					onClose={() => setTemporaryCheckoutModalVisible(false)}
+				/>
+
+				<h1 className="store-title" onClick={() => setDrawerVisible(true)}>
+					EJ &amp; JY WET MARKET AND ENTERPRISES
+				</h1>
 			</section>
 		</Container>
 	);

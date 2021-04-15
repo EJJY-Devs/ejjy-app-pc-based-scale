@@ -55,5 +55,6 @@ export const productCategoryTypes = {
 	ASSORTED: 'assorted',
 	BABOY: 'baboy',
 	MANOK: 'manok',
+	GULAY: 'gulay',
 	NONE: 'none',
 };

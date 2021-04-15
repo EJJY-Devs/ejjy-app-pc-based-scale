@@ -1,10 +1,10 @@
 import { message, Modal } from 'antd';
-import React, { useState } from 'react';
-import './style.scss';
-import ControlledInput from '../../../../components/elements/ControlledInput/ControlledInput';
-import { MainButton } from '../MainButtons/MainButton';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../../../../components/elements';
+import ControlledInput from '../../../../components/elements/ControlledInput/ControlledInput';
 import { useBranchProducts } from '../../../../hooks/useBranchProducts';
+import { MainButton } from '../MainButtons/MainButton';
+import './style.scss';
 
 interface Props {
 	visible: boolean;
@@ -20,6 +20,12 @@ export const TextcodeModal = ({ visible, onSelectProduct, onClose }: Props) => {
 	const { branchProducts } = useBranchProducts();
 
 	// METHODS
+	useEffect(() => {
+		if (visible) {
+			setTextcode('');
+		}
+	}, [visible]);
+
 	const onNumpadInput = (key) => {
 		if (textcode.length >= 10) {
 			return;
@@ -34,14 +40,16 @@ export const TextcodeModal = ({ visible, onSelectProduct, onClose }: Props) => {
 
 	const onSubmit = () => {
 		if (textcode.length > 0) {
-			const {
-				product,
-				discounted_price_per_piece1,
-				discounted_price_per_piece2,
-				price_per_piece,
-			} = branchProducts.find(({ product }) => product.textcode === textcode);
+			const foundProduct = branchProducts.find(({ product }) => product.textcode === textcode);
 
-			if (product) {
+			if (foundProduct) {
+				const {
+					product,
+					discounted_price_per_piece1,
+					discounted_price_per_piece2,
+					price_per_piece,
+				} = foundProduct;
+
 				onSelectProduct({
 					...product,
 					discounted_price_per_piece1: discounted_price_per_piece1,
@@ -59,7 +67,7 @@ export const TextcodeModal = ({ visible, onSelectProduct, onClose }: Props) => {
 
 	return (
 		<Modal
-			title="Textcode"
+			title="Search Product By Textcode"
 			className="TextcodeModal"
 			visible={visible}
 			footer={null}
@@ -75,7 +83,11 @@ export const TextcodeModal = ({ visible, onSelectProduct, onClose }: Props) => {
 						onChange={(value) => setTextcode(value)}
 						disabled
 					/>
-					<MainButton classNames="btn-clear" title="X" onClick={() => onNumpadInput(-1)} />
+					<MainButton
+						classNames="btn-clear"
+						title={<img src={require('../../../../assets/images/icon-delete.svg')} alt="icon" />}
+						onClick={() => onNumpadInput(-1)}
+					/>
 
 					<MainButton classNames="number-9" title="9" onClick={() => onNumpadInput(9)} />
 					<MainButton classNames="number-8" title="8" onClick={() => onNumpadInput(8)} />

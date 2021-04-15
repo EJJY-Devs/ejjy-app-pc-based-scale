@@ -1,6 +1,6 @@
 @import '../../../../assets/styles/main';
 
-.PaymentModal {
+.CheckoutModal {
 	.form {
 		.quantity-label {
 			font-size: 20px;
@@ -13,6 +13,33 @@
 		.amount-due-input {
 			text-align: center;
 			@include font(80px, bold);
+			color: $color-dark;
+		}
+	}
+}
+
+.TemporaryCheckoutModal {
+	.form {
+		.quantity-label {
+			font-size: 20px;
+
+			&.space-top {
+				margin-top: 25px;
+			}
+		}
+
+		.amount-due-input {
+			text-align: center;
+			@include font(80px, bold);
+			color: $color-dark;
+		}
+	}
+
+	.product-list {
+		margin-bottom: 20px;
+
+		li {
+			font-size: 16px;
 			color: $color-dark;
 		}
 	}

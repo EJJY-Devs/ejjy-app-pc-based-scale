@@ -7,8 +7,40 @@
 		color: $color-dark;
 	}
 
+	.input-normal {
+		@include font(25px, bold);
+		color: $color-dark;
+	}
+
 	.btn-input-texcode {
 		width: 100%;
+	}
+
+	.input-spacing-top {
+		margin-top: 40px;
+	}
+
+	.button-print-checkout {
+		@include flex(stretch, stretch);
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+
+		.btn-print {
+			max-height: 100%;
+			width: 100%;
+			margin-right: 20px;
+		}
+
+		.btn-add-cart {
+			height: 100%;
+			width: 150px;
+		}
+	}
+
+	.ant-spin-nested-loading,
+	.ant-spin-container {
+		height: 100% !important;
 	}
 }
 
@@ -72,6 +104,11 @@
 		.number-0 {
 			grid-area: number-0;
 		}
+	}
+
+	.btn-clear {
+		padding-top: 20px;
+		padding-bottom: 20px;
 	}
 
 	.custom-footer {

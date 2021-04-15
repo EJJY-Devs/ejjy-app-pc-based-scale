@@ -3,6 +3,7 @@ import { Divider, message, Modal } from 'antd';
 import cn from 'classnames';
 import React, { useCallback, useState } from 'react';
 import { EMPTY_CELL, NO_INDEX_SELECTED } from '../../../../global/constants';
+import { productCategoryTypes } from '../../../../global/types';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { numberWithCommas } from '../../../../utils/function';
 import { DiscountAuthModal } from './DiscountAuthModal';
@@ -15,7 +16,7 @@ const discountTypes = {
 	NO_DISCOUNT: '3',
 };
 
-export const MainButtons = ({ onOpenDrawerModal, onOpenCheckoutModal }) => {
+export const MainButtons = ({ onOpenCheckoutModal, onOpenTemporaryCheckoutModal }) => {
 	// STATES
 	const [discountAuthModalVisible, setDiscountAuthModalVisible] = useState(false);
 	const [selectedDiscountType, setSelectedDiscountType] = useState(null);
@@ -31,6 +32,7 @@ export const MainButtons = ({ onOpenDrawerModal, onOpenCheckoutModal }) => {
 	// METHODS
 	const onResetConfirmation = () => {
 		Modal.confirm({
+			className: 'EJJYModal',
 			title: 'Reset Confirmation',
 			icon: <ExclamationCircleOutlined />,
 			content: 'Are you sure you want to reset and clear the product list?',
@@ -39,6 +41,15 @@ export const MainButtons = ({ onOpenDrawerModal, onOpenCheckoutModal }) => {
 			onOk: resetTransaction,
 		});
 	};
+
+	const isTempCheckoutDisabled = useCallback(
+		() =>
+			!transactionProducts.some(
+				(product) =>
+					!product.isCheckedOut && product.product_category === productCategoryTypes.GULAY,
+			),
+		[transactionProducts],
+	);
 
 	const getDiscount1 = useCallback(() => {
 		const value = transactionProducts?.[selectedProductIndex]?.discounted_price_per_piece1;
@@ -137,12 +148,11 @@ export const MainButtons = ({ onOpenDrawerModal, onOpenCheckoutModal }) => {
 									<span className="shortcut-key">[{getDiscount2()}]</span>
 								</>
 							}
-							// onClick={() => {
-							// 	setSelectedDiscountType(discountTypes.SECOND);
-							// 	setDiscountAuthModalVisible(true);
-							// }}
-							onClick={onOpenDrawerModal}
-							// disabled={selectedProductIndex === NO_INDEX_SELECTED}
+							onClick={() => {
+								setSelectedDiscountType(discountTypes.SECOND);
+								setDiscountAuthModalVisible(true);
+							}}
+							disabled={selectedProductIndex === NO_INDEX_SELECTED}
 						/>
 					</>
 				)}
@@ -152,6 +162,18 @@ export const MainButtons = ({ onOpenDrawerModal, onOpenCheckoutModal }) => {
 				</div>
 
 				<MainButton
+					title={
+						<span>
+							Temp
+							<br />
+							Checkout
+						</span>
+					}
+					onClick={onOpenTemporaryCheckoutModal}
+					disabled={isTempCheckoutDisabled()}
+				/>
+
+				<MainButton
 					title="Checkout"
 					onClick={onOpenCheckoutModal}
 					disabled={!transactionProducts.length}
@@ -159,6 +181,7 @@ export const MainButtons = ({ onOpenDrawerModal, onOpenCheckoutModal }) => {
 			</div>
 
 			<DiscountAuthModal
+				discount={selectedDiscountType === discountTypes.FIRST ? getDiscount1() : getDiscount2()}
 				visible={discountAuthModalVisible}
 				isLoading={false}
 				onConfirm={onDiscountSuccess}

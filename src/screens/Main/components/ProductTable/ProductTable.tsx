@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { Modal } from 'antd';
+import { ExclamationCircleOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { Modal, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { CancelButtonIcon, TableProducts } from '../../../../components';
-import ControlledInput from '../../../../components/elements/ControlledInput/ControlledInput';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { numberWithCommas } from '../../../../utils/function';
 import './style.scss';
@@ -28,22 +27,23 @@ export const ProductTable = ({ isLoading }: Props) => {
 	const {
 		transactionProducts,
 		selectedProductIndex,
-		editProduct,
 		removeProduct,
 		setSelectedProduct,
 	} = useCurrentTransaction();
 
 	// METHODS
 	useEffect(() => {
-		console.log('transactionProducts', transactionProducts);
 		const formattedProducts = transactionProducts.map((product) => [
 			<CancelButtonIcon tooltip="Remove" onClick={() => onRemoveProductConfirmation(product)} />,
-			product.name,
-			<ControlledInput
-				type="number"
-				value={product.weight}
-				onChange={(value) => onEditProductWeight(product, value)}
-			/>,
+			<>
+				<span>{product.name}</span>
+				{product?.isCheckedOut && (
+					<Tooltip title="Item already checked out">
+						<ShoppingCartOutlined className="icon-checked-out" />
+					</Tooltip>
+				)}
+			</>,
+			product.weight,
 			product?.discount > 0 ? (
 				<div>
 					{`₱${numberWithCommas(product.price_per_piece?.toFixed(2))}`}
@@ -54,7 +54,7 @@ export const ProductTable = ({ isLoading }: Props) => {
 			) : (
 				`₱${numberWithCommas(product.price_per_piece.toFixed(2))}`
 			),
-			`₱${numberWithCommas((Number(product.weight) * product.price_per_piece)?.toFixed(3))}`,
+			`₱${numberWithCommas((Number(product.weight) * product.price_per_piece)?.toFixed(2))}`,
 		]);
 
 		setData(formattedProducts);
@@ -62,19 +62,13 @@ export const ProductTable = ({ isLoading }: Props) => {
 
 	const onRemoveProductConfirmation = (product) => {
 		Modal.confirm({
+			className: 'EJJYModal',
 			title: 'Delete Confirmation',
 			icon: <ExclamationCircleOutlined />,
 			content: `Are you sure you want to delete ${product.name}?`,
 			okText: 'Delete',
 			cancelText: 'Cancel',
 			onOk: () => removeProduct(product.id),
-		});
-	};
-
-	const onEditProductWeight = (product, weight) => {
-		editProduct({
-			id: product.id,
-			weight,
 		});
 	};
 

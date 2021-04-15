@@ -31,6 +31,18 @@ function* printProduct({ payload }: any) {
 	}
 }
 
+function* printTransaction({ payload }: any) {
+	const { id, branch, totalPrice, callback } = payload;
+	callback({ status: request.REQUESTING });
+
+	try {
+		yield call(service.printTransaction, { id, branch, totalPrice });
+		callback({ status: request.SUCCESS });
+	} catch (e) {
+		callback({ status: request.ERROR, errors: e.errors });
+	}
+}
+
 /* WATCHERS */
 const getWeightWatcherSaga = function* getWeightWatcherSaga() {
 	yield takeLatest(types.GET_WEIGHT, getWeight);
@@ -40,4 +52,8 @@ const printProductWatcherSaga = function* printProductWatcherSaga() {
 	yield takeLatest(types.PRINT_PRODUCT, printProduct);
 };
 
-export default [getWeightWatcherSaga(), printProductWatcherSaga()];
+const printTransactionWatcherSaga = function* printTransactionWatcherSaga() {
+	yield takeLatest(types.PRINT_TRANSACTION, printTransaction);
+};
+
+export default [getWeightWatcherSaga(), printProductWatcherSaga(), printTransactionWatcherSaga()];

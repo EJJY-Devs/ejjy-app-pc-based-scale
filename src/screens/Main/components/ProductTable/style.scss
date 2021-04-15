@@ -16,6 +16,11 @@
 		display: block;
 		text-decoration: line-through;
 	}
+
+	.icon-checked-out {
+		margin-left: 8px;
+		color: $color-primary;
+	}
 }
 
 .EditProductModal {
