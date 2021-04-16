@@ -20,11 +20,11 @@ function* getWeight() {
 }
 
 function* printProduct({ payload }: any) {
-	const { name, weight, price, totalPrice, code, branch, callback } = payload;
+	const { weight, price, totalPrice, code, branch, callback } = payload;
 	callback({ status: request.REQUESTING });
 
 	try {
-		yield call(service.printProduct, { name, weight, price, totalPrice, code, branch });
+		yield call(service.printProduct, { weight, price, totalPrice, code, branch });
 		callback({ status: request.SUCCESS });
 	} catch (e) {
 		callback({ status: request.ERROR, errors: e.errors });
@@ -32,11 +32,11 @@ function* printProduct({ payload }: any) {
 }
 
 function* printTransaction({ payload }: any) {
-	const { id, branch, totalPrice, callback } = payload;
+	const { transactionId, totalPrice, branch, callback } = payload;
 	callback({ status: request.REQUESTING });
 
 	try {
-		yield call(service.printTransaction, { id, branch, totalPrice });
+		yield call(service.printTransaction, { transactionId, totalPrice, branch });
 		callback({ status: request.SUCCESS });
 	} catch (e) {
 		callback({ status: request.ERROR, errors: e.errors });

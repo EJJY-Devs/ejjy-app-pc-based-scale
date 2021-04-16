@@ -184,3 +184,7 @@ export const getProductQuantity = (quantity, unitOfMeasurementType) => {
 
 	return 0;
 };
+
+export const zeroToO = (value) => {
+	return value?.replace(/0/g, 'O');
+};

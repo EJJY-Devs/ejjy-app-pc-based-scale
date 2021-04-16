@@ -6,7 +6,7 @@ import { useAuth } from '../../../../hooks/useAuth';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
 import { useTransactions } from '../../../../hooks/useTransactions';
-import { numberWithCommas } from '../../../../utils/function';
+import { numberWithCommas, zeroToO } from '../../../../utils/function';
 import './style.scss';
 
 interface Props {
@@ -73,11 +73,17 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 			},
 			({ status, response }) => {
 				if (status === request.SUCCESS) {
+					const total = getCheckoutProducts().reduce(
+						(prev: number, { weight, price_per_piece }) =>
+							Number(weight) * Number(price_per_piece) + prev,
+						0,
+					);
+
 					printTransaction(
 						{
-							id: response.id,
-							branch: 'BRANCHNAME',
-							totalPrice: getTotal().toFixed(2),
+							transactionId: `T_${response.id}`,
+							totalPrice: `P${zeroToO(total.toFixed(2))}`,
+							branch: 'TEST',
 						},
 						({ status }) => {
 							if (status === request.SUCCESS) {

@@ -2,7 +2,7 @@
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Divider, Drawer, message, Modal, Spin, Tabs } from 'antd';
 import { startCase, toLower } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AddButtonIcon } from '../../../../components';
 import { Label } from '../../../../components/elements';
 import ControlledInput from '../../../../components/elements/ControlledInput/ControlledInput';
@@ -11,7 +11,7 @@ import { productCategoryTypes, request } from '../../../../global/types';
 import { useBranchProducts } from '../../../../hooks/useBranchProducts';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
-import { numberWithCommas } from '../../../../utils/function';
+import { numberWithCommas, zeroToO } from '../../../../utils/function';
 import { MainButton } from '../MainButtons/MainButton';
 import './style.scss';
 import { TextcodeModal } from './TextcodeModal';
@@ -63,20 +63,6 @@ export const WeightDrawer = ({ visible, onClose }) => {
 		setAssortedDataSource(getProductsByCategory(availableProducts, productCategoryTypes.ASSORTED));
 	}, [branchProducts, transactionProducts]);
 
-	const getTotal = useCallback(
-		() =>
-			numberWithCommas(
-				Object.values(transactionProducts)
-					.reduce(
-						(prev: number, { weight, price_per_piece }) =>
-							Number(weight) * Number(price_per_piece) + prev,
-						0,
-					)
-					.toString(),
-			),
-		[transactionProducts],
-	);
-
 	const onSelectProduct = (product) => {
 		const foundProduct = transactionProducts.find(({ id }) => id === product.id);
 
@@ -95,27 +81,23 @@ export const WeightDrawer = ({ visible, onClose }) => {
 	};
 
 	const onPrint = () => {
-		Modal.confirm({
-			className: 'EJJYModal',
-			title: 'Add To Cart',
-			icon: <ExclamationCircleOutlined />,
-			content: 'Do you want to add this product to the cart?',
-			okText: 'Yes',
-			cancelText: 'No',
-			onOk: () => {
-				addProduct(currentProduct);
-				onClose();
-			},
-		});
+		const weightSplit = weight.toFixed(3).split('.');
+		const wholeNumber = `0${weightSplit}`.substring(0, 2);
+		const decimalNumber = weightSplit[1].substring(0, 2);
+
+		const total = transactionProducts.reduce(
+			(prev: number, { weight, price_per_piece }) =>
+				Number(weight) * Number(price_per_piece) + prev,
+			0,
+		);
 
 		printProduct(
 			{
-				name: currentProduct.name?.replace(/\s/g, ''),
-				weight: `${weight}kg`,
+				weight: `${weight.toFixed(3)}kg`,
 				price: currentProduct.price_per_piece?.toFixed(2),
-				totalPrice: '99.99',
-				code: currentProduct.barcode,
-				branch: 'BRANCHNAME',
+				totalPrice: `P${zeroToO(total.toFixed(2))}`,
+				code: `${currentProduct.barcode}${wholeNumber}${decimalNumber}`,
+				branch: 'TEST',
 			},
 			({ status }) => {
 				if (status === request.SUCCESS) {
