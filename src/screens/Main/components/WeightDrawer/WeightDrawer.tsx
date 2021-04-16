@@ -67,14 +67,14 @@ export const WeightDrawer = ({ visible, onClose }) => {
 		const foundProduct = transactionProducts.find(({ id }) => id === product.id);
 
 		if (!foundProduct) {
-			setCurrentProduct({ ...product, isCheckedOut: false, weight: weight.toFixed(3) });
+			setCurrentProduct({ ...product, isCheckedOut: false });
 		} else {
 			message.error('Product already in the list.');
 		}
 	};
 
 	const onAddCart = () => {
-		addProduct(currentProduct);
+		addProduct({ ...currentProduct, weight: weight.toFixed(3) });
 		onClose();
 		message.success('Product successfully added.');
 		setCurrentProduct(null);
@@ -159,6 +159,14 @@ export const WeightDrawer = ({ visible, onClose }) => {
 			maskClosable
 		>
 			<Spin size="large" spinning={status === request.REQUESTING} style={{ height: '100%' }}>
+				{currentProduct && (
+					<MainButton
+						title="CLEAR SELECTION"
+						onClick={() => setCurrentProduct(null)}
+						classNames="btn-clear"
+					/>
+				)}
+
 				<Label id="weight" label="Weight" spacing />
 				<ControlledInput
 					classNames="input-weight"
@@ -194,7 +202,7 @@ export const WeightDrawer = ({ visible, onClose }) => {
 							<ControlledInput
 								classNames="input-normal"
 								value={`₱${numberWithCommas(
-									(Number(currentProduct.weight) * currentProduct.price_per_piece)?.toFixed(2),
+									(weight * currentProduct.price_per_piece)?.toFixed(2),
 								)}`}
 								onChange={() => null}
 								disabled

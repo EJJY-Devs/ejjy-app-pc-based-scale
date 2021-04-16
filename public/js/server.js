@@ -18,8 +18,9 @@
   
   app.get("/weight", cors(),(req, res, next) => {
     // const users = [
-    //   {val: 1,   pct: 20},
-    //   {val: 0,  pct: 80}
+    //   {val: 0, pct: 60},
+    //   {val: 1.5, pct: 20},
+    //   {val: 1.25, pct: 20},
     // ];
     
     // const expanded = users.flatMap(user => Array(user.pct).fill(user));
