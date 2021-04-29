@@ -81,13 +81,6 @@ export const ProductTable = ({ isLoading }: Props) => {
 				onClick={setSelectedProduct}
 				loading={false}
 			/>
-
-			{/* 
-			<DiscountModal
-				product={selectedDiscountProduct}
-				visible={discountModalVisible}
-				onClose={() => setDiscountModalVisible(false)}
-			/> */}
 		</div>
 	);
 };

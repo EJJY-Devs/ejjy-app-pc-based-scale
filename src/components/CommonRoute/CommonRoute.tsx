@@ -9,14 +9,15 @@ const noAuthPages = ['/reports'];
 
 export const CommonRoute = ({ path, exact, component }: any) => {
 	const { pathname: pathName } = useLocation();
-	const { accessToken } = useAuth();
+	const { user, accessToken, localIpAddress } = useAuth();
+	const isLoggedIn = user && accessToken && localIpAddress;
 
 	if (!noAuthPages.includes(pathName)) {
-		if (portal.includes(pathName) && accessToken) {
+		if (portal.includes(pathName) && isLoggedIn) {
 			return <Route render={() => <Redirect to="/" />} />;
 		}
 
-		if (!portal.includes(pathName) && !accessToken) {
+		if (!portal.includes(pathName) && !isLoggedIn) {
 			return <Route render={() => <Redirect to="/login" />} />;
 		}
 

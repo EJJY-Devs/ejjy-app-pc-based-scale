@@ -3,9 +3,10 @@ import { Divider, message, Modal } from 'antd';
 import cn from 'classnames';
 import React, { useCallback, useState } from 'react';
 import { EMPTY_CELL, NO_INDEX_SELECTED } from '../../../../global/constants';
-import { productCategoryTypes } from '../../../../global/types';
+import { productCategoryTypes, request, userTypes } from '../../../../global/types';
+import { useAuth } from '../../../../hooks/useAuth';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
-import { numberWithCommas } from '../../../../utils/function';
+import { numberWithCommas, showErrorMessages } from '../../../../utils/function';
 import { DiscountAuthModal } from './DiscountAuthModal';
 import { MainButton } from './MainButton';
 import './style.scss';
@@ -22,6 +23,7 @@ export const MainButtons = ({ onOpenCheckoutModal, onOpenTemporaryCheckoutModal 
 	const [selectedDiscountType, setSelectedDiscountType] = useState(null);
 
 	// CUSTOM HOOKS
+	const { validateUser, status: authStatus } = useAuth();
 	const {
 		transactionProducts,
 		selectedProductIndex,
@@ -94,6 +96,16 @@ export const MainButtons = ({ onOpenCheckoutModal, onOpenTemporaryCheckoutModal 
 		}
 
 		setDiscountAuthModalVisible(false);
+	};
+
+	const onDiscount = (data) => {
+		validateUser({ data, userType: userTypes.BRANCH_MANAGER }, ({ status, errors }) => {
+			if (status === request.SUCCESS) {
+				onDiscountSuccess();
+			} else if (status === request.ERROR) {
+				showErrorMessages(errors);
+			}
+		});
 	};
 
 	return (
@@ -183,8 +195,8 @@ export const MainButtons = ({ onOpenCheckoutModal, onOpenTemporaryCheckoutModal 
 			<DiscountAuthModal
 				discount={selectedDiscountType === discountTypes.FIRST ? getDiscount1() : getDiscount2()}
 				visible={discountAuthModalVisible}
-				isLoading={false}
-				onConfirm={onDiscountSuccess}
+				isLoading={authStatus === request.REQUESTING}
+				onConfirm={onDiscount}
 				onClose={() => setDiscountAuthModalVisible(false)}
 			/>
 		</div>

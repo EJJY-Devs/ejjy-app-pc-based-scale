@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { actions, selectors, types } from '../ducks/branch-products';
 import { request } from '../global/types';
+import { modifiedExtraCallback } from '../utils/function';
 import { useActionDispatch } from './useActionDispatch';
 
 export const useBranchProducts = () => {
@@ -21,9 +22,9 @@ export const useBranchProducts = () => {
 
 	const resetStatus = () => setStatus(request.NONE);
 
-	const listBranchProductsRequest = () => {
+	const listBranchProductsRequest = (extraCallback = null) => {
 		setRecentRequest(types.LIST_BRANCH_PRODUCTS);
-		listBranchProducts({ callback });
+		listBranchProducts({ callback: modifiedExtraCallback(callback, extraCallback) });
 	};
 
 	const callback = ({ status, errors = [] }) => {

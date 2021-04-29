@@ -10,6 +10,7 @@ import { MainButtons } from './components/MainButtons/MainButtons';
 import { ProductTable } from './components/ProductTable/ProductTable';
 import { WeightDrawer } from './components/WeightDrawer/WeightDrawer';
 import './style.scss';
+import { message } from 'antd';
 
 const DRAWER_CLOSE_TIME = 4000;
 
@@ -29,8 +30,12 @@ const Main = () => {
 	// METHODS
 	useEffect(() => {
 		resetWeight();
-		getWeight();
-		listBranchProducts();
+		// getWeight();
+		listBranchProducts(({ status }) => {
+			if (status === request.ERROR) {
+				message.error('An error occurred while fetching branch products');
+			}
+		});
 	}, []);
 
 	useEffect(() => {

@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Divider, Drawer, message, Modal, Spin, Tabs } from 'antd';
+import cn from 'classnames';
 import { startCase, toLower } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { AddButtonIcon } from '../../../../components';
@@ -156,16 +157,27 @@ export const WeightDrawer = ({ visible, onClose }) => {
 			width="50%"
 			onClose={onClose}
 			closable={false}
-			maskClosable
+			maskClosable={false}
 		>
 			<Spin size="large" spinning={status === request.REQUESTING} style={{ height: '100%' }}>
-				{currentProduct && (
+				<div className={cn('drawer-buttons', { 'has-clear-selection': currentProduct })}>
+					{currentProduct && (
+						<MainButton
+							title="CLEAR SELECTION"
+							onClick={() => setCurrentProduct(null)}
+							classNames="btn-clear-selection"
+						/>
+					)}
+
 					<MainButton
-						title="CLEAR SELECTION"
-						onClick={() => setCurrentProduct(null)}
-						classNames="btn-clear"
+						title="CLOSE"
+						onClick={() => {
+							onClose();
+							setCurrentProduct(null);
+						}}
+						classNames="btn-close"
 					/>
-				)}
+				</div>
 
 				<Label id="weight" label="Weight" spacing />
 				<ControlledInput

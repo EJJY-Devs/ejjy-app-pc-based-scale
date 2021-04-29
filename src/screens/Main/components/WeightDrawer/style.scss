@@ -38,12 +38,24 @@
 		}
 	}
 
-	.btn-clear {
-		margin-bottom: 20px;
-		margin-left: auto;
-		padding: 10px 20px;
-		display: block;
-		font-size: 16px;
+	.drawer-buttons {
+		@include flex(flex-end, center);
+		margin-bottom: 25px;
+
+		&.has-clear-selection {
+			justify-content: space-between;
+		}
+
+		.MainButton {
+			padding: 10px 20px;
+			font-size: 16px;
+		}
+
+		.btn-clear-selection {
+			background-color: $color-red;
+			color: white;
+			box-shadow: 0px 4px 0px #ab363d;
+		}
 	}
 
 	.ant-spin-nested-loading,

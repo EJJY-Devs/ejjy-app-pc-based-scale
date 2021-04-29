@@ -12,6 +12,7 @@ export const useAuth = () => {
 
 	const user = useSelector(selectors.selectUser());
 	const accessToken = useSelector(selectors.selectAccessToken());
+	const localIpAddress = useSelector(selectors.selectLocalIpAddress());
 
 	const loginAction = useActionDispatch(actions.login);
 	const validateUserAction = useActionDispatch(actions.validateUser);
@@ -42,6 +43,7 @@ export const useAuth = () => {
 	return {
 		user,
 		accessToken,
+		localIpAddress,
 		login,
 		validateUser,
 		status,

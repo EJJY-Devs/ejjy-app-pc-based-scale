@@ -1,35 +1,54 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
-import { actions, types } from '../ducks/auth';
-import { request } from '../global/types';
-import { LOCAL_API_URL } from '../services';
+import axios from 'axios';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { actions, selectors, types } from '../ducks/auth';
+import { request, userTypes } from '../global/types';
 import { service } from '../services/auth';
 import { getUserTypeDescription } from '../utils/function';
 
 /* WORKERS */
 function* login({ payload }: any) {
 	const { login, password, callback } = payload;
-	callback(request.REQUESTING);
+	callback({ status: request.REQUESTING });
 
 	try {
-		const loginResponse = yield call(service.login, { login, password }, LOCAL_API_URL);
+		const loginResponse = yield call(service.loginOnline, { login, password });
 
 		if (loginResponse) {
-			const tokenResponse = yield call(service.acquireToken, { username: login, password });
+			if (loginResponse.data.user_type === userTypes.BRANCH_MANAGER) {
+				const user = loginResponse.data;
+				const tokenResponse = yield call(service.acquireToken, { username: login, password });
+				yield put(
+					actions.save({
+						user: user,
+						accessToken: tokenResponse.data.access,
+						refreshToken: tokenResponse.data.refresh,
+					}),
+				);
 
-			yield put(
-				actions.save({
-					user: loginResponse.data,
-					accessToken: tokenResponse.data.access,
-					refreshToken: tokenResponse.data.refresh,
-				}),
-			);
+				const branchResponse = yield call(service.getBranch, user?.branch?.id);
+				const localIpAddress = branchResponse.data?.local_ip_address;
 
-			callback(request.SUCCESS);
+				if (localIpAddress) {
+					axios.defaults.baseURL = localIpAddress;
+					yield put(actions.save({ localIpAddress: localIpAddress }));
+					callback({ status: request.SUCCESS });
+				} else {
+					callback({
+						status: request.ERROR,
+						errors: ['No local API address set on this branch yet.'],
+					});
+				}
+			} else {
+				callback({
+					status: request.ERROR,
+					errors: ['Only a branch manager is allowed to log in.'],
+				});
+			}
 		} else {
-			callback(request.ERROR, ['Username or password is invalid.']);
+			callback({ status: request.ERROR, errors: ['Username or password is invalid.'] });
 		}
 	} catch (e) {
-		callback(request.ERROR, e.errors);
+		callback({ status: request.ERROR, errors: e.errors });
 	}
 }
 
@@ -38,7 +57,12 @@ function* validateUser({ payload }: any) {
 	callback({ status: request.REQUESTING });
 
 	try {
-		const response = yield call(service.login, { login, password }, LOCAL_API_URL);
+		const localApiUrl = yield select(selectors.selectLocalIpAddress());
+		if (!localApiUrl) {
+			callback({ status: request.ERROR, errors: ['Local API URL not found.'] });
+		}
+
+		const response = yield call(service.login, { login, password }, localApiUrl);
 
 		if (response.data.user_type === userType) {
 			callback({ status: request.SUCCESS });
