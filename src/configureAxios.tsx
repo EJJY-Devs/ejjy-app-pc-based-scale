@@ -21,9 +21,12 @@ export default function configureAxios(store) {
 
 			// since there's no `connect` HOC, this is how we
 			// access the store (or reducer)
-			const { accessToken } = store.getState()?.[AUTH_KEY];
+			const { accessToken, localIpAddress } = store.getState()?.[AUTH_KEY];
 
 			// Get access token from store for every api request
+			if (!config.baseURL) {
+				config.baseURL = localIpAddress;
+			}
 			config.headers.authorization = accessToken ? `Bearer ${accessToken}` : null;
 
 			return config;

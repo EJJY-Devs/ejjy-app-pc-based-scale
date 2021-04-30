@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { message } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { Container } from '../../components';
 import { request } from '../../global/types';
@@ -8,9 +9,9 @@ import { CheckoutModal } from './components/Checkout/CheckoutModal';
 import { TemporaryCheckoutModal } from './components/Checkout/TemporaryCheckoutModal';
 import { MainButtons } from './components/MainButtons/MainButtons';
 import { ProductTable } from './components/ProductTable/ProductTable';
+import { SettingUrlModal } from './components/SettingUrl/SettingUrlModal';
 import { WeightDrawer } from './components/WeightDrawer/WeightDrawer';
 import './style.scss';
-import { message } from 'antd';
 
 const DRAWER_CLOSE_TIME = 4000;
 
@@ -19,6 +20,7 @@ const Main = () => {
 	const [checkoutModalVisible, setCheckoutModalVisible] = useState(false);
 	const [temporaryCheckoutModalVisible, setTemporaryCheckoutModalVisible] = useState(false);
 	const [drawerVisible, setDrawerVisible] = useState(false);
+	const [urlModalVisible, setUrlModalVisible] = useState(false);
 
 	// CUSTOM HOOKS
 	const { weight, resetWeight, getWeight } = usePc();
@@ -71,9 +73,16 @@ const Main = () => {
 					onClose={() => setTemporaryCheckoutModalVisible(false)}
 				/>
 
-				<h1 className="store-title" onClick={() => setDrawerVisible(true)}>
-					EJ &amp; JY WET MARKET AND ENTERPRISES
-				</h1>
+				<SettingUrlModal visible={urlModalVisible} onClose={() => setUrlModalVisible(false)} />
+
+				<div className="footer">
+					<h2 className="set-url" onClick={() => setUrlModalVisible(true)}>
+						Set Local URL
+					</h2>
+					<h1 className="store-title" onClick={() => setDrawerVisible(true)}>
+						EJ &amp; JY WET MARKET AND ENTERPRISES
+					</h1>
+				</div>
 			</section>
 		</Container>
 	);
