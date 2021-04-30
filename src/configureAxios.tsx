@@ -4,7 +4,6 @@ import { key as AUTH_KEY } from './ducks/auth';
 import { API_TIMEOUT, NO_VERIFICATION_NEEDED } from './services';
 
 export default function configureAxios(store) {
-	axios.defaults.baseURL = store.getState()?.[AUTH_KEY]?.localIpAddress;
 	axios.defaults.timeout = API_TIMEOUT;
 
 	// add a request interceptor to all the axios requests
@@ -23,10 +22,10 @@ export default function configureAxios(store) {
 			// access the store (or reducer)
 			const { accessToken, localIpAddress } = store.getState()?.[AUTH_KEY];
 
-			// Get access token from store for every api request
 			if (!config.baseURL) {
 				config.baseURL = localIpAddress;
 			}
+			// Get access token from store for every api request
 			config.headers.authorization = accessToken ? `Bearer ${accessToken}` : null;
 
 			return config;

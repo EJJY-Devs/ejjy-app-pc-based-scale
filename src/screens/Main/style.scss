@@ -9,12 +9,12 @@ $spacing: 25px;
 	.footer {
 		@include flex(center, center);
 		margin-top: 20px;
-		margin-bottom: 0;
 
 		.set-url {
 			position: absolute;
 			left: 15px;
 			color: $color-dark-gray;
+			margin-bottom: 0;
 		}
 
 		.store-title {
@@ -22,6 +22,7 @@ $spacing: 25px;
 			font-weight: bold;
 			text-align: center;
 			color: $color-dark-gray;
+			margin-bottom: 0;
 		}
 	}
 }
