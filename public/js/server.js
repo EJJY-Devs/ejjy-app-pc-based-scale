@@ -17,24 +17,24 @@
   scaleAndPrinterPath = "C:\\Users\\EJ-JY\\Desktop\\Scale and Printer\\bin\\Debug\\net4.0\\Scale and Printer.exe";
   
   app.get("/weight", cors(),(req, res, next) => {
-    const users = [
-      {val: 0, pct: 60},
-      {val: 1.5, pct: 20},
-      {val: 1.25, pct: 20},
-    ];
+    // const users = [
+    //   {val: 0, pct: 60},
+    //   {val: 1.5, pct: 20},
+    //   {val: 1.25, pct: 20},
+    // ];
     
-    const expanded = users.flatMap(user => Array(user.pct).fill(user));
-    const winner = expanded[Math.floor(Math.random() * expanded.length)];
+    // const expanded = users.flatMap(user => Array(user.pct).fill(user));
+    // const winner = expanded[Math.floor(Math.random() * expanded.length)];
 
-    res.json({weight: winner.val});
+    // res.json({weight: winner.val});
 
-    // const spawn = require('child_process').spawn;
-    // const posProc = spawn(scaleAndPrinterPath);
-    // posProc.stdout.once('data', function(data) {
-    //   const weight = parseFloat(data.toString());
-    //   res.json({weight});
-    // });
-    // posProc.stdin.write('getWeight\r\n');    
+    const spawn = require('child_process').spawn;
+    const posProc = spawn(scaleAndPrinterPath);
+    posProc.stdout.once('data', function(data) {
+      const weight = parseFloat(data.toString());
+      res.json({weight});
+    });
+    posProc.stdin.write('getWeight\r\n');    
   });
 
   
