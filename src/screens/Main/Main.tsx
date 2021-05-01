@@ -32,7 +32,7 @@ const Main = () => {
 	// METHODS
 	useEffect(() => {
 		resetWeight();
-		// getWeight();
+		getWeight();
 		listBranchProducts(({ status }) => {
 			if (status === request.ERROR) {
 				message.error('An error occurred while fetching branch products');
