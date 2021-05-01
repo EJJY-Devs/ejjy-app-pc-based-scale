@@ -46,6 +46,12 @@ export const WeightDrawer = ({ visible, onClose }) => {
 
 	// METHODS
 	useEffect(() => {
+		if (weight === 0) {
+			setCurrentProduct(null);
+		}
+	}, [weight]);
+
+	useEffect(() => {
 		const addedProductIds = transactionProducts.map(({ id }) => id);
 		const availableProducts = branchProducts.filter(
 			({ product }) => !addedProductIds.includes(product.id),
