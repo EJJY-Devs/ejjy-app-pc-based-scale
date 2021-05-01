@@ -47,6 +47,7 @@ export const WeightDrawer = ({ visible, onClose }) => {
 	// METHODS
 	useEffect(() => {
 		if (weight === 0) {
+			console.log('weight', weight);
 			setCurrentProduct(null);
 		}
 	}, [weight]);
@@ -100,6 +101,7 @@ export const WeightDrawer = ({ visible, onClose }) => {
 
 		printProduct(
 			{
+				name: currentProduct.name,
 				weight: `${weight.toFixed(3)}kg`,
 				price: currentProduct.price_per_piece?.toFixed(2),
 				totalPrice: `P${zeroToO(total.toFixed(2))}`,

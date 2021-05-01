@@ -11,7 +11,7 @@
 			th {
 				position: sticky;
 				top: 0;
-				padding: 25px 15px;
+				padding: 10px 15px;
 				@include font(1rem, bold);
 				color: $color-dark;
 				background-color: $color-main-background;
@@ -30,32 +30,6 @@
 
 				a {
 					color: $color-link !important;
-				}
-			}
-		}
-	}
-
-	&.hasCustomHeaderComponent {
-		thead {
-			th {
-				padding: 13px 15px;
-			}
-		}
-	}
-
-	&.page {
-		table {
-			thead {
-				th {
-					padding-left: 25px !important;
-					padding-right: 25px !important;
-				}
-			}
-
-			tbody {
-				td {
-					padding-left: 25px !important;
-					padding-right: 25px !important;
 				}
 			}
 		}

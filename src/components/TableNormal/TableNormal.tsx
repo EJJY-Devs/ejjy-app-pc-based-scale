@@ -1,5 +1,4 @@
 import { Spin, Tooltip } from 'antd';
-import cn from 'classnames';
 import React, { ReactNode } from 'react';
 import { calculateTableHeight } from '../../utils/function';
 import './style.scss';
@@ -15,23 +14,15 @@ interface Props {
 	columns: Column[];
 	data: any;
 	loading?: boolean;
-	displayInPage?: boolean;
-	hasCustomHeaderComponent?: boolean;
 }
 
 const ROW_HEIGHT = 58;
 
-export const TableNormal = ({
-	columns,
-	data,
-	loading,
-	displayInPage,
-	hasCustomHeaderComponent,
-}: Props) => {
+export const TableNormal = ({ columns, data, loading }: Props) => {
 	return (
 		<Spin size="large" spinning={loading}>
 			<div
-				className={cn('TableNormal', { page: displayInPage, hasCustomHeaderComponent })}
+				className="TableNormal"
 				style={{ height: calculateTableHeight(data?.length + 1, 4) + 25 }}
 			>
 				<table>

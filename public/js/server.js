@@ -42,13 +42,13 @@
     // DEBUG: TESTING PURPOSES ONLY REMOVE WHEN BUILD
     // res.json(true);
 
-    const {weight, price, totalPrice, code, branch} = req.body;
+  const {name, weight, price, totalPrice, code, branch} = req.body;
     const spawn = require('child_process').spawn;
     const posProc = spawn(scaleAndPrinterPath);
     posProc.stdout.once('data', function(data) {
       res.json(true);
     });
-    posProc.stdin.write(`print ${weight} ${price} ${totalPrice} ${code} ${branch}\r\n`);
+    posProc.stdin.write(`print ${name} ${weight} ${price} ${totalPrice} ${code} ${branch}\r\n`);
   });
 
   app.post("/print-transaction", cors(),(req, res, next) => {

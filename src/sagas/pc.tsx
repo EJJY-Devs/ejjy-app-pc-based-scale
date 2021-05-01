@@ -3,7 +3,7 @@ import { actions, types } from '../ducks/pc';
 import { request } from '../global/types';
 import { service } from '../services/pc';
 
-const WEIGHT_CHECKING_INTERVAL_MS = 250;
+const WEIGHT_CHECKING_INTERVAL_MS = 100;
 
 /* WORKERS */
 function* getWeight() {
@@ -20,11 +20,11 @@ function* getWeight() {
 }
 
 function* printProduct({ payload }: any) {
-	const { weight, price, totalPrice, code, branch, callback } = payload;
+	const { name, weight, price, totalPrice, code, branch, callback } = payload;
 	callback({ status: request.REQUESTING });
 
 	try {
-		yield call(service.printProduct, { weight, price, totalPrice, code, branch });
+		yield call(service.printProduct, { name, weight, price, totalPrice, code, branch });
 		callback({ status: request.SUCCESS });
 	} catch (e) {
 		callback({ status: request.ERROR, errors: e.errors });
