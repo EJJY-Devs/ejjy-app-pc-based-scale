@@ -163,7 +163,6 @@ export const WeightDrawer = ({ visible, onClose }) => {
 			visible={visible}
 			placement="right"
 			width="50%"
-			onClose={onClose}
 			closable={false}
 			maskClosable={false}
 		>
