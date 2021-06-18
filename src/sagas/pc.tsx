@@ -3,7 +3,7 @@ import { actions, types } from '../ducks/pc';
 import { request } from '../global/types';
 import { service } from '../services/pc';
 
-const WEIGHT_CHECKING_INTERVAL_MS = 75;
+const WEIGHT_CHECKING_INTERVAL_MS = 10;
 
 /* WORKERS */
 function* getWeight() {
