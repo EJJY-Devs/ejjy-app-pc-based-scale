@@ -1,38 +1,31 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { actions, selectors, types } from '../ducks/pc';
+import { actions, selectors } from '../ducks/pc';
 import { request } from '../global/types';
 import { modifiedExtraCallback } from '../utils/function';
 import { useActionDispatch } from './useActionDispatch';
 
 export const usePc = () => {
+	// STATES
 	const [status, setStatus] = useState<any>(request.NONE);
 	const [errors, setErrors] = useState<any>([]);
-	const [recentRequest, setRecentRequest] = useState<any>();
 
+	// SELECTORS
 	const weight = useSelector(selectors.selectWeight());
 
+	// ACTIONS
 	const getWeightAction = useActionDispatch(actions.getWeight);
+	const recalibrateAction = useActionDispatch(actions.recalibrate);
 	const printProductAction = useActionDispatch(actions.printProduct);
 	const printTransactionAction = useActionDispatch(actions.printTransaction);
 	const resetWeight = useActionDispatch(actions.resetWeight);
 
-	const reset = () => {
-		resetError();
-		resetStatus();
-	};
-
-	const resetError = () => setErrors([]);
-
-	const resetStatus = () => setStatus(request.NONE);
-
+	// METHODS
 	const getWeight = () => {
-		setRecentRequest(types.GET_WEIGHT);
 		getWeightAction();
 	};
 
 	const printProduct = (data, extraCallback = null) => {
-		setRecentRequest(types.PRINT_PRODUCT);
 		printProductAction({
 			...data,
 			callback: modifiedExtraCallback(callback, extraCallback),
@@ -40,9 +33,14 @@ export const usePc = () => {
 	};
 
 	const printTransaction = (data, extraCallback = null) => {
-		setRecentRequest(types.PRINT_TRANSACTION);
 		printTransactionAction({
 			...data,
+			callback: modifiedExtraCallback(callback, extraCallback),
+		});
+	};
+
+	const recalibrate = (extraCallback = null) => {
+		recalibrateAction({
 			callback: modifiedExtraCallback(callback, extraCallback),
 		});
 	};
@@ -54,15 +52,12 @@ export const usePc = () => {
 
 	return {
 		weight,
+		recalibrate,
 		resetWeight,
 		getWeight,
 		printProduct,
 		printTransaction,
 		status,
 		errors,
-		recentRequest,
-		reset,
-		resetStatus,
-		resetError,
 	};
 };

@@ -19,6 +19,18 @@ function* getWeight() {
 	}
 }
 
+function* recalibrate({ payload }: any) {
+	const { callback } = payload;
+	callback({ status: request.REQUESTING });
+
+	try {
+		yield call(service.recalibrate);
+		callback({ status: request.SUCCESS });
+	} catch (e) {
+		callback({ status: request.ERROR, errors: e.errors });
+	}
+}
+
 function* printProduct({ payload }: any) {
 	const { name, weight, price, totalPrice, code, branch, callback } = payload;
 	callback({ status: request.REQUESTING });
@@ -48,6 +60,10 @@ const getWeightWatcherSaga = function* getWeightWatcherSaga() {
 	yield takeLatest(types.GET_WEIGHT, getWeight);
 };
 
+const recalibrateWatcherSaga = function* recalibrateWatcherSaga() {
+	yield takeLatest(types.RECALIBRATE, recalibrate);
+};
+
 const printProductWatcherSaga = function* printProductWatcherSaga() {
 	yield takeLatest(types.PRINT_PRODUCT, printProduct);
 };
@@ -56,4 +72,9 @@ const printTransactionWatcherSaga = function* printTransactionWatcherSaga() {
 	yield takeLatest(types.PRINT_TRANSACTION, printTransaction);
 };
 
-export default [getWeightWatcherSaga(), printProductWatcherSaga(), printTransactionWatcherSaga()];
+export default [
+	getWeightWatcherSaga(),
+	recalibrateWatcherSaga(),
+	printProductWatcherSaga(),
+	printTransactionWatcherSaga(),
+];

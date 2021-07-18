@@ -8,6 +8,7 @@ export const types = {
 	GET_WEIGHT: `${key}/GET_WEIGHT`,
 	PRINT_PRODUCT: `${key}/PRINT_PRODUCT`,
 	PRINT_TRANSACTION: `${key}/PRINT_TRANSACTION`,
+	RECALIBRATE: `${key}/RECALIBRATE`,
 
 	RESET_WEIGHT: `${key}/RESET_WEIGHT`,
 };
@@ -41,6 +42,7 @@ export const actions = {
 	getWeight: createAction(types.GET_WEIGHT),
 	printProduct: createAction(types.PRINT_PRODUCT),
 	printTransaction: createAction(types.PRINT_TRANSACTION),
+	recalibrate: createAction(types.RECALIBRATE),
 	resetWeight: createAction(types.RESET_WEIGHT),
 };
 

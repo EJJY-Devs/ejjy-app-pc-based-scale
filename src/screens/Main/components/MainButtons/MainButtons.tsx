@@ -6,6 +6,7 @@ import { EMPTY_CELL, NO_INDEX_SELECTED } from '../../../../global/constants';
 import { productCategoryTypes, request, userTypes } from '../../../../global/types';
 import { useAuth } from '../../../../hooks/useAuth';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
+import { usePc } from '../../../../hooks/usePc';
 import { numberWithCommas, showErrorMessages } from '../../../../utils/function';
 import { DiscountAuthModal } from './DiscountAuthModal';
 import { MainButton } from './MainButton';
@@ -24,25 +25,11 @@ export const MainButtons = ({ onOpenCheckoutModal, onOpenTemporaryCheckoutModal 
 
 	// CUSTOM HOOKS
 	const { validateUser, status: authStatus } = useAuth();
-	const {
-		transactionProducts,
-		selectedProductIndex,
-		editProduct,
-		resetTransaction,
-	} = useCurrentTransaction();
+	const { transactionProducts, selectedProductIndex, editProduct, resetTransaction } =
+		useCurrentTransaction();
+	const { recalibrate } = usePc();
 
 	// METHODS
-	const onResetConfirmation = () => {
-		Modal.confirm({
-			className: 'EJJYModal',
-			title: 'Reset Confirmation',
-			icon: <ExclamationCircleOutlined />,
-			content: 'Are you sure you want to reset and clear the product list?',
-			okText: 'Reset',
-			cancelText: 'Cancel',
-			onOk: resetTransaction,
-		});
-	};
 
 	const isTempCheckoutDisabled = useCallback(
 		() =>
@@ -108,6 +95,28 @@ export const MainButtons = ({ onOpenCheckoutModal, onOpenTemporaryCheckoutModal 
 		});
 	};
 
+	const onReset = () => {
+		Modal.confirm({
+			className: 'EJJYModal',
+			title: 'Reset Confirmation',
+			icon: <ExclamationCircleOutlined />,
+			content: 'Are you sure you want to reset and clear the product list?',
+			okText: 'Reset',
+			cancelText: 'Cancel',
+			onOk: resetTransaction,
+		});
+	};
+
+	const onRecalibrate = () => {
+		recalibrate(({ status, errors }) => {
+			if (status === request.SUCCESS) {
+				message.success('Scale recalibrated successfully!');
+			} else if (status === request.ERROR) {
+				message.error('An error occurred while recalibrating scale.');
+			}
+		});
+	};
+
 	return (
 		<div className="MainButtons">
 			<div
@@ -117,11 +126,9 @@ export const MainButtons = ({ onOpenCheckoutModal, onOpenTemporaryCheckoutModal 
 						transactionProducts?.[selectedProductIndex]?.discount > 0,
 				})}
 			>
-				<MainButton
-					title="Reset"
-					onClick={onResetConfirmation}
-					disabled={!transactionProducts.length}
-				/>
+				<MainButton title="Reset" onClick={onReset} disabled={!transactionProducts.length} />
+
+				<MainButton title="Recalibrate" onClick={onRecalibrate} />
 
 				<div className="divider">
 					<Divider type="vertical" className="vertical-divider" />
