@@ -2,7 +2,7 @@ const { app, BrowserWindow, Menu, MenuItem } = require('electron');
 const path = require('path');
 
 let isDev = process.env.APP_DEV ? process.env.APP_DEV.trim() == 'true' : false;
-isDev = false;
+isDev = true;
 
 let mainWindow;
 function createWindow() {

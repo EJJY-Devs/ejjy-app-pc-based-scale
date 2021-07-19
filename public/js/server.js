@@ -54,7 +54,7 @@
     process.stdout.once("data", function () {
       res.json(true);
     });
-    process.stdin.write(`zero\r\n`);
+    process.stdin.write("zero\r\n");
   });
 
   module.exports = app;
