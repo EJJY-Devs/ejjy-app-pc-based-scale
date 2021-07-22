@@ -4,7 +4,9 @@ import { useActionDispatch } from './useActionDispatch';
 
 export const useCurrentTransaction = () => {
 	const transactionProducts = useSelector(selectors.selectProducts());
-	const selectedProductIndex = useSelector(selectors.selectSelectedProductIndex());
+	const selectedProductIndex = useSelector(
+		selectors.selectSelectedProductIndex(),
+	);
 	const currentProduct = useSelector(selectors.selectCurrentProduct());
 
 	const addProduct = useActionDispatch(actions.addProduct);

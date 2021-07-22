@@ -19,10 +19,16 @@ interface Props {
 	data: any;
 	activeRow?: number;
 	onClick: any;
-	loading?: any;
+	loading?: boolean;
 }
 
-export const TableProducts = ({ columns, data, activeRow, onClick, loading }: Props) => {
+export const TableProducts = ({
+	columns,
+	data,
+	activeRow,
+	onClick,
+	loading,
+}: Props) => {
 	// METHODS
 	const getStyleAlignment = (alignment) =>
 		({
@@ -36,31 +42,43 @@ export const TableProducts = ({ columns, data, activeRow, onClick, loading }: Pr
 				style={{ height: calculateTableHeight(data?.length + 1) + 25 }}
 			>
 				{!data.length && (
-					<img src={require('../../assets/images/logo.jpg')} alt="logo" className="placeholder" />
+					<img
+						src={require('../../assets/images/logo.jpg')}
+						alt="logo"
+						className="placeholder"
+					/>
 				)}
 
 				<table>
 					<thead>
 						<tr>
-							{columns.map(({ name, width, alignment, tooltip = null }, index) => (
-								<th key={`th-${index}`} style={{ width, ...getStyleAlignment(alignment) }}>
-									{tooltip ? <Tooltip title={tooltip}>{name}</Tooltip> : name}
-								</th>
-							))}
+							{columns.map(
+								({ name, width, alignment, tooltip = null }, index) => (
+									<th
+										key={`th-${index}`}
+										style={{ width, ...getStyleAlignment(alignment) }}
+									>
+										{tooltip ? <Tooltip title={tooltip}>{name}</Tooltip> : name}
+									</th>
+								),
+							)}
 						</tr>
 					</thead>
 					<tbody>
-						{data?.map((row, index) => (
+						{data?.map((row, rowIndex) => (
 							<tr
 								className={cn({
-									active: activeRow === index,
+									active: activeRow === rowIndex,
 								})}
-								key={`tr-${index}`}
+								key={`tr-${rowIndex}`}
 								style={{ height: `${ROW_HEIGHT}px` }}
-								onClick={() => onClick(index)}
+								onClick={() => onClick(rowIndex)}
 							>
-								{row.map((item, index) => (
-									<td key={`td-${index}`} style={getStyleAlignment(columns?.[index]?.alignment)}>
+								{row.map((item, colIndex) => (
+									<td
+										key={`td-${colIndex}`}
+										style={getStyleAlignment(columns?.[colIndex]?.alignment)}
+									>
 										{item}
 									</td>
 								))}
@@ -75,4 +93,5 @@ export const TableProducts = ({ columns, data, activeRow, onClick, loading }: Pr
 
 TableProducts.defaultProps = {
 	activeRow: NO_INDEX_SELECTED,
+	loading: false,
 };

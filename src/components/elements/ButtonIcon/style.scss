@@ -10,17 +10,12 @@
 	display: block;
 	cursor: pointer;
 
-	&.block {
-		display: block;
-		width: 100%;
-	}
-
-	&.loading {
+	&_loading {
 		opacity: 0.8;
 		pointer-events: none;
 	}
 
-	&.disabled {
+	&_disabled {
 		opacity: 0.5;
 		background-color: $color-dark-gray !important;
 		border: 0 !important;

@@ -13,15 +13,14 @@ interface Props {
 	onChange: any;
 	onFocus?: any;
 	autoFocus?: boolean;
-	classNames?: any;
-	ref?: any;
+	className?: any;
 	step?: string;
 }
 
 const ControlledInput = React.forwardRef<HTMLInputElement, Props>(
 	(
 		{
-			classNames,
+			className,
 			type,
 			id,
 			max,
@@ -41,7 +40,7 @@ const ControlledInput = React.forwardRef<HTMLInputElement, Props>(
 			type={type}
 			id={id}
 			name={id}
-			className={cn('Input', classNames)}
+			className={cn('Input', className)}
 			placeholder={placeholder}
 			max={max}
 			min={min}
@@ -50,6 +49,7 @@ const ControlledInput = React.forwardRef<HTMLInputElement, Props>(
 			onFocus={(event) => {
 				if (onFocus) onFocus(event.target.value);
 			}}
+			// eslint-disable-next-line jsx-a11y/no-autofocus
 			autoFocus={autoFocus}
 			value={value}
 			step={step}

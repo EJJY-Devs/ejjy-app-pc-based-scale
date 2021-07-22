@@ -1,62 +1,55 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { actions, selectors, types } from '../ducks/auth';
+import { actions, selectors } from '../ducks/auth';
 import { request } from '../global/types';
 import { modifiedExtraCallback } from '../utils/function';
 import { useActionDispatch } from './useActionDispatch';
 
 export const useAuth = () => {
+	// STATES
 	const [status, setStatus] = useState<any>(request.NONE);
 	const [errors, setErrors] = useState<any>([]);
-	const [recentRequest, setRecentRequest] = useState<any>();
 
+	// SELECTORS
 	const user = useSelector(selectors.selectUser());
-	const accessToken = useSelector(selectors.selectAccessToken());
 	const localIpAddress = useSelector(selectors.selectLocalIpAddress());
 
+	// ACTIONS
 	const saveAction = useActionDispatch(actions.save);
 	const loginAction = useActionDispatch(actions.login);
 	const validateUserAction = useActionDispatch(actions.validateUser);
 
-	const reset = () => {
-		resetError();
-		resetStatus();
-	};
-
-	const resetError = () => setErrors([]);
-
-	const resetStatus = () => setStatus(request.NONE);
-
+	// METHODS
 	const login = (data) => {
 		loginAction({ ...data, callback });
 	};
 
 	const validateUser = (data, extraCallback = null) => {
-		setRecentRequest(types.VALIDATE_USER);
-		validateUserAction({ ...data, callback: modifiedExtraCallback(callback, extraCallback) });
+		validateUserAction({
+			...data,
+			callback: modifiedExtraCallback(callback, extraCallback),
+		});
 	};
 
 	const updateLocalIpAddress = (newLocalIpAddress) => {
 		saveAction({ localIpAddress: newLocalIpAddress });
 	};
 
-	const callback = ({ status, errors = [] }) => {
-		setStatus(status);
-		setErrors(errors);
+	const callback = ({
+		status: callbackStatus,
+		errors: callbackErrors = [],
+	}) => {
+		setStatus(callbackStatus);
+		setErrors(callbackErrors);
 	};
 
 	return {
 		user,
-		accessToken,
 		localIpAddress,
 		login,
 		validateUser,
 		updateLocalIpAddress,
 		status,
 		errors,
-		recentRequest,
-		reset,
-		resetStatus,
-		resetError,
 	};
 };

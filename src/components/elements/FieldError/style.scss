@@ -6,12 +6,12 @@
 	margin-top: 8px;
 	margin-bottom: 5px;
 
-	.icon {
-		color: $color-red;
+	&_icon {
+		color: $color-red !important;
 		font-size: 13px;
 	}
 
-	.text {
+	&_text {
 		margin-left: 5px;
 		color: $color-red;
 		@include font(0.75rem);

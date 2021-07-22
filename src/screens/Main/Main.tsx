@@ -1,89 +1,82 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { message } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container } from '../../components';
 import { request } from '../../global/types';
 import { useBranchProducts } from '../../hooks/useBranchProducts';
-import { usePc } from '../../hooks/usePc';
+import { Buttons } from './components/Buttons/Buttons';
 import { CheckoutModal } from './components/Checkout/CheckoutModal';
 import { TemporaryCheckoutModal } from './components/Checkout/TemporaryCheckoutModal';
-import { MainButtons } from './components/MainButtons/MainButtons';
-import { ProductTable } from './components/ProductTable/ProductTable';
+import { MainTable } from './components/MainTable/MainTable';
 import { SettingUrlModal } from './components/SettingUrl/SettingUrlModal';
 import { WeightDrawer } from './components/WeightDrawer/WeightDrawer';
 import './style.scss';
 
-const DRAWER_CLOSE_TIME = 4000;
-
 const Main = () => {
 	// STATES
 	const [checkoutModalVisible, setCheckoutModalVisible] = useState(false);
-	const [temporaryCheckoutModalVisible, setTemporaryCheckoutModalVisible] = useState(false);
-	const [drawerVisible, setDrawerVisible] = useState(false);
+	const [temporaryCheckoutModalVisible, setTemporaryCheckoutModalVisible] =
+		useState(false);
 	const [urlModalVisible, setUrlModalVisible] = useState(false);
 
 	// CUSTOM HOOKS
-	const { weight, resetWeight, getWeight } = usePc();
-	const { listBranchProducts, status } = useBranchProducts();
-
-	// REFS
-	const refDrawerTimeout = useRef(null);
+	const { listBranchProducts, status: branchProductsStatus } =
+		useBranchProducts();
 
 	// METHODS
 	useEffect(() => {
-		resetWeight();
-		getWeight();
-		listBranchProducts(({ status }) => {
+		listBranchProducts({}, ({ status }) => {
 			if (status === request.ERROR) {
 				message.error('An error occurred while fetching branch products');
 			}
 		});
 	}, []);
 
-	useEffect(() => {
-		if (weight > 0) {
-			setDrawerVisible(true);
-			clearTimeout(refDrawerTimeout.current);
-		} else {
-			refDrawerTimeout.current = setTimeout(() => {
-				setDrawerVisible(false);
-			}, DRAWER_CLOSE_TIME);
-		}
-	}, [weight]);
-
 	return (
-		<Container loading={status === request.REQUESTING}>
+		<Container
+			loadingText="Fetching products..."
+			loading={branchProductsStatus === request.REQUESTING}
+		>
 			<section className="Main">
-				<div className="main-content">
-					<ProductTable isLoading={false} />
-					<MainButtons
+				<div className="Main_left">
+					<MainTable />
+					<Buttons
 						onOpenCheckoutModal={() => setCheckoutModalVisible(true)}
-						onOpenTemporaryCheckoutModal={() => setTemporaryCheckoutModalVisible(true)}
+						onOpenTemporaryCheckoutModal={() => {
+							setTemporaryCheckoutModalVisible(true);
+						}}
 					/>
-					<WeightDrawer visible={drawerVisible} onClose={() => setDrawerVisible(false)} />
 				</div>
 
-				<CheckoutModal
-					visible={checkoutModalVisible}
-					onClose={() => setCheckoutModalVisible(false)}
-				/>
-
-				<TemporaryCheckoutModal
-					visible={temporaryCheckoutModalVisible}
-					onClose={() => setTemporaryCheckoutModalVisible(false)}
-				/>
-
-				<SettingUrlModal visible={urlModalVisible} onClose={() => setUrlModalVisible(false)} />
-
-				<div className="footer">
-					<h2 className="set-url" onClick={() => setUrlModalVisible(true)}>
-						Set Local URL
-					</h2>
-					<h1 className="store-title" onClick={() => setDrawerVisible(true)}>
-						EJ &amp; JY WET MARKET AND ENTERPRISES
-					</h1>
+				<div className="Main_right">
+					<WeightDrawer />
 				</div>
 			</section>
+
+			<div className="Footer">
+				<h2 className="Footer_setUrl" onClick={() => setUrlModalVisible(true)}>
+					Set Local URL
+				</h2>
+				<h1 className="Footer_storeTitle">
+					EJ &amp; JY WET MARKET AND ENTERPRISES
+				</h1>
+			</div>
+
+			<CheckoutModal
+				visible={checkoutModalVisible}
+				onClose={() => setCheckoutModalVisible(false)}
+			/>
+
+			<TemporaryCheckoutModal
+				visible={temporaryCheckoutModalVisible}
+				onClose={() => setTemporaryCheckoutModalVisible(false)}
+			/>
+
+			<SettingUrlModal
+				visible={urlModalVisible}
+				onClose={() => setUrlModalVisible(false)}
+			/>
 		</Container>
 	);
 };

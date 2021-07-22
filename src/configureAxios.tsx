@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import axios from 'axios';
 import { flatten, values } from 'lodash';
 import { key as AUTH_KEY } from './ducks/auth';
@@ -12,7 +13,7 @@ export default function configureAxios(store) {
 	// is still valid and renew it if needed and possible
 	axios.interceptors.request.use(
 		// eslint-disable-next-line func-names
-		function (config) {
+		(config) => {
 			// if there's no verification needed, just exit immediately
 			if (NO_VERIFICATION_NEEDED === config.params) {
 				return config;
@@ -26,23 +27,27 @@ export default function configureAxios(store) {
 				config.baseURL = localIpAddress;
 			}
 			// Get access token from store for every api request
-			config.headers.authorization = accessToken ? `Bearer ${accessToken}` : null;
+			config.headers.authorization = accessToken
+				? `Bearer ${accessToken}`
+				: null;
 
 			return config;
 		},
-		function (error) {
-			return Promise.reject(error);
-		},
+		(error) => Promise.reject(error),
 	);
 
 	axios.interceptors.response.use(null, (error) => {
 		const modifiedError = { ...error };
 
 		if (error.isAxiosError) {
-			if (typeof error.response.data === 'string') {
+			if (typeof error?.response?.data === 'string') {
 				modifiedError.errors = [error.response.data];
+			} else if (typeof error?.response?.data === 'object') {
+				modifiedError.errors = flatten(values(error?.response?.data));
 			} else {
-				modifiedError.errors = flatten(values(error.response.data));
+				modifiedError.errors = [
+					'An error occurred while executing your request',
+				];
 			}
 		}
 

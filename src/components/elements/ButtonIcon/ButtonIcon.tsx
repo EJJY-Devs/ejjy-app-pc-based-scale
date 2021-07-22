@@ -1,10 +1,12 @@
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin, Tooltip } from 'antd';
+import cn from 'classnames';
 import * as React from 'react';
 import './style.scss';
-import cn from 'classnames';
-import { Spin, Tooltip } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
 
-const loadingIcon = <LoadingOutlined style={{ fontSize: 24, color: 'white' }} spin />;
+const loadingIcon = (
+	<LoadingOutlined style={{ fontSize: 24, color: 'white' }} spin />
+);
 
 interface Props {
 	icon: any;
@@ -15,20 +17,27 @@ interface Props {
 	classNames?: any;
 }
 
-const ButtonIcon = ({ onClick, icon, tooltip, loading, disabled, classNames }: Props) => (
+const ButtonIcon = ({
+	onClick,
+	icon,
+	tooltip,
+	loading,
+	disabled,
+	classNames,
+}: Props) => (
 	<Tooltip placement="top" title={tooltip}>
 		<button
+			type="button"
 			onClick={onClick}
-			className={cn('ButtonIcon', classNames, { disabled, loading })}
+			className={cn('ButtonIcon', classNames, {
+				ButtonIcon__disabled: disabled,
+				ButtonIcon__loading: loading,
+			})}
 			tabIndex={-1}
 		>
 			{loading ? <Spin indicator={loadingIcon} /> : <>{icon}</>}
 		</button>
 	</Tooltip>
 );
-
-ButtonIcon.defaultProps = {
-	onClick: null,
-};
 
 export default ButtonIcon;

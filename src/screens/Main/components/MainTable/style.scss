@@ -1,0 +1,32 @@
+@import '../../../../assets/styles/main';
+@import '../../style.scss';
+
+.MainTable {
+	flex: 1;
+
+	.TableProducts {
+		border-radius: 10px;
+		min-height: 480px;
+		border: 2px solid $color-gray;
+	}
+}
+
+.MainTableName {
+	&_info {
+		&_icon {
+			margin-left: 8px;
+			color: $color-primary;
+		}
+	}
+
+	&_quantities {
+		margin: 5px 0 0 0;
+		@include font(1rem, 400);
+
+		&_discount {
+			margin: 0 0 0 4px;
+			@include font(0.8rem, 400);
+			text-decoration: line-through;
+		}
+	}
+}

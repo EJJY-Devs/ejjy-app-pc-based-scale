@@ -11,11 +11,14 @@ function* getWeight() {
 		while (true) {
 			const response = yield call(service.getWeight);
 
-			yield put(actions.save({ type: types.GET_WEIGHT, weight: response.data.weight }));
+			yield put(
+				actions.save({ type: types.GET_WEIGHT, weight: response.data.weight }),
+			);
 			yield delay(WEIGHT_CHECKING_INTERVAL_MS);
 		}
 	} catch (e) {
-		console.error(e);
+		// eslint-disable-next-line no-console
+		console.error('getWeight', e);
 	}
 }
 
@@ -36,7 +39,14 @@ function* printProduct({ payload }: any) {
 	callback({ status: request.REQUESTING });
 
 	try {
-		yield call(service.printProduct, { name, weight, price, totalPrice, code, branch });
+		yield call(service.printProduct, {
+			name,
+			weight,
+			price,
+			totalPrice,
+			code,
+			branch,
+		});
 		callback({ status: request.SUCCESS });
 	} catch (e) {
 		callback({ status: request.ERROR, errors: e.errors });

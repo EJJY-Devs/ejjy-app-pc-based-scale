@@ -5,7 +5,9 @@ import cn from 'classnames';
 import * as React from 'react';
 import './style.scss';
 
-const loadingIcon = <LoadingOutlined style={{ fontSize: 17, color: 'white' }} spin />;
+const loadingIcon = (
+	<LoadingOutlined style={{ fontSize: 17, color: 'white' }} spin />
+);
 
 interface Props {
 	text: string | React.ReactNode;
@@ -44,9 +46,14 @@ const Button = React.forwardRef<HTMLInputElement, Props>(
 		}: Props,
 		ref,
 	) => (
-		<Tooltip placement={tooltipPlacement} title={tooltip} overlayClassName="button-tooltip">
+		<Tooltip
+			placement={tooltipPlacement}
+			title={tooltip}
+			overlayClassName="ButtonTooltip"
+		>
 			<button
 				ref={ref}
+				// eslint-disable-next-line react/button-has-type
 				type={type}
 				className={cn('Button', classNames, {
 					[variant]: true,
@@ -63,9 +70,13 @@ const Button = React.forwardRef<HTMLInputElement, Props>(
 					<Spin indicator={loadingIcon} className="spinner" />
 				) : (
 					<>
-						{iconDirection === 'left' && <div className="icon-left">{icon}</div>}
+						{iconDirection === 'left' && (
+							<div className="icon-left">{icon}</div>
+						)}
 						{text}
-						{iconDirection === 'right' && <div className="icon-right">{icon}</div>}
+						{iconDirection === 'right' && (
+							<div className="icon-right">{icon}</div>
+						)}
 					</>
 				)}
 			</button>

@@ -1,6 +1,10 @@
 import { message, Modal, Spin } from 'antd';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Button, ControlledInput, Label } from '../../../../components/elements';
+import {
+	Button,
+	ControlledInput,
+	Label,
+} from '../../../../components/elements';
 import { productCategoryTypes, request } from '../../../../global/types';
 import { useAuth } from '../../../../hooks/useAuth';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
@@ -34,11 +38,15 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 		}
 	}, [visible, inputRef]);
 
-	const getCheckoutProducts = useCallback(() => {
-		return transactionProducts.filter(
-			(product) => !product.isCheckedOut && product.product_category === productCategoryTypes.GULAY,
-		);
-	}, [transactionProducts]);
+	const getCheckoutProducts = useCallback(
+		() =>
+			transactionProducts.filter(
+				(product) =>
+					!product.isCheckedOut &&
+					product.product_category === productCategoryTypes.GULAY,
+			),
+		[transactionProducts],
+	);
 
 	const getTotal = useCallback(() => {
 		const total = getCheckoutProducts().reduce(
@@ -71,8 +79,8 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 					discount_per_piece: product?.discount || 0,
 				})),
 			},
-			({ status, response }) => {
-				if (status === request.SUCCESS) {
+			({ status: createTransactionStatus, response }) => {
+				if (createTransactionStatus === request.SUCCESS) {
 					const total = getCheckoutProducts().reduce(
 						(prev: number, { weight, price_per_piece }) =>
 							Number(weight) * Number(price_per_piece) + prev,
@@ -85,17 +93,17 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 							totalPrice: `P${zeroToO(total.toFixed(2))}`,
 							branch: 'TEST',
 						},
-						({ status }) => {
-							if (status === request.SUCCESS) {
+						({ status: printTransactionStatus }) => {
+							if (printTransactionStatus === request.SUCCESS) {
 								updateCheckedOutProducts();
 								onClose();
 								message.success('Transaction was created successfully.');
-							} else if (status === request.ERROR) {
+							} else if (printTransactionStatus === request.ERROR) {
 								message.error('An error occurred while printing transaction.');
 							}
 						},
 					);
-				} else if (status === request.ERROR) {
+				} else if (createTransactionStatus === request.ERROR) {
 					message.error('An error occurred while creating transaction.');
 				}
 			},
@@ -112,7 +120,10 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 			centered
 			closable
 		>
-			<Spin size="large" spinning={[transactionStatus, pcStatus].includes(request.REQUESTING)}>
+			<Spin
+				size="large"
+				spinning={[transactionStatus, pcStatus].includes(request.REQUESTING)}
+			>
 				<div className="form">
 					<div className="product-list">
 						<Label classNames="quantity-label" label="Products" spacing />
@@ -125,7 +136,7 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 
 					<Label classNames="quantity-label" label="Amount Due (₱)" spacing />
 					<ControlledInput
-						classNames="amount-due-input"
+						className="amount-due-input"
 						value={getTotal()}
 						onChange={() => null}
 						disabled
@@ -139,7 +150,13 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 							onClick={onClose}
 							classNames="btn-cancel"
 						/>
-						<Button type="submit" text="Proceed" size="lg" variant="primary" onClick={onSubmit} />
+						<Button
+							type="submit"
+							text="Proceed"
+							size="lg"
+							variant="primary"
+							onClick={onSubmit}
+						/>
 					</div>
 				</div>
 			</Spin>

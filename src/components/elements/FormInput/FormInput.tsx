@@ -38,6 +38,7 @@ const FormInput = ({
 		max={max}
 		min={min}
 		disabled={disabled}
+		// eslint-disable-next-line jsx-a11y/tabindex-no-positive
 		tabIndex={1}
 		autoFocus={autoFocus}
 		step={step}

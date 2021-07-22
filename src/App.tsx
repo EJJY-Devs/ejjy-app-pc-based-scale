@@ -1,10 +1,9 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { CommonRoute } from './components';
 import { APP_TITLE } from './global/constants';
-import { Error404, Login } from './screens';
-import { MainScreens } from './utils/routeMapping';
+import Login from './screens/Login/Login';
+import Main from './screens/Main/Main';
 
 const App = () => (
 	<>
@@ -12,11 +11,15 @@ const App = () => (
 			<title>{APP_TITLE}</title>
 		</Helmet>
 		<Switch>
-			<CommonRoute path="/login" exact component={Login} />
-			<CommonRoute path="/" exact component={MainScreens} />
+			<Route path="/login" exact component={Login} />
+			<Route path="/main" exact component={Main} />
+			{/* <CommonRoute
+				forUserType={userTypes.BRANCH_PERSONNEL}
+				path="/admin"
+				render={(props) => <Main {...props} />}
+			/> */}
 
-			<Route path="/404" exact component={Error404} />
-			<Route path="" render={() => <Redirect to="/404" />} />
+			<Redirect from="/" to="/login" />
 		</Switch>
 	</>
 );

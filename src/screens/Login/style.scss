@@ -1,0 +1,22 @@
+@import '../../assets/styles/main';
+
+.Login {
+	height: 100%;
+	background-color: $color-main-background;
+	@include flex(center, center);
+
+	&_box {
+		width: 400px;
+		padding: 50px 40px;
+		@include flex(center, center, column);
+	}
+
+	&_logo {
+		width: 200px;
+		margin-bottom: 40px;
+	}
+
+	&_requestErrors {
+		width: 100%;
+	}
+}

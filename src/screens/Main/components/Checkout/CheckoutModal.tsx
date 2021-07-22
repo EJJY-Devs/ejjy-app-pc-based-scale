@@ -1,7 +1,10 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Modal, Spin } from 'antd';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Button, ControlledInput, Label } from '../../../../components/elements';
+import {
+	Button,
+	ControlledInput,
+	Label,
+} from '../../../../components/elements';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { numberWithCommas } from '../../../../utils/function';
 import './style.scss';
@@ -61,7 +64,7 @@ export const CheckoutModal = ({ visible, onClose }: Props) => {
 				<div className="form">
 					<Label classNames="quantity-label" label="Amount Due (₱)" spacing />
 					<ControlledInput
-						classNames="amount-due-input"
+						className="amount-due-input"
 						value={getTotal()}
 						onChange={() => null}
 						disabled
@@ -75,7 +78,13 @@ export const CheckoutModal = ({ visible, onClose }: Props) => {
 							onClick={onClose}
 							classNames="btn-cancel"
 						/>
-						<Button type="submit" text="Proceed" size="lg" variant="primary" onClick={onSubmit} />
+						<Button
+							type="submit"
+							text="Proceed"
+							size="lg"
+							variant="primary"
+							onClick={onSubmit}
+						/>
 					</div>
 				</div>
 			</Spin>

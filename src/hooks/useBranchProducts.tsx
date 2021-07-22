@@ -1,45 +1,43 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { actions, selectors, types } from '../ducks/branch-products';
+import { actions, selectors } from '../ducks/branch-products';
 import { request } from '../global/types';
 import { modifiedExtraCallback } from '../utils/function';
 import { useActionDispatch } from './useActionDispatch';
 
 export const useBranchProducts = () => {
+	// STATES
 	const [status, setStatus] = useState<any>(request.NONE);
 	const [errors, setErrors] = useState<any>([]);
-	const [recentRequest, setRecentRequest] = useState<any>();
 
+	// SELECTORS
 	const branchProducts = useSelector(selectors.selectBranchProducts());
-	const listBranchProducts = useActionDispatch(actions.listBranchProducts);
 
-	const reset = () => {
-		resetError();
-		resetStatus();
+	// ACTIONS
+	const listBranchProductsAction = useActionDispatch(
+		actions.listBranchProducts,
+	);
+
+	// METHODS
+	const listBranchProducts = (data, extraCallback = null) => {
+		listBranchProductsAction({
+			...data,
+			callback: modifiedExtraCallback(callback, extraCallback),
+		});
 	};
 
-	const resetError = () => setErrors([]);
-
-	const resetStatus = () => setStatus(request.NONE);
-
-	const listBranchProductsRequest = (extraCallback = null) => {
-		setRecentRequest(types.LIST_BRANCH_PRODUCTS);
-		listBranchProducts({ callback: modifiedExtraCallback(callback, extraCallback) });
-	};
-
-	const callback = ({ status, errors = [] }) => {
-		setStatus(status);
-		setErrors(errors);
+	const callback = ({
+		status: callbackStatus,
+		errors: callbackErrors = [],
+	}) => {
+		setStatus(callbackStatus);
+		setErrors(callbackErrors);
 	};
 
 	return {
 		branchProducts,
-		listBranchProducts: listBranchProductsRequest,
+		listBranchProducts,
 		status,
 		errors,
-		recentRequest,
-		reset,
-		resetStatus,
-		resetError,
 	};
 };

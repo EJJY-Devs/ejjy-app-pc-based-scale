@@ -1,85 +1,35 @@
 @import '../../assets/styles/main';
 
-$spacing: 25px;
-
 .Main {
-	background-color: white;
 	height: 100%;
-
-	.footer {
-		@include flex(center, center);
-		margin-top: 20px;
-
-		.set-url {
-			position: absolute;
-			left: 15px;
-			color: $color-dark-gray;
-			margin-bottom: 0;
-		}
-
-		.store-title {
-			font-size: 30px;
-			font-weight: bold;
-			text-align: center;
-			color: $color-dark-gray;
-			margin-bottom: 0;
-		}
-	}
-}
-
-.other-button {
-	position: relative;
-	display: block;
 	width: 100%;
-	background: $color-gray;
-	box-shadow: 0px 4px 0px rgba(0, 0, 0, 0.25);
-	border: 0;
-	border-radius: 10px;
-	@include font(20px, bold);
-	color: #858585;
-	padding: 15px 10px;
-	cursor: pointer;
-	outline: 0;
+	display: grid;
+	grid-template-columns: repeat(2, 0.5fr);
+	column-gap: 20px;
+	background-color: white;
 
-	&.disabled {
-		opacity: 0.3 !important;
-		color: #858585 !important;
-		background: white !important;
-		border: 3px solid #b2b2b2 !important;
-		pointer-events: none !important;
-		box-shadow: none !important;
-	}
-
-	&:hover {
-		opacity: 0.7;
-	}
-
-	&.btn-end-session {
-		background-color: $color-red;
-		color: white;
-		box-shadow: 0px 4px 0px #ab363d !important;
-	}
-
-	&.btn-no-discount {
-		background-color: $color-red;
-		color: white;
-		box-shadow: 0px 4px 0px #ab363d;
+	&_left {
+		display: flex;
+		flex-direction: column;
 	}
 }
 
-.shortcut-key {
-	display: block;
-	@include font($size: 15px);
+.Footer {
+	@include flex(center, center);
+	margin-top: 20px;
 
-	&.text-lg {
-		@include font($size: 18px);
+	&_setUrl {
+		position: absolute;
+		left: 15px;
+		color: $color-dark-gray;
+		margin-bottom: 0;
 	}
 
-	&.position-right {
-		@include flex(center, center);
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		right: 15px;
+	&_storeTitle {
+		font-size: 30px;
+		font-weight: bold;
+		text-align: center;
+		color: $color-dark-gray;
+		margin-bottom: 0;
 	}
 }

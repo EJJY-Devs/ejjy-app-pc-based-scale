@@ -1,0 +1,28 @@
+@import '../../../../assets/styles/main';
+
+.Buttons {
+	display: grid;
+	column-gap: 10px;
+	row-gap: 10px;
+	grid-template-columns: repeat(4, 1fr);
+	grid-template-rows: repeat(2, $button-height);
+
+	&_btnReset {
+		grid-column: 3 / span 2;
+	}
+
+	&_btnTempCheckout {
+		grid-column: 1 / span 2;
+	}
+
+	&_btnCheckout {
+		grid-column: 3 / span 2;
+	}
+
+	&_btnRemoveDiscount {
+		grid-column: 1 / span 2;
+		color: white;
+		background-color: $color-red;
+		border-bottom: 4px solid #ab363d;
+	}
+}

@@ -1,137 +1,104 @@
 @import '../../../../assets/styles/main';
-@import '../../style.scss';
 
 .WeightDrawer {
-	.input-weight {
-		@include font(30px, bold);
+	height: 100%;
+
+	&_container {
+		height: inherit;
+		display: flex;
+		flex-direction: column;
+	}
+
+	&_inputWeight {
+		@include font(2.5rem, bold);
 		color: $color-dark;
 	}
 
-	.input-normal {
-		@include font(25px, bold);
-		color: $color-dark;
-	}
-
-	.btn-input-texcode {
-		width: 100%;
-	}
-
-	.input-spacing-top {
-		margin-top: 40px;
-	}
-
-	.button-print-checkout {
-		@include flex(stretch, stretch);
-		position: absolute;
-		bottom: 0;
-		width: 100%;
-
-		.btn-print {
-			max-height: 100%;
-			width: 100%;
-			margin-right: 20px;
-		}
-
-		.btn-add-cart {
-			height: 100%;
-			width: 150px;
-		}
-	}
-
-	.drawer-buttons {
-		@include flex(flex-end, center);
-		margin-bottom: 25px;
-
-		&.has-clear-selection {
-			justify-content: space-between;
-		}
-
-		.MainButton {
-			padding: 10px 20px;
-			font-size: 16px;
-		}
-
-		.btn-clear-selection {
-			background-color: $color-red;
-			color: white;
-			box-shadow: 0px 4px 0px #ab363d;
-		}
-	}
-
-	.ant-spin-nested-loading,
 	.ant-spin-container {
-		height: 100% !important;
+		height: inherit;
 	}
 }
 
-.TextcodeModal {
-	.textcode-numbers {
+.WeightProductDetails {
+	&_inputGroup {
+		margin: 30px 0 0 0;
+
+		&_input {
+			@include font(25px, bold);
+			color: $color-dark;
+		}
+	}
+
+	&_btnGroup {
+		height: $button-height;
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		display: grid;
+		grid-template-columns: 0.65fr 0.35fr;
+		column-gap: 10px;
+	}
+
+	&_btnClear {
+		@include font(1rem, normal);
+		width: 100%;
+		margin: 20px 0 0 0;
+		color: $color-red;
+		border: 2px solid $color-red;
+		background-color: transparent;
+	}
+}
+
+.WeightProductSelection {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+
+	&_tabs {
+		flex: 1;
+	}
+
+	&_btnInputTextcode {
+		height: $button-height;
+	}
+}
+
+.WeightTextcodeModal {
+	
+
+	&_textcodeNumbers {
 		width: 100%;
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: repeat(5, auto);
 		column-gap: 10px;
 		row-gap: 10px;
-		grid-template-areas:
-			'input input btn-clear'
-			'number-7 number-8 number-9'
-			'number-4 number-5 number-6'
-			'number-1 number-2 number-3'
-			'number-0 number-0 number-0';
 
-		.input {
-			text-align: center;
-			@include font(40px, bold);
+		&_input {
+			@include font(2.5rem, bold);
 			color: $color-dark;
-			grid-area: input;
+			grid-column: 1 / span 2;
 		}
 
-		.number-9 {
-			grid-area: number-9;
+		&_btnClear {
+			padding-top: 20px;
+			padding-bottom: 20px;
 		}
 
-		.number-8 {
-			grid-area: number-8;
-		}
+		&_num {
+			font-size: 2rem;
+			height: 80px;
 
-		.number-7 {
-			grid-area: number-7;
-		}
-
-		.number-6 {
-			grid-area: number-6;
-		}
-
-		.number-5 {
-			grid-area: number-5;
-		}
-
-		.number-4 {
-			grid-area: number-4;
-		}
-
-		.number-3 {
-			grid-area: number-3;
-		}
-
-		.number-2 {
-			grid-area: number-2;
-		}
-
-		.number-1 {
-			grid-area: number-1;
-		}
-
-		.number-0 {
-			grid-area: number-0;
+			&0 {
+				grid-column: 1 / span 3;
+			}
 		}
 	}
 
-	.btn-clear {
-		padding-top: 20px;
-		padding-bottom: 20px;
-	}
-
-	.custom-footer {
-		margin-top: 30px !important;
+	&_btnGroup {
+		margin: 30px 0 0 0;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		column-gap: 20px;
 	}
 }

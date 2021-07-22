@@ -1,4 +1,4 @@
-import { Modal, message } from 'antd';
+import { message, Modal } from 'antd';
 import React from 'react';
 import { useAuth } from '../../../../hooks/useAuth';
 import { SettingUrlForm } from './SettingUrlForm';
@@ -30,7 +30,11 @@ export const SettingUrlModal = ({ visible, onClose }: Props) => {
 			centered
 			closable
 		>
-			<SettingUrlForm localIpAddress={localIpAddress} onSubmit={onSubmit} onClose={onClose} />
+			<SettingUrlForm
+				localIpAddress={localIpAddress}
+				onSubmit={onSubmit}
+				onClose={onClose}
+			/>
 		</Modal>
 	);
 };
