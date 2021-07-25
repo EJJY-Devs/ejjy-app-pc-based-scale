@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable react/jsx-one-expression-per-line */
 import { message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Container } from '../../components';
@@ -62,6 +63,10 @@ const Main = () => {
 					EJ &amp; JY WET MARKET AND ENTERPRISES
 				</h1>
 			</div>
+
+			<span className="AppVersion">
+				App Version {process.env.REACT_APP_VERSION}
+			</span>
 
 			<CheckoutModal
 				visible={checkoutModalVisible}

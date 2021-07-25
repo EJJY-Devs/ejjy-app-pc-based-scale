@@ -20,14 +20,6 @@ body {
 	height: 700px;
 }
 
-.ml-10 {
-	margin-left: 10px;
-}
-
-.mr-10 {
-	margin-right: 10px;
-}
-
 .ant-modal-root {
 	.ant-modal {
 		margin-top: 25px;
@@ -71,19 +63,6 @@ body {
 	}
 }
 
-.quantity-container {
-	@include flex();
-
-	& > *:first-child {
-		margin-right: 8px;
-	}
-
-	select {
-		width: 80px;
-		font-size: 12px;
-	}
-}
-
 .ant-message {
 	.ant-message-custom-content {
 		span {
@@ -116,4 +95,10 @@ body {
 			font-size: 25px !important;
 		}
 	}
+}
+
+.AppVersion {
+	position: fixed;
+	bottom: 5px;
+	right: 5px;
 }

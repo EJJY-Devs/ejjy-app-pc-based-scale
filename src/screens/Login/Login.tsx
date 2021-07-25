@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AuthForm, RequestErrors } from '../../components';
@@ -40,6 +41,10 @@ const Login = () => {
 					loading={authStatus === request.REQUESTING}
 				/>
 			</Box>
+
+			<span className="AppVersion">
+				App Version {process.env.REACT_APP_VERSION}
+			</span>
 		</section>
 	);
 };
