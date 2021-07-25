@@ -13,8 +13,8 @@
 		"dev": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
 		"electron": "wait-on http://localhost:3000 && electron .",
 		"pack:build": "npm run build && electron-packager . EJJY-PC-Based-Scale --no-prune --platform=win32 --ignore=/.vscode --ignore=/deployment --ignore=/node_modules --ignore=/public --ignore=/src --ignore=/.prettierignore --ignore=/.prettierrc --ignore=/.config-overrides.js --ignore=/package-lock.json --ignore=/README.md --ignore=/tsconfig.json --ignore=/yarn.lock --ignore=/electron-dev --overwrite",
-		"pack:install": "cd EJJY-PC-Based-Scale-win32-ia32/resources/app && mv temp-package.json package.json && npm install",
-		"pack:zip": "7z a -tzip EJJY-PC-Based-Scale-win32-ia32.zip EJJY-PC-Based-Scale-win32-ia32",
+		"pack:install": "cd EJJY-PC-Based-Scale-win32-x64/resources/app && mv temp-package.json package.json && npm install",
+		"pack:zip": "7z a -tzip EJJY-PC-Based-Scale-win32-x64.zip EJJY-PC-Based-Scale-win32-x64",
 		"pack": "npm version patch --no-git-tag-version && npm run pack:build && npm run pack:install && npm run pack:zip"
 	},
 	"dependencies": {
@@ -71,7 +71,6 @@
 		"@types/yup": "^0.29.6",
 		"concurrently": "^5.3.0",
 		"electron": "^11.2.1",
-		"electron-builder": "^22.9.1",
 		"electron-packager": "^15.2.0",
 		"express": "^4.17.1",
 		"node-sass": "^4.14.1",
