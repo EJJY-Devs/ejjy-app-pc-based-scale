@@ -1,16 +1,9 @@
 {
 	"name": "ejjy-pc-based-scale",
-	"version": "0.1.1",
+	"version": "1.0.0",
 	"private": true,
 	"homepage": "./",
 	"main": "./electron/main.js",
-	"scripts": {
-		"start": "react-scripts start",
-		"build": "react-scripts build",
-		"dev": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
-		"electron": "wait-on http://localhost:3000 && electron .",
-		"pack": "npm run build && electron-packager . EJJY-PC-Based-Scale --no-prune --platform=win32 --ignore=/.vscode --ignore=/deployment --ignore=/node_modules --ignore=/public --ignore=/src --ignore=/.prettierignore --ignore=/.prettierrc --ignore=/.config-overrides.js --ignore=/package-lock.json --ignore=/README.md --ignore=/tsconfig.json --ignore=/yarn.lock --ignore=/electron-dev --overwrite"
-	},
 	"dependencies": {
 		"cors": "^2.8.5",
 		"express": "^4.17.1"
