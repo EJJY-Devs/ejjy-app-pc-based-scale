@@ -165,8 +165,6 @@ export const Buttons = ({
 	return (
 		<>
 			<div className="Buttons">
-				{/* <MainButton title="Recalibrate" onClick={onRecalibrate} /> */}
-
 				{isWithDiscount() ? (
 					<ScaleButton
 						className="Buttons_btnRemoveDiscount"
@@ -203,6 +201,12 @@ export const Buttons = ({
 					title="Reset"
 					onClick={onReset}
 					disabled={!transactionProducts.length}
+				/>
+
+				<ScaleButton
+					className="Buttons_btnRecalibrate"
+					title="Zero"
+					onClick={onRecalibrate}
 				/>
 
 				<ScaleButton

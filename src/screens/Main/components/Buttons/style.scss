@@ -1,5 +1,11 @@
 @import '../../../../assets/styles/main';
 
+@mixin redButton() {
+	color: white;
+	background-color: $color-red;
+	border-bottom: 4px solid #ab363d;
+}
+
 .Buttons {
 	display: grid;
 	column-gap: 10px;
@@ -7,8 +13,8 @@
 	grid-template-columns: repeat(4, 1fr);
 	grid-template-rows: repeat(2, $button-height);
 
-	&_btnReset {
-		grid-column: 3 / span 2;
+	&_btnRecalibrate {
+		@include redButton();
 	}
 
 	&_btnTempCheckout {
@@ -21,8 +27,6 @@
 
 	&_btnRemoveDiscount {
 		grid-column: 1 / span 2;
-		color: white;
-		background-color: $color-red;
-		border-bottom: 4px solid #ab363d;
+		@include redButton();
 	}
 }
