@@ -2,8 +2,11 @@
 
 .Container {
 	width: 100%;
+	min-height: 100vh;
 	height: 100%;
 	padding: 15px;
+
+	@include flex(center, center);
 
 	.ant-spin-container {
 		width: inherit;

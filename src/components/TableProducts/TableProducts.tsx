@@ -2,7 +2,6 @@ import { Spin, Tooltip } from 'antd';
 import cn from 'classnames';
 import React, { ReactNode } from 'react';
 import { NO_INDEX_SELECTED, ROW_HEIGHT } from '../../global/constants';
-import { calculateTableHeight } from '../../utils/function';
 import './style.scss';
 
 interface Column {
@@ -37,10 +36,7 @@ export const TableProducts = ({
 
 	return (
 		<Spin size="large" spinning={loading}>
-			<div
-				className="TableProducts"
-				style={{ height: calculateTableHeight(data?.length + 1) + 25 }}
-			>
+			<div className="TableProducts">
 				{!data.length && (
 					<img
 						src={require('../../assets/images/logo.jpg')}

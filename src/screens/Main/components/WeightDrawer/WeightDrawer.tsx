@@ -60,7 +60,6 @@ export const WeightDrawer = () => {
 				if (status === request.SUCCESS) {
 					onSuccess();
 				} else if (status === request.ERROR) {
-					onSuccess();
 					message.error('An error occurred while printing the product details');
 				}
 			},

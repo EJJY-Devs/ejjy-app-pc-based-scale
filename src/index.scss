@@ -11,13 +11,6 @@ body {
 	background-color: #fff;
 	font-family: $font-primary;
 	color: $color-dark;
-
-	@include flex(center, center);
-}
-
-#root {
-	width: 1024px;
-	height: 700px;
 }
 
 .ant-modal-root {
