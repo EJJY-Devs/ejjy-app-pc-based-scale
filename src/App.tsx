@@ -13,11 +13,6 @@ const App = () => (
 		<Switch>
 			<Route path="/login" exact component={Login} />
 			<Route path="/main" exact component={Main} />
-			{/* <CommonRoute
-				forUserType={userTypes.BRANCH_PERSONNEL}
-				path="/admin"
-				render={(props) => <Main {...props} />}
-			/> */}
 
 			<Redirect from="/" to="/login" />
 		</Switch>
