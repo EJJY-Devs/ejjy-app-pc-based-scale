@@ -2,9 +2,12 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-one-expression-per-line */
 import { message } from 'antd';
+import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Container } from '../../components';
 import { request } from '../../global/types';
+import { useAuth } from '../../hooks/useAuth';
 import { useBranchProducts } from '../../hooks/useBranchProducts';
 import { Buttons } from './components/Buttons/Buttons';
 import { CheckoutModal } from './components/Checkout/CheckoutModal';
@@ -22,6 +25,8 @@ const Main = () => {
 	const [urlModalVisible, setUrlModalVisible] = useState(false);
 
 	// CUSTOM HOOKS
+	const history = useHistory();
+	const { user } = useAuth();
 	const { listBranchProducts, status: branchProductsStatus } =
 		useBranchProducts();
 
@@ -33,6 +38,12 @@ const Main = () => {
 			}
 		});
 	}, []);
+
+	useEffect(() => {
+		if (isEmpty(user)) {
+			history.replace('/login');
+		}
+	}, [user]);
 
 	return (
 		<Container

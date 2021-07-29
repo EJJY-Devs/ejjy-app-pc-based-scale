@@ -65,3 +65,13 @@ export const convertIntoArray = (errors, prefixMessage = null) => {
 
 	return array;
 };
+
+export const formatPrintDetails = (detail) => {
+	let formattedDetail = '';
+
+	if (detail) {
+		formattedDetail = detail?.replace(/\s/g, '%');
+	}
+
+	return formattedDetail;
+};

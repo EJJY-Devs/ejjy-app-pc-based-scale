@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-one-expression-per-line */
+import { isEmpty } from 'lodash';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AuthForm, RequestErrors } from '../../components';
@@ -15,7 +16,7 @@ const Login = () => {
 
 	// METHODS
 	useEffect(() => {
-		if (user) {
+		if (!isEmpty(user)) {
 			history.replace('main');
 		}
 	}, [user]);

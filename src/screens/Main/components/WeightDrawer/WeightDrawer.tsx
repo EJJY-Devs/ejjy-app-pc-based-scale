@@ -6,13 +6,15 @@ import ControlledInput from '../../../../components/elements/ControlledInput/Con
 import { request } from '../../../../global/types';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
-import { zeroToO } from '../../../../utils/function';
+import { formatPrintDetails, zeroToO } from '../../../../utils/function';
 import './style.scss';
 import { WeightProductDetails } from './WeightProductDetails';
 import { WeightProductSelection } from './WeightProductSelection';
+import { useAuth } from '../../../../hooks/useAuth';
 
 export const WeightDrawer = () => {
 	// CUSTOM HOOKS
+	const { user } = useAuth();
 	const { resetWeight, getWeight } = usePc();
 	const { weight, printProduct, status: pcStatus } = usePc();
 	const { transactionProducts, currentProduct, setCurrentProduct } =
@@ -49,12 +51,12 @@ export const WeightDrawer = () => {
 
 		printProduct(
 			{
-				name: currentProduct.name,
+				name: formatPrintDetails(currentProduct.name),
 				weight: `${weight.toFixed(3)}kg`,
 				price: currentProduct.price_per_piece?.toFixed(2),
 				totalPrice: `P${zeroToO(total.toFixed(2))}`,
 				code: `${currentProduct.barcode}${wholeNumber}${decimalNumber}`,
-				branch: 'TEST',
+				branch: formatPrintDetails(user?.branch?.name),
 			},
 			({ status }) => {
 				if (status === request.SUCCESS) {

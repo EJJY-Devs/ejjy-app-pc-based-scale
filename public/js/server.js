@@ -1,4 +1,4 @@
-/* eslint-disable global-require */
+/* eslint-disable */
 (function () {
   const express = require("express");
   const cors = require("cors");
@@ -12,7 +12,7 @@
     console.log(`Express server listening on port ${server.address().port}`);
   });
 
-  // Initiaite Scale and Printer exe
+  // Initiate Scale and Printer exe
   let process = null;
   const scaleAndPrinterPath = "C:\\Users\\EJ-JY\\Desktop\\Scale and Printer\\bin\\Debug\\net4.0\\Scale and Printer.exe";
   fs.stat(scaleAndPrinterPath, function(err, stat) {

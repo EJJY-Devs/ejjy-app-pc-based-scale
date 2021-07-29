@@ -22,6 +22,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 	const onPrintAndAddCart = () => {
 		onPrint(() => {
 			addProduct({ ...currentProduct, weight: weight.toFixed(3) });
+			onClearSelectedProduct();
 			message.success('Product successfully added.');
 		});
 	};
