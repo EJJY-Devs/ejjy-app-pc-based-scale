@@ -41,7 +41,7 @@ const Main = () => {
 
 	useEffect(() => {
 		if (isEmpty(user)) {
-			history.replace('/login');
+			history.replace('/');
 		}
 	}, [user]);
 

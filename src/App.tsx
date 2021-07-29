@@ -11,7 +11,7 @@ const App = () => (
 			<title>{APP_TITLE}</title>
 		</Helmet>
 		<Switch>
-			<Route path="/login" exact component={Login} />
+			<Route path="/" exact component={Login} />
 			<Route path="/main" exact component={Main} />
 		</Switch>
 	</>
