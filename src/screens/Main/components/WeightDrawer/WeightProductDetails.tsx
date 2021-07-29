@@ -74,7 +74,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 			/>
 
 			<div className="WeightProductDetails_btnGroup">
-				<ScaleButton title="Print" onClick={onPrint} />
+				<ScaleButton title="Print" onClick={() => onPrint()} />
 				<ScaleButton
 					title={
 						<img

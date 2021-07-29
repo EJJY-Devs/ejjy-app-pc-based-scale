@@ -38,7 +38,7 @@ export const WeightDrawer = () => {
 		}
 	};
 
-	const onPrint = (onSuccess = () => {}) => {
+	const onPrint = (onSuccess = null) => {
 		const weightSplit = weight.toFixed(3).split('.');
 		const wholeNumber = `0${weightSplit}`.substring(0, 2);
 		const decimalNumber = weightSplit[1].substring(0, 2);
@@ -60,7 +60,11 @@ export const WeightDrawer = () => {
 			},
 			({ status }) => {
 				if (status === request.SUCCESS) {
-					onSuccess();
+					if (!onSuccess) {
+						message.success('Successfully printed product details.');
+					} else {
+						onSuccess();
+					}
 				} else if (status === request.ERROR) {
 					message.error('An error occurred while printing the product details');
 				}
