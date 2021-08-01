@@ -53,7 +53,7 @@ export const WeightDrawer = () => {
 			{
 				name: formatPrintDetails(currentProduct.name),
 				weight: `${weight.toFixed(3)}kg`,
-				price: currentProduct.price_per_piece?.toFixed(2),
+				price: `P${zeroToO(currentProduct.price_per_piece.toFixed(2))}`,
 				totalPrice: `P${zeroToO(total.toFixed(2))}`,
 				code: `${currentProduct.barcode}${wholeNumber}${decimalNumber}`,
 				branch: formatPrintDetails(user?.branch?.name),
