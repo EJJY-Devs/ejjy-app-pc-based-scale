@@ -43,12 +43,15 @@ export const WeightDrawer = () => {
 		const wholeNumber = `0${weightSplit}`.substring(0, 2);
 		const decimalNumber = weightSplit[1].substring(0, 2);
 
-		const total = transactionProducts.reduce(
-			(prev: number, { weight: productWeight, price_per_piece }) =>
-				Number(productWeight) * Number(price_per_piece) + prev,
-			0,
-		);
-
+		const total = currentProduct.price_per_piece * weight;
+		console.log('data', {
+			name: formatPrintDetails(currentProduct.name),
+			weight: `${weight.toFixed(3)}kg`,
+			price: `P${zeroToO(currentProduct.price_per_piece.toFixed(2))}`,
+			totalPrice: `P${zeroToO(total.toFixed(2))}`,
+			code: `${currentProduct.barcode}${wholeNumber}${decimalNumber}`,
+			branch: formatPrintDetails(user?.branch?.name),
+		});
 		printProduct(
 			{
 				name: formatPrintDetails(currentProduct.name),
