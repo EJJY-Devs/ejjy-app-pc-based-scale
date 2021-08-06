@@ -40,18 +40,11 @@ export const WeightDrawer = () => {
 
 	const onPrint = (onSuccess = null) => {
 		const weightSplit = weight.toFixed(3).split('.');
-		const wholeNumber = `0${weightSplit}`.substring(0, 2);
-		const decimalNumber = weightSplit[1].substring(0, 2);
+		const wholeNumber = `0${weightSplit[0]}`.substring(0, 2);
+		const decimalNumber = weightSplit[1];
 
 		const total = currentProduct.price_per_piece * weight;
-		console.log('data', {
-			name: formatPrintDetails(currentProduct.name),
-			weight: `${weight.toFixed(3)}kg`,
-			price: `P${zeroToO(currentProduct.price_per_piece.toFixed(2))}`,
-			totalPrice: `P${zeroToO(total.toFixed(2))}`,
-			code: `${currentProduct.barcode}${wholeNumber}${decimalNumber}`,
-			branch: formatPrintDetails(user?.branch?.name),
-		});
+
 		printProduct(
 			{
 				name: formatPrintDetails(currentProduct.name),

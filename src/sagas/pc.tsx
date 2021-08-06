@@ -37,6 +37,8 @@ function* recalibrate({ payload }: any) {
 function* printProduct({ payload }: any) {
 	const { name, weight, price, totalPrice, code, branch, callback } = payload;
 	callback({ status: request.REQUESTING });
+	// eslint-disable-next-line no-console
+	console.info('printProduct', payload);
 
 	try {
 		yield call(service.printProduct, {
@@ -56,6 +58,7 @@ function* printProduct({ payload }: any) {
 function* printTransaction({ payload }: any) {
 	const { transactionId, totalPrice, branch, callback } = payload;
 	callback({ status: request.REQUESTING });
+	console.info('printTransaction', payload);
 
 	try {
 		yield call(service.printTransaction, { transactionId, totalPrice, branch });
