@@ -75,12 +75,8 @@
 		&_input {
 			@include font(2.5rem, bold);
 			color: $color-dark;
-			grid-column: 1 / span 2;
-		}
-
-		&_btnClear {
-			padding-top: 20px;
-			padding-bottom: 20px;
+			text-align: center;
+			grid-column: 1 / span 3;
 		}
 
 		&_num {
@@ -88,7 +84,7 @@
 			height: 80px;
 
 			&0 {
-				grid-column: 1 / span 3;
+				grid-column: 1 / span 2;
 			}
 		}
 	}

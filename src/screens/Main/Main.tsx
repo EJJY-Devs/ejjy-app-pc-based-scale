@@ -42,7 +42,7 @@ const Main = () => {
 		});
 
 		listProductCategories(({ status }) => {
-			if (status === request.SUCCESS) {
+			if (status === request.ERROR) {
 				message.error('An error occurred while fetching product categories.');
 			}
 		});

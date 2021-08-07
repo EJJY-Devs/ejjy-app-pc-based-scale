@@ -9,6 +9,8 @@ import { useBranchProducts } from '../../../../hooks/useBranchProducts';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import './style.scss';
 
+const TEXTCODE_MAX_LENGTH = 10;
+
 interface Props {
 	visible: boolean;
 	onSelectProduct: any;
@@ -103,79 +105,74 @@ export const WeightTextcodeModal = ({
 					onChange={(value) => setTextcode(value)}
 					disabled
 				/>
-				<ScaleButton
-					className="WeightTextcodeModal_textcodeNumbers_btnClear"
-					title={
-						<img
-							src={require('../../../../assets/images/icon-delete.svg')}
-							alt="icon"
-						/>
-					}
-					onClick={() => onNumpadInput(-1)}
-				/>
 
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
-					title="9"
-					onClick={() => onNumpadInput(9)}
-					disabled={textcode.length === 10}
+					title="7"
+					onClick={() => onNumpadInput(7)}
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
 					title="8"
 					onClick={() => onNumpadInput(8)}
-					disabled={textcode.length === 10}
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
-					title="7"
-					onClick={() => onNumpadInput(7)}
-					disabled={textcode.length === 10}
+					title="9"
+					onClick={() => onNumpadInput(9)}
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
-					title="6"
-					onClick={() => onNumpadInput(6)}
-					disabled={textcode.length === 10}
+					title="4"
+					onClick={() => onNumpadInput(4)}
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
 					title="5"
 					onClick={() => onNumpadInput(5)}
-					disabled={textcode.length === 10}
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
-					title="4"
-					onClick={() => onNumpadInput(4)}
-					disabled={textcode.length === 10}
+					title="6"
+					onClick={() => onNumpadInput(6)}
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
-					title="3"
-					onClick={() => onNumpadInput(3)}
-					disabled={textcode.length === 10}
+					title="1"
+					onClick={() => onNumpadInput(1)}
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
 					title="2"
 					onClick={() => onNumpadInput(2)}
-					disabled={textcode.length === 10}
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
-					title="1"
-					onClick={() => onNumpadInput(1)}
-					disabled={textcode.length === 10}
+					title="3"
+					onClick={() => onNumpadInput(3)}
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num WeightTextcodeModal_textcodeNumbers_num0"
 					title="0"
 					onClick={() => onNumpadInput(0)}
-					disabled={textcode.length === 10}
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
+				/>
+				<ScaleButton
+					title="C"
+					onClick={() => onNumpadInput(-1)}
+					disabled={textcode.length === 0}
 				/>
 			</div>
 

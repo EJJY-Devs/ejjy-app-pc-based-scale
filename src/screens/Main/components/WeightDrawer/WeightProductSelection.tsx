@@ -48,11 +48,13 @@ export const WeightProductSelection = ({ onSelectProduct }: Props) => {
 		);
 
 		setDataSource(
-			productCategories.map(({ id, name }) => ({
-				id,
-				title: name,
-				dataSource: getProductsByCategory(availableProducts, name),
-			})),
+			productCategories
+				.map(({ id, name }) => ({
+					id,
+					title: name,
+					dataSource: getProductsByCategory(availableProducts, name),
+				}))
+				.filter(({ dataSource: data }) => data.length > 0),
 		);
 	}, [branchProducts, transactionProducts, productCategories]);
 

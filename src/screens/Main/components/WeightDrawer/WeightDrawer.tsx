@@ -26,6 +26,12 @@ export const WeightDrawer = () => {
 		getWeight();
 	}, []);
 
+	useEffect(() => {
+		if (weight === 0 && currentProduct) {
+			setCurrentProduct(null);
+		}
+	}, [weight]);
+
 	const onSelectProduct = (product) => {
 		const foundProduct = transactionProducts.find(
 			({ id }) => id === product.id,

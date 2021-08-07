@@ -10,14 +10,13 @@ import { service } from '../services/branch-products';
 
 /* WORKERS */
 function* list({ payload }: any) {
-	const { search, callback } = payload;
+	const { callback } = payload;
 	callback({ status: request.REQUESTING });
 
 	try {
 		const response = yield retry(MAX_RETRY, RETRY_INTERVAL_MS, service.list, {
 			page: 1,
 			page_size: MAX_PAGE_SIZE,
-			search,
 			is_shown_in_scale_list: true,
 		});
 
