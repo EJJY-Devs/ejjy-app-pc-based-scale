@@ -1,14 +1,13 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import { Divider, Table, Tabs } from 'antd';
 import { ColumnsType } from 'antd/lib/table/interface';
-import { startCase, toLower } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { ScaleButton } from '../../../../components';
 import { ButtonIcon } from '../../../../components/elements';
-import { productCategoryTypes } from '../../../../global/types';
 import { useBranchProducts } from '../../../../hooks/useBranchProducts';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
+import { useProductCategories } from '../../../../hooks/useProductCategories';
 import './style.scss';
 import { WeightTextcodeModal } from './WeightTextcodeModal';
 
@@ -33,15 +32,12 @@ interface Props {
 export const WeightProductSelection = ({ onSelectProduct }: Props) => {
 	// STATES
 	const [textcodeModalVisible, setTextcodeModalVisible] = useState(false);
-	const [baboyDataSource, setBaboyDataSource] = useState([]);
-	const [manokDataSource, setManokDataSource] = useState([]);
-	const [gulayDataSource, setGulayDataSource] = useState([]);
-	const [hotdogDataSource, setHotdogDataSource] = useState([]);
-	const [assortedDataSource, setAssortedDataSource] = useState([]);
+	const [dataSource, setDataSource] = useState([]);
 
 	// CUSTOM HOOKS
 	const { weight } = usePc();
 	const { branchProducts } = useBranchProducts();
+	const { productCategories } = useProductCategories();
 	const { transactionProducts } = useCurrentTransaction();
 
 	// METHODS
@@ -51,31 +47,16 @@ export const WeightProductSelection = ({ onSelectProduct }: Props) => {
 			({ product }) => !addedProductIds.includes(product.id),
 		);
 
-		// Filter baboy
-		setBaboyDataSource(
-			getProductsByCategory(availableProducts, productCategoryTypes.BABOY),
-		);
+		console.log('availableProducts', availableProducts);
 
-		// Filter manok
-		setManokDataSource(
-			getProductsByCategory(availableProducts, productCategoryTypes.MANOK),
+		setDataSource(
+			productCategories.map(({ id, name }) => ({
+				id,
+				title: name,
+				dataSource: getProductsByCategory(availableProducts, name),
+			})),
 		);
-
-		// Filter gulay
-		setGulayDataSource(
-			getProductsByCategory(availableProducts, productCategoryTypes.GULAY),
-		);
-
-		// Filter hotdog
-		setHotdogDataSource(
-			getProductsByCategory(availableProducts, productCategoryTypes.HOTDOG),
-		);
-
-		// Filter assorted
-		setAssortedDataSource(
-			getProductsByCategory(availableProducts, productCategoryTypes.ASSORTED),
-		);
-	}, [branchProducts, transactionProducts]);
+	}, [branchProducts, transactionProducts, productCategories]);
 
 	const getProductsByCategory = (products, category) =>
 		products
@@ -109,76 +90,23 @@ export const WeightProductSelection = ({ onSelectProduct }: Props) => {
 					),
 				}),
 			);
-
+	console.log('dataSource', dataSource);
 	return (
 		<>
 			<div className="WeightProductSelection">
 				<Divider />
 
-				<Tabs
-					className="WeightProductSelection_tabs"
-					defaultActiveKey={productCategoryTypes.BABOY}
-					type="card"
-				>
-					<Tabs.TabPane
-						key={productCategoryTypes.BABOY}
-						tab={startCase(toLower(productCategoryTypes.BABOY))}
-					>
-						<Table
-							columns={columns}
-							dataSource={baboyDataSource}
-							scroll={{ y: 285 }}
-							pagination={false}
-						/>
-					</Tabs.TabPane>
-
-					<Tabs.TabPane
-						key={productCategoryTypes.MANOK}
-						tab={startCase(toLower(productCategoryTypes.MANOK))}
-					>
-						<Table
-							columns={columns}
-							dataSource={manokDataSource}
-							scroll={{ y: 285 }}
-							pagination={false}
-						/>
-					</Tabs.TabPane>
-
-					<Tabs.TabPane
-						key={productCategoryTypes.GULAY}
-						tab={startCase(toLower(productCategoryTypes.GULAY))}
-					>
-						<Table
-							columns={columns}
-							dataSource={gulayDataSource}
-							scroll={{ y: 285 }}
-							pagination={false}
-						/>
-					</Tabs.TabPane>
-
-					<Tabs.TabPane
-						key={productCategoryTypes.HOTDOG}
-						tab={startCase(toLower(productCategoryTypes.HOTDOG))}
-					>
-						<Table
-							columns={columns}
-							dataSource={hotdogDataSource}
-							scroll={{ y: 285 }}
-							pagination={false}
-						/>
-					</Tabs.TabPane>
-
-					<Tabs.TabPane
-						key={productCategoryTypes.ASSORTED}
-						tab={startCase(toLower(productCategoryTypes.ASSORTED))}
-					>
-						<Table
-							columns={columns}
-							dataSource={assortedDataSource}
-							scroll={{ y: 285 }}
-							pagination={false}
-						/>
-					</Tabs.TabPane>
+				<Tabs className="WeightProductSelection_tabs" type="card">
+					{dataSource.map((data) => (
+						<Tabs.TabPane key={data.id} tab={data.title}>
+							<Table
+								columns={columns}
+								dataSource={data.dataSource}
+								scroll={{ y: 285 }}
+								pagination={false}
+							/>
+						</Tabs.TabPane>
+					))}
 				</Tabs>
 
 				<Divider />

@@ -11,11 +11,15 @@ import currentTransactionReducer, {
 	key as CURRENT_TRANSACTION_KEY,
 } from './current-transaction';
 import pcReducer, { key as PC_KEY } from './pc';
+import productCategoriesReducer, {
+	key as PRODUCT_CATEGORIES_KEY,
+} from './product-categories';
 
 const appReducer = combineReducers({
 	router: connectRouter(history),
 	[AUTH_KEY]: authReducer,
 	[BRANCH_PRODUCTS_KEY]: branchProductsReducer,
+	[PRODUCT_CATEGORIES_KEY]: productCategoriesReducer,
 	[CURRENT_TRANSACTION_KEY]: currentTransactionReducer,
 	[PC_KEY]: pcReducer,
 });

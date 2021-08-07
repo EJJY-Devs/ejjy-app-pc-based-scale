@@ -9,6 +9,7 @@ import { Container } from '../../components';
 import { request } from '../../global/types';
 import { useAuth } from '../../hooks/useAuth';
 import { useBranchProducts } from '../../hooks/useBranchProducts';
+import { useProductCategories } from '../../hooks/useProductCategories';
 import { Buttons } from './components/Buttons/Buttons';
 import { CheckoutModal } from './components/Checkout/CheckoutModal';
 import { TemporaryCheckoutModal } from './components/Checkout/TemporaryCheckoutModal';
@@ -29,12 +30,20 @@ const Main = () => {
 	const { user } = useAuth();
 	const { listBranchProducts, status: branchProductsStatus } =
 		useBranchProducts();
+	const { listProductCategories, status: productCategoriesStatus } =
+		useProductCategories();
 
 	// METHODS
 	useEffect(() => {
 		listBranchProducts({}, ({ status }) => {
 			if (status === request.ERROR) {
-				message.error('An error occurred while fetching branch products');
+				message.error('An error occurred while fetching branch products.');
+			}
+		});
+
+		listProductCategories(({ status }) => {
+			if (status === request.SUCCESS) {
+				message.error('An error occurred while fetching product categories.');
 			}
 		});
 	}, []);
@@ -48,7 +57,9 @@ const Main = () => {
 	return (
 		<Container
 			loadingText="Fetching products..."
-			loading={branchProductsStatus === request.REQUESTING}
+			loading={[branchProductsStatus, productCategoriesStatus].includes(
+				request.REQUESTING,
+			)}
 		>
 			<section className="Main">
 				<div className="Main_left">

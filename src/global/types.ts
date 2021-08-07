@@ -13,10 +13,5 @@ export const userTypes = {
 };
 
 export const productCategoryTypes = {
-	ASSORTED: 'assorted',
-	BABOY: 'baboy',
-	MANOK: 'manok',
-	GULAY: 'gulay',
-	HOTDOG: 'hotdog',
-	NONE: 'none',
+	GULAY: 'Gulay',
 };

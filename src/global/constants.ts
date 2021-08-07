@@ -6,7 +6,7 @@ export const APP_KEY = process.env.REACT_APP_KEY;
 
 export const APP_TITLE = process.env.REACT_APP_TITLE;
 
-export const MAX_PAGE_SIZE = 100;
+export const MAX_PAGE_SIZE = 500;
 
 export const MAX_RETRY = 1;
 
