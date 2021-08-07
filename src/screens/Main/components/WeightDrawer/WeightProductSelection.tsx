@@ -47,8 +47,6 @@ export const WeightProductSelection = ({ onSelectProduct }: Props) => {
 			({ product }) => !addedProductIds.includes(product.id),
 		);
 
-		console.log('availableProducts', availableProducts);
-
 		setDataSource(
 			productCategories.map(({ id, name }) => ({
 				id,
@@ -90,7 +88,7 @@ export const WeightProductSelection = ({ onSelectProduct }: Props) => {
 					),
 				}),
 			);
-	console.log('dataSource', dataSource);
+
 	return (
 		<>
 			<div className="WeightProductSelection">
