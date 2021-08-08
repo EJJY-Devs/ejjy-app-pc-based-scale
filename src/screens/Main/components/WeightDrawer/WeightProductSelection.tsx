@@ -4,7 +4,6 @@ import { ColumnsType } from 'antd/lib/table/interface';
 import React, { useEffect, useState } from 'react';
 import { ScaleButton } from '../../../../components';
 import { ButtonIcon } from '../../../../components/elements';
-import { useBranchProducts } from '../../../../hooks/useBranchProducts';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
 import { useProductCategories } from '../../../../hooks/useProductCategories';
@@ -26,17 +25,20 @@ const columns: ColumnsType = [
 ];
 
 interface Props {
+	branchProducts: any;
 	onSelectProduct: any;
 }
 
-export const WeightProductSelection = ({ onSelectProduct }: Props) => {
+export const WeightProductSelection = ({
+	branchProducts,
+	onSelectProduct,
+}: Props) => {
 	// STATES
 	const [textcodeModalVisible, setTextcodeModalVisible] = useState(false);
 	const [dataSource, setDataSource] = useState([]);
 
 	// CUSTOM HOOKS
 	const { weight } = usePc();
-	const { branchProducts } = useBranchProducts();
 	const { productCategories } = useProductCategories();
 	const { transactionProducts } = useCurrentTransaction();
 

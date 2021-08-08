@@ -12,7 +12,11 @@ import { WeightProductDetails } from './WeightProductDetails';
 import { WeightProductSelection } from './WeightProductSelection';
 import { useAuth } from '../../../../hooks/useAuth';
 
-export const WeightDrawer = () => {
+interface Props {
+	branchProducts: any;
+}
+
+export const WeightDrawer = ({ branchProducts }: Props) => {
 	// CUSTOM HOOKS
 	const { user } = useAuth();
 	const { resetWeight, getWeight } = usePc();
@@ -92,7 +96,10 @@ export const WeightDrawer = () => {
 				{currentProduct ? (
 					<WeightProductDetails onPrint={onPrint} />
 				) : (
-					<WeightProductSelection onSelectProduct={onSelectProduct} />
+					<WeightProductSelection
+						branchProducts={branchProducts}
+						onSelectProduct={onSelectProduct}
+					/>
 				)}
 			</div>
 		</Spin>

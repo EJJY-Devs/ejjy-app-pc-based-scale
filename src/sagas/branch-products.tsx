@@ -1,5 +1,5 @@
-import { put, retry, takeLatest } from 'redux-saga/effects';
-import { actions, types } from '../ducks/branch-products';
+import { retry, takeLatest } from 'redux-saga/effects';
+import { types } from '../ducks/branch-products';
 import {
 	MAX_PAGE_SIZE,
 	MAX_RETRY,
@@ -21,13 +21,7 @@ function* list({ payload }: any) {
 			is_shown_in_scale_list: true,
 		});
 
-		yield put(
-			actions.save({
-				type: types.LIST_BRANCH_PRODUCTS,
-				branchProducts: response.data.results,
-			}),
-		);
-		callback({ status: request.SUCCESS, data: response.data });
+		callback({ status: request.SUCCESS, data: response.data.results });
 	} catch (e) {
 		callback({ status: request.ERROR, errors: e.errors });
 	}

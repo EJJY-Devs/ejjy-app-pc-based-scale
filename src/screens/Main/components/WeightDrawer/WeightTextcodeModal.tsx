@@ -51,7 +51,7 @@ export const WeightTextcodeModal = ({
 		if (textcode.length > 0) {
 			listBranchProducts({ search: textcode }, ({ status, data }) => {
 				if (status === request.SUCCESS) {
-					const foundProduct = data.results?.[0];
+					const foundProduct = data?.[0];
 					const transactionProduct = transactionProducts.find(
 						({ id }) => id === foundProduct.id,
 					);

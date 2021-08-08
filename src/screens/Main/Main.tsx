@@ -24,6 +24,7 @@ const Main = () => {
 	const [temporaryCheckoutModalVisible, setTemporaryCheckoutModalVisible] =
 		useState(false);
 	const [urlModalVisible, setUrlModalVisible] = useState(false);
+	const [branchProducts, setBranchProducts] = useState([]);
 
 	// CUSTOM HOOKS
 	const history = useHistory();
@@ -35,8 +36,10 @@ const Main = () => {
 
 	// METHODS
 	useEffect(() => {
-		listBranchProducts({}, ({ status }) => {
-			if (status === request.ERROR) {
+		listBranchProducts({}, ({ status, data }) => {
+			if (status === request.SUCCESS) {
+				setBranchProducts(data);
+			} else if (status === request.ERROR) {
 				message.error('An error occurred while fetching branch products.');
 			}
 		});
@@ -73,7 +76,7 @@ const Main = () => {
 				</div>
 
 				<div className="Main_right">
-					<WeightDrawer />
+					<WeightDrawer branchProducts={branchProducts} />
 				</div>
 			</section>
 

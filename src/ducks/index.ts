@@ -4,9 +4,6 @@ import storage from 'redux-persist/lib/storage';
 import { APP_KEY } from '../global/constants';
 import history from '../utils/history';
 import authReducer, { key as AUTH_KEY, types as authTypes } from './auth';
-import branchProductsReducer, {
-	key as BRANCH_PRODUCTS_KEY,
-} from './branch-products';
 import currentTransactionReducer, {
 	key as CURRENT_TRANSACTION_KEY,
 } from './current-transaction';
@@ -18,7 +15,6 @@ import productCategoriesReducer, {
 const appReducer = combineReducers({
 	router: connectRouter(history),
 	[AUTH_KEY]: authReducer,
-	[BRANCH_PRODUCTS_KEY]: branchProductsReducer,
 	[PRODUCT_CATEGORIES_KEY]: productCategoriesReducer,
 	[CURRENT_TRANSACTION_KEY]: currentTransactionReducer,
 	[PC_KEY]: pcReducer,
