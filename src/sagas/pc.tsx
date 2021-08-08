@@ -58,6 +58,7 @@ function* printProduct({ payload }: any) {
 function* printTransaction({ payload }: any) {
 	const { transactionId, totalPrice, branch, callback } = payload;
 	callback({ status: request.REQUESTING });
+	// eslint-disable-next-line no-console
 	console.info('printTransaction', payload);
 
 	try {
