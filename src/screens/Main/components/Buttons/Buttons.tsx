@@ -188,7 +188,10 @@ export const Buttons = ({
 								setSelectedDiscountType(discountTypes.FIRST);
 								setDiscountAuthModalVisible(true);
 							}}
-							disabled={selectedProductIndex === NO_INDEX_SELECTED}
+							disabled={
+								selectedProductIndex === NO_INDEX_SELECTED ||
+								transactionProducts.length === 0
+							}
 						/>
 
 						<ScaleButton
@@ -197,7 +200,10 @@ export const Buttons = ({
 								setSelectedDiscountType(discountTypes.SECOND);
 								setDiscountAuthModalVisible(true);
 							}}
-							disabled={selectedProductIndex === NO_INDEX_SELECTED}
+							disabled={
+								selectedProductIndex === NO_INDEX_SELECTED ||
+								transactionProducts.length === 0
+							}
 						/>
 					</>
 				)}
@@ -206,7 +212,7 @@ export const Buttons = ({
 					className="Buttons_btnReset"
 					title="Reset"
 					onClick={onReset}
-					disabled={!transactionProducts.length}
+					disabled={transactionProducts.length === 0}
 				/>
 
 				<ScaleButton
@@ -220,7 +226,7 @@ export const Buttons = ({
 					className="Buttons_btnCheckout"
 					title="Checkout"
 					onClick={onOpenCheckoutModal}
-					disabled={!transactionProducts.length}
+					disabled={transactionProducts.length === 0}
 				/>
 			</div>
 
