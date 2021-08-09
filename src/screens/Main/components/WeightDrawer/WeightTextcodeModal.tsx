@@ -26,7 +26,8 @@ export const WeightTextcodeModal = ({
 	const [textcode, setTextcode] = useState('');
 
 	// CUSTOM HOOKS
-	const { listBranchProducts } = useBranchProducts();
+	const { listBranchProducts, status: branchProductsStatus } =
+		useBranchProducts();
 	const { transactionProducts } = useCurrentTransaction();
 
 	// METHODS
@@ -190,6 +191,7 @@ export const WeightTextcodeModal = ({
 					size="lg"
 					variant="primary"
 					onClick={onSubmit}
+					loading={branchProductsStatus === request.REQUESTING}
 				/>
 			</div>
 		</Modal>
