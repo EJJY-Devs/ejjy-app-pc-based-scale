@@ -17,7 +17,7 @@
 
 	&__disabled {
 		opacity: 0.3;
-		background: white;
+		background: $color-background;
 		border: 2px solid #b2b2b2;
 		pointer-events: none;
 		box-shadow: none;

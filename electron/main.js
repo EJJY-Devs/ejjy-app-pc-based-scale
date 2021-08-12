@@ -1,9 +1,10 @@
 const { app, BrowserWindow, Menu, MenuItem } = require('electron');
 const path = require('path');
-require('../build/js/server');
 
 let mainWindow;
 function createWindow() {
+	require('../build/js/server');
+
 	mainWindow = new BrowserWindow({
 		width: 800,
 		height: 600,
