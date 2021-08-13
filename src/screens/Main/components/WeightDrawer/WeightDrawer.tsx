@@ -52,8 +52,8 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 	const onPrint = (onSuccess = null) => {
 		const total = currentProduct.price_per_piece * weight;
 		const formattedWeight = padStart(
-			weight.toFixed(3).replace(/\./g, ''),
-			5,
+			weight.toFixed(4).replace(/\./g, ''),
+			6,
 			'0',
 		);
 
