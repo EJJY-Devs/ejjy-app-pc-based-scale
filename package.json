@@ -1,5 +1,6 @@
 {
 	"name": "ejjy-pc-based-scale",
+	"productName": "EJJY PC-Based Scale",
 	"version": "1.1.18",
 	"private": true,
 	"homepage": "./",
@@ -10,6 +11,7 @@
 		"prettify": "prettier --write ./src",
 		"start": "react-scripts start",
 		"build": "react-scripts build",
+		"server": "node public/js/server.js",
 		"dev": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
 		"electron": "wait-on http://localhost:3000 && electron .",
 		"pack:build": "npm run build && electron-packager . EJJY-PC-Based-Scale --platform=win32 --ignore=/.vscode --ignore=/deployment --ignore=/node_modules --ignore=/public --ignore=/src --ignore=/.prettierignore --ignore=/.prettierrc --ignore=/.config-overrides.js --ignore=/package-lock.json --ignore=/README.md --ignore=/tsconfig.json --ignore=/yarn.lock --overwrite",

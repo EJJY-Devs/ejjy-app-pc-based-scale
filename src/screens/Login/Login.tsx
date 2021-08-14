@@ -1,20 +1,30 @@
 /* eslint-disable react/jsx-one-expression-per-line */
+import { Divider } from 'antd';
 import { isEmpty } from 'lodash';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { AuthForm, RequestErrors } from '../../components';
-import { Box } from '../../components/elements';
+import { AppVersion, AuthForm, RequestErrors } from '../../components';
+import { Box, Button } from '../../components/elements';
 import { request } from '../../global/types';
 import { useAuth } from '../../hooks/useAuth';
-import { convertIntoArray } from '../../utils/function';
+import { convertIntoArray, getLocalServerUrl } from '../../utils/function';
+import { SettingUrlModal } from '../../components/SettingUrl/SettingUrlModal';
 import './style.scss';
 
 const Login = () => {
+	// STATES
+	const [areSetupButtonsVisible, setSetupButtonsVisible] = useState(false);
+	const [urlModalVisible, setUrlModalVisible] = useState(false);
+
 	// CUSTOM HOOKS
 	const history = useHistory();
 	const { user, login, status: authStatus, errors } = useAuth();
 
 	// METHODS
+	useEffect(() => {
+		setSetupButtonsVisible(!getLocalServerUrl());
+	}, []);
+
 	useEffect(() => {
 		if (!isEmpty(user)) {
 			history.replace('main');
@@ -41,11 +51,27 @@ const Login = () => {
 					onSubmit={login}
 					loading={authStatus === request.REQUESTING}
 				/>
+
+				{areSetupButtonsVisible && (
+					<>
+						<Divider />
+
+						<Button
+							text="Set API URL"
+							variant="dark-gray"
+							onClick={() => setUrlModalVisible(true)}
+							block
+						/>
+					</>
+				)}
 			</Box>
 
-			<span className="AppVersion">
-				App Version {process.env.REACT_APP_VERSION}
-			</span>
+			<AppVersion />
+
+			<SettingUrlModal
+				visible={urlModalVisible}
+				onClose={() => setUrlModalVisible(false)}
+			/>
 		</section>
 	);
 };

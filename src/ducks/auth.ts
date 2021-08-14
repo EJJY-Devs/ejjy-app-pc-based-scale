@@ -14,7 +14,6 @@ const initialState = {
 	user: {},
 	accessToken: null,
 	refreshToken: null,
-	localIpAddress: null,
 };
 
 const reducer = handleActions(
@@ -37,8 +36,6 @@ export const actions = {
 const selectState = (state: any) => state[key] || initialState;
 export const selectors = {
 	selectUser: () => createSelector(selectState, (state) => state.user),
-	selectLocalIpAddress: () =>
-		createSelector(selectState, (state) => state.localIpAddress),
 };
 
 export default reducer;

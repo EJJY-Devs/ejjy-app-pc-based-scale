@@ -1,9 +1,31 @@
 import { message } from 'antd';
 import { isArray, isString, memoize } from 'lodash';
-import { ROW_HEIGHT } from '../global/constants';
+import { APP_BRIGHTNESS_KEY, LOCAL_SERVER_URL_KEY } from '../global/constants';
 import { userTypes } from '../global/types';
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+// Numbers
+
+export const numberWithCommas = (x) =>
+	x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+
+// Messages
+
+export const showErrorMessages = (errors) => {
+	if (isString(errors)) {
+		message.error(errors);
+	} else if (isArray(errors)) {
+		errors.forEach((error) => message.error(error));
+	}
+};
+
+// Local Storage Getters
+
+export const getLocalServerUrl = () =>
+	localStorage.getItem(LOCAL_SERVER_URL_KEY);
+
+export const getAppBrightness = () => localStorage.getItem(APP_BRIGHTNESS_KEY);
 
 export const getUserTypeDescription = memoize((userType) => {
 	let userTypeDescription = '';
@@ -28,19 +50,7 @@ export const getUserTypeDescription = memoize((userType) => {
 	return userTypeDescription;
 });
 
-export const calculateTableHeight = (listLength, MAX_ROW_COUNT = 6) =>
-	ROW_HEIGHT * (listLength <= MAX_ROW_COUNT ? listLength : MAX_ROW_COUNT);
-
-export const numberWithCommas = (x) =>
-	x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
-
-export const showErrorMessages = (errors) => {
-	if (isString(errors)) {
-		message.error(errors);
-	} else if (isArray(errors)) {
-		errors.forEach((error) => message.error(error));
-	}
-};
+// Callbacks
 
 export const modifiedExtraCallback =
 	(callback, extraCallback = null) =>
@@ -50,6 +60,8 @@ export const modifiedExtraCallback =
 			extraCallback(response);
 		}
 	};
+
+// Formats
 
 export const zeroToO = (value) => value?.replace(/0/g, 'O');
 

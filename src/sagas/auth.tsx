@@ -1,9 +1,8 @@
-import axios from 'axios';
-import { call, put, select, takeLatest } from 'redux-saga/effects';
-import { actions, selectors, types } from '../ducks/auth';
+import { call, put, takeLatest } from 'redux-saga/effects';
+import { actions, types } from '../ducks/auth';
 import { request, userTypes } from '../global/types';
 import { service } from '../services/auth';
-import { getUserTypeDescription } from '../utils/function';
+import { getLocalServerUrl, getUserTypeDescription } from '../utils/function';
 
 /* WORKERS */
 function* login({ payload }: any) {
@@ -34,21 +33,6 @@ function* login({ payload }: any) {
 						refreshToken: tokenResponse.data.refresh,
 					}),
 				);
-
-				// Get local IP Address
-				const branchResponse = yield call(service.getBranch, user?.branch?.id);
-				const localIpAddress = branchResponse.data?.local_ip_address;
-
-				if (localIpAddress) {
-					axios.defaults.baseURL = localIpAddress;
-					yield put(actions.save({ localIpAddress }));
-					callback({ status: request.SUCCESS });
-				} else {
-					callback({
-						status: request.ERROR,
-						errors: ['No local API address set on this branch yet.'],
-					});
-				}
 			} else {
 				callback({
 					status: request.ERROR,
@@ -71,15 +55,18 @@ function* validateUser({ payload }: any) {
 	callback({ status: request.REQUESTING });
 
 	try {
-		const localApiUrl = yield select(selectors.selectLocalIpAddress());
-		if (!localApiUrl) {
-			callback({ status: request.ERROR, errors: ['Local API URL not found.'] });
+		const localServerUrl = getLocalServerUrl();
+		if (!localServerUrl) {
+			callback({
+				status: request.ERROR,
+				errors: ['Local Server URL not found.'],
+			});
 		}
 
 		const response = yield call(
 			service.login,
 			{ login: username, password },
-			localApiUrl,
+			localServerUrl,
 		);
 
 		if (response.data.user_type === userType) {
