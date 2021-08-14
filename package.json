@@ -1,6 +1,6 @@
 {
 	"name": "ejjy-pc-based-scale",
-	"version": "1.1.4",
+	"version": "1.1.18",
 	"private": true,
 	"homepage": "./",
 	"main": "./electron-dev/main.js",
