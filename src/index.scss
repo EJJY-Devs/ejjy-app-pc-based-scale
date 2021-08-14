@@ -2,10 +2,6 @@
 @import './assets/styles/main';
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap');
 
-html {
-	filter: brightness(95%)
-}
-
 html,
 body {
 	overflow-x: hidden;
@@ -97,10 +93,4 @@ body {
 			font-size: 25px !important;
 		}
 	}
-}
-
-.AppVersion {
-	position: fixed;
-	bottom: 5px;
-	right: 5px;
 }

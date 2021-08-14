@@ -3,6 +3,7 @@ import axios from 'axios';
 import { flatten, values } from 'lodash';
 import { key as AUTH_KEY } from './ducks/auth';
 import { API_TIMEOUT, NO_VERIFICATION_NEEDED } from './services';
+import { getLocalServerUrl } from './utils/function';
 
 export default function configureAxios(store) {
 	axios.defaults.timeout = API_TIMEOUT;
@@ -21,10 +22,10 @@ export default function configureAxios(store) {
 
 			// since there's no `connect` HOC, this is how we
 			// access the store (or reducer)
-			const { accessToken, localIpAddress } = store.getState()?.[AUTH_KEY];
+			const { accessToken } = store.getState()?.[AUTH_KEY];
 
 			if (!config.baseURL) {
-				config.baseURL = localIpAddress;
+				config.baseURL = getLocalServerUrl();
 			}
 			// Get access token from store for every api request
 			config.headers.authorization = accessToken

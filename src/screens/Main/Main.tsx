@@ -5,7 +5,7 @@ import { message } from 'antd';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Container } from '../../components';
+import { AppVersion, Container } from '../../components';
 import { request } from '../../global/types';
 import { useAuth } from '../../hooks/useAuth';
 import { useBranchProducts } from '../../hooks/useBranchProducts';
@@ -14,7 +14,7 @@ import { Buttons } from './components/Buttons/Buttons';
 import { CheckoutModal } from './components/Checkout/CheckoutModal';
 import { TemporaryCheckoutModal } from './components/Checkout/TemporaryCheckoutModal';
 import { MainTable } from './components/MainTable/MainTable';
-import { SettingUrlModal } from './components/SettingUrl/SettingUrlModal';
+import { SettingUrlModal } from '../../components/SettingUrl/SettingUrlModal';
 import { WeightDrawer } from './components/WeightDrawer/WeightDrawer';
 import './style.scss';
 
@@ -82,16 +82,14 @@ const Main = () => {
 
 			<div className="Footer">
 				<h2 className="Footer_setUrl" onClick={() => setUrlModalVisible(true)}>
-					Set Local URL
+					Set Server URL
 				</h2>
 				<h1 className="Footer_storeTitle">
 					EJ &amp; JY WET MARKET AND ENTERPRISES
 				</h1>
 			</div>
 
-			<span className="AppVersion">
-				App Version {process.env.REACT_APP_VERSION}
-			</span>
+			<AppVersion />
 
 			<CheckoutModal
 				visible={checkoutModalVisible}

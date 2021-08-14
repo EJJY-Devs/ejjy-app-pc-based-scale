@@ -12,10 +12,8 @@ export const useAuth = () => {
 
 	// SELECTORS
 	const user = useSelector(selectors.selectUser());
-	const localIpAddress = useSelector(selectors.selectLocalIpAddress());
 
 	// ACTIONS
-	const saveAction = useActionDispatch(actions.save);
 	const loginAction = useActionDispatch(actions.login);
 	const validateUserAction = useActionDispatch(actions.validateUser);
 
@@ -31,10 +29,6 @@ export const useAuth = () => {
 		});
 	};
 
-	const updateLocalIpAddress = (newLocalIpAddress) => {
-		saveAction({ localIpAddress: newLocalIpAddress });
-	};
-
 	const callback = ({
 		status: callbackStatus,
 		errors: callbackErrors = [],
@@ -45,10 +39,8 @@ export const useAuth = () => {
 
 	return {
 		user,
-		localIpAddress,
 		login,
 		validateUser,
-		updateLocalIpAddress,
 		status,
 		errors,
 	};
