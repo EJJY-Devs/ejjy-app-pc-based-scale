@@ -1,4 +1,4 @@
-import { Modal, Spin } from 'antd';
+import { Modal } from 'antd';
 import React, { useCallback, useEffect, useRef } from 'react';
 import {
 	Button,
@@ -6,7 +6,7 @@ import {
 	Label,
 } from '../../../../components/elements';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
-import { numberWithCommas } from '../../../../utils/function';
+import { numberWithCommas, standardRound } from '../../../../utils/function';
 import './style.scss';
 
 interface Props {
@@ -38,7 +38,7 @@ export const CheckoutModal = ({ visible, onClose }: Props) => {
 			0,
 		);
 
-		return numberWithCommas(total.toFixed(2));
+		return numberWithCommas(standardRound(total));
 	}, [transactionProducts]);
 
 	const onSubmit = () => {
@@ -56,38 +56,32 @@ export const CheckoutModal = ({ visible, onClose }: Props) => {
 			centered
 			closable
 		>
-			<Spin
-				size="large"
-				spinning={false}
-				// spinning={[createTransactionStatus, paymentStatus].includes(request.REQUESTING)}
-			>
-				<div className="form">
-					<Label classNames="quantity-label" label="Amount Due (₱)" spacing />
-					<ControlledInput
-						className="amount-due-input"
-						value={getTotal()}
-						onChange={() => null}
-						disabled
-					/>
+			<div className="form">
+				<Label classNames="quantity-label" label="Amount Due (₱)" spacing />
+				<ControlledInput
+					className="amount-due-input"
+					value={getTotal()}
+					onChange={() => null}
+					disabled
+				/>
 
-					<div className="custom-footer">
-						<Button
-							type="button"
-							text="Cancel"
-							size="lg"
-							onClick={onClose}
-							classNames="btn-cancel"
-						/>
-						<Button
-							type="submit"
-							text="Proceed"
-							size="lg"
-							variant="primary"
-							onClick={onSubmit}
-						/>
-					</div>
+				<div className="custom-footer">
+					<Button
+						type="button"
+						text="Cancel"
+						size="lg"
+						onClick={onClose}
+						classNames="btn-cancel"
+					/>
+					<Button
+						type="submit"
+						text="Proceed"
+						size="lg"
+						variant="primary"
+						onClick={onSubmit}
+					/>
 				</div>
-			</Spin>
+			</div>
 		</Modal>
 	);
 };

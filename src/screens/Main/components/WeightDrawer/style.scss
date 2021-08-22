@@ -9,17 +9,18 @@
 		flex-direction: column;
 	}
 
-	&_inputWeight {
-		@include font(2.5rem, bold);
-		color: $color-dark;
-	}
-
 	.ant-spin-container {
 		height: inherit;
 	}
 }
 
 .WeightProductDetails {
+	&_inputAmount {
+		@include font(2.5rem, bold);
+		color: $color-dark;
+		text-align: right;
+	}
+
 	&_inputGroup {
 		margin: 30px 0 0 0;
 
@@ -42,10 +43,20 @@
 	&_btnClear {
 		@include font(1rem, normal);
 		width: 100%;
-		margin: 20px 0 0 0;
 		color: $color-red;
 		border: 2px solid $color-red;
 		background-color: transparent;
+	}
+
+	&_btnDiscount {
+		width: 100%;
+
+		&__remove {
+			width: 100%;
+			color: white;
+			background-color: $color-red;
+			border-bottom: 4px solid #ab363d;
+		}
 	}
 }
 
@@ -53,6 +64,11 @@
 	flex: 1;
 	display: flex;
 	flex-direction: column;
+
+	&_inputWeight {
+		@include font(2.5rem, bold);
+		color: $color-dark;
+	}
 
 	&_tabs {
 		flex: 1;

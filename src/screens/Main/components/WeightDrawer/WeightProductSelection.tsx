@@ -3,7 +3,11 @@ import { Divider, Table, Tabs } from 'antd';
 import { ColumnsType } from 'antd/lib/table/interface';
 import React, { useEffect, useState } from 'react';
 import { ScaleButton } from '../../../../components';
-import { ButtonIcon } from '../../../../components/elements';
+import {
+	ButtonIcon,
+	ControlledInput,
+	Label,
+} from '../../../../components/elements';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
 import { useProductCategories } from '../../../../hooks/useProductCategories';
@@ -96,8 +100,15 @@ export const WeightProductSelection = ({
 	return (
 		<>
 			<div className="WeightProductSelection">
-				<Divider />
+				<Label id="weight" label="Weight" spacing />
+				<ControlledInput
+					className="WeightProductSelection_inputWeight"
+					value={weight}
+					onChange={() => null}
+					disabled
+				/>
 
+				<Divider />
 				<Tabs className="WeightProductSelection_tabs" type="card">
 					{dataSource.map((data) => (
 						<Tabs.TabPane key={data.id} tab={data.title}>

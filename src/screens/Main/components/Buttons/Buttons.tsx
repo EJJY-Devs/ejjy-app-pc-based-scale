@@ -3,9 +3,10 @@
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { message, Modal } from 'antd';
 import React, { useCallback, useState } from 'react';
-import { ScaleButton } from '../../../../components';
+import { DiscountModal, ScaleButton } from '../../../../components';
 import { EMPTY_CELL, NO_INDEX_SELECTED } from '../../../../global/constants';
 import {
+	discountTypes,
 	productCategoryTypes,
 	request,
 	userTypes,
@@ -13,18 +14,8 @@ import {
 import { useAuth } from '../../../../hooks/useAuth';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
-import {
-	numberWithCommas,
-	showErrorMessages,
-} from '../../../../utils/function';
-import { DiscountAuthModal } from './DiscountAuthModal';
+import { formatInPeso, showErrorMessages } from '../../../../utils/function';
 import './style.scss';
-
-const discountTypes = {
-	FIRST: '1',
-	SECOND: '2',
-	NO_DISCOUNT: '3',
-};
 
 interface Props {
 	onOpenCheckoutModal: any;
@@ -83,9 +74,7 @@ export const Buttons = ({
 					: product?.discounted_price_per_piece2;
 		}
 
-		return discount >= 0
-			? `₱${numberWithCommas(discount?.toFixed(2))}`
-			: EMPTY_CELL;
+		return discount >= 0 ? formatInPeso(discount) : EMPTY_CELL;
 	}, [transactionProducts, selectedProductIndex, selectedDiscountType]);
 
 	const onDiscountSuccess = () => {
@@ -230,7 +219,7 @@ export const Buttons = ({
 				/>
 			</div>
 
-			<DiscountAuthModal
+			<DiscountModal
 				discount={getDiscount()}
 				visible={discountAuthModalVisible}
 				isLoading={authStatus === request.REQUESTING}

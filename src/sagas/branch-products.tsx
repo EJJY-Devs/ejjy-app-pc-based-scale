@@ -1,4 +1,4 @@
-import { retry, takeLatest } from 'redux-saga/effects';
+import { retry, takeEvery } from 'redux-saga/effects';
 import { types } from '../ducks/branch-products';
 import {
 	MAX_PAGE_SIZE,
@@ -29,7 +29,7 @@ function* list({ payload }: any) {
 
 /* WATCHERS */
 const listWatcherSaga = function* listWatcherSaga() {
-	yield takeLatest(types.LIST_BRANCH_PRODUCTS, list);
+	yield takeEvery(types.LIST_BRANCH_PRODUCTS, list);
 };
 
 export default [listWatcherSaga()];

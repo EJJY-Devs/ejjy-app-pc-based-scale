@@ -1,7 +1,7 @@
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
 import React from 'react';
-import { numberWithCommas } from '../../../../utils/function';
+import { formatInPeso } from '../../../../utils/function';
 import './style.scss';
 
 interface Props {
@@ -10,13 +10,11 @@ interface Props {
 
 export const MainTableName = ({ product }: Props) => {
 	const { weight, price_per_piece, discount } = product;
-	const price = `₱${numberWithCommas(price_per_piece.toFixed(2))}`;
+	const price = formatInPeso(price_per_piece);
 	const productDiscount =
 		discount > 0 ? (
 			<span className="MainTableName_quantities_discount">
-				{`(₱${numberWithCommas(
-					(product.price_per_piece + product.discount)?.toFixed(2),
-				)})`}
+				{`(${formatInPeso(product.price_per_piece + product.discount)}`}
 			</span>
 		) : null;
 

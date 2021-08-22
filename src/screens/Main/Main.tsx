@@ -2,8 +2,8 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-one-expression-per-line */
 import { message } from 'antd';
-import { isEmpty } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import { isEmpty, isEqual } from 'lodash';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AppVersion, Container } from '../../components';
 import { request } from '../../global/types';
@@ -17,6 +17,7 @@ import { MainTable } from './components/MainTable/MainTable';
 import { SettingUrlModal } from '../../components/SettingUrl/SettingUrlModal';
 import { WeightDrawer } from './components/WeightDrawer/WeightDrawer';
 import './style.scss';
+import { useCurrentTransaction } from '../../hooks/useCurrentTransaction';
 
 const Main = () => {
 	// STATES
@@ -25,6 +26,10 @@ const Main = () => {
 		useState(false);
 	const [urlModalVisible, setUrlModalVisible] = useState(false);
 	const [branchProducts, setBranchProducts] = useState([]);
+	const [isInitialFetch, setIsInitialFetch] = useState(true);
+
+	// REFS
+	const intervalRef = useRef(null);
 
 	// CUSTOM HOOKS
 	const history = useHistory();
@@ -33,23 +38,72 @@ const Main = () => {
 		useBranchProducts();
 	const { listProductCategories, status: productCategoriesStatus } =
 		useProductCategories();
+	const { currentProduct, setCurrentProduct } = useCurrentTransaction();
 
 	// METHODS
 	useEffect(() => {
-		listBranchProducts({}, ({ status, data }) => {
-			if (status === request.SUCCESS) {
-				setBranchProducts(data);
-			} else if (status === request.ERROR) {
-				message.error('An error occurred while fetching branch products.');
-			}
-		});
+		const fetchBranchProducts = () => {
+			listBranchProducts({}, ({ status, data }) => {
+				if (status === request.SUCCESS) {
+					setBranchProducts(data);
+				} else if (status === request.ERROR) {
+					message.error('An error occurred while fetching branch products.');
+				}
+
+				if (
+					[request.SUCCESS, request.ERROR].includes(status) &&
+					isInitialFetch
+				) {
+					setIsInitialFetch(false);
+				}
+			});
+		};
+
+		fetchBranchProducts();
+		intervalRef.current = setInterval(() => {
+			fetchBranchProducts();
+		}, 10000);
 
 		listProductCategories(({ status }) => {
 			if (status === request.ERROR) {
 				message.error('An error occurred while fetching product categories.');
 			}
 		});
+
+		return () => {
+			clearInterval(intervalRef.current);
+		};
 	}, []);
+
+	useEffect(() => {
+		if (currentProduct) {
+			const branchProduct = branchProducts.find(
+				({ product }) => product.id === currentProduct.id,
+			);
+
+			if (branchProduct) {
+				const newProduct = {
+					...currentProduct,
+					...branchProduct.product,
+					discounted_price_per_piece1:
+						branchProduct.discounted_price_per_piece1,
+					discounted_price_per_piece2:
+						branchProduct.discounted_price_per_piece2,
+
+					// We need to retain the current price_per_piece value if
+					// user applied discount
+					price_per_piece:
+						currentProduct?.discount > 0
+							? currentProduct.price_per_piece
+							: branchProduct.price_per_piece,
+				};
+
+				if (!isEqual(currentProduct, newProduct)) {
+					setCurrentProduct(newProduct);
+				}
+			}
+		}
+	}, [branchProducts]);
 
 	useEffect(() => {
 		if (isEmpty(user)) {
@@ -57,13 +111,12 @@ const Main = () => {
 		}
 	}, [user]);
 
+	const isLoading =
+		(isInitialFetch && branchProductsStatus === request.REQUESTING) ||
+		productCategoriesStatus === request.REQUESTING;
+
 	return (
-		<Container
-			loadingText="Fetching products..."
-			loading={[branchProductsStatus, productCategoriesStatus].includes(
-				request.REQUESTING,
-			)}
-		>
+		<Container loadingText="Fetching products..." loading={isLoading}>
 			<section className="Main">
 				<div className="Main_left">
 					<MainTable />

@@ -10,7 +10,11 @@ import { useAuth } from '../../../../hooks/useAuth';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
 import { useTransactions } from '../../../../hooks/useTransactions';
-import { numberWithCommas, zeroToO } from '../../../../utils/function';
+import {
+	numberWithCommas,
+	standardRound,
+	zeroToO,
+} from '../../../../utils/function';
 import './style.scss';
 
 interface Props {
@@ -55,7 +59,7 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 			0,
 		);
 
-		return numberWithCommas(total.toFixed(2));
+		return numberWithCommas(standardRound(total));
 	}, [getCheckoutProducts]);
 
 	const updateCheckedOutProducts = () => {
@@ -90,7 +94,7 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 					printTransaction(
 						{
 							transactionId: `T_${response.id}`,
-							totalPrice: `P${zeroToO(total.toFixed(2))}`,
+							totalPrice: `P${zeroToO(standardRound(total))}`,
 							branch: 'TEST',
 						},
 						({ status: printTransactionStatus }) => {

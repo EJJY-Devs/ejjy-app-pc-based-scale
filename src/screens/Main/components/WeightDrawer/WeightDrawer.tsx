@@ -2,13 +2,15 @@
 import { message, Spin } from 'antd';
 import { padStart } from 'lodash';
 import React, { useEffect } from 'react';
-import { Label } from '../../../../components/elements';
-import ControlledInput from '../../../../components/elements/ControlledInput/ControlledInput';
 import { request } from '../../../../global/types';
 import { useAuth } from '../../../../hooks/useAuth';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
-import { formatPrintDetails, zeroToO } from '../../../../utils/function';
+import {
+	formatPrintDetails,
+	standardRound,
+	zeroToO,
+} from '../../../../utils/function';
 import './style.scss';
 import { WeightProductDetails } from './WeightProductDetails';
 import { WeightProductSelection } from './WeightProductSelection';
@@ -50,7 +52,7 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 	};
 
 	const onPrint = (onSuccess = null) => {
-		const total = currentProduct.price_per_piece * weight;
+		const total = standardRound(currentProduct.price_per_piece * weight);
 		const formattedWeight = padStart(
 			weight.toFixed(4).replace(/\./g, ''),
 			6,
@@ -60,9 +62,9 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		printProduct(
 			{
 				name: formatPrintDetails(currentProduct.name),
-				weight: `${weight.toFixed(3)}kg`,
+				weight: `${weight}kg`,
 				price: `P${zeroToO(currentProduct.price_per_piece.toFixed(2))}`,
-				totalPrice: `P${zeroToO(total.toFixed(2))}`,
+				totalPrice: `P${zeroToO(total)}`,
 				code: `${currentProduct.barcode}${formattedWeight}`,
 				branch: formatPrintDetails(user?.branch?.name),
 			},
@@ -87,14 +89,6 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 			spinning={pcStatus === request.REQUESTING}
 		>
 			<div className="WeightDrawer_container">
-				<Label id="weight" label="Weight" spacing />
-				<ControlledInput
-					className="WeightDrawer_inputWeight"
-					value={weight?.toFixed(3)}
-					onChange={() => null}
-					disabled
-				/>
-
 				{currentProduct ? (
 					<WeightProductDetails onPrint={onPrint} />
 				) : (

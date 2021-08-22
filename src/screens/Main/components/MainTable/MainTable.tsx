@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { TableProducts } from '../../../../components';
 import { ButtonIcon } from '../../../../components/elements';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
-import { numberWithCommas } from '../../../../utils/function';
+import { formatInPeso } from '../../../../utils/function';
 import { MainTableName } from './MainTableName';
 import './style.scss';
 
@@ -41,9 +41,7 @@ export const MainTable = () => {
 				tooltip="Remove"
 			/>,
 			<MainTableName product={product} />,
-			`₱${numberWithCommas(
-				(Number(product.weight) * product.price_per_piece)?.toFixed(2),
-			)}`,
+			formatInPeso(product.weight * product.price_per_piece),
 		]);
 
 		setData(formattedProducts);

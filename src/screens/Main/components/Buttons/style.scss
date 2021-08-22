@@ -26,7 +26,8 @@
 	}
 
 	&_btnRemoveDiscount {
-		grid-column: 1 / span 2;
 		@include redButton();
+		grid-column: 2 / span 2;
+		grid-row: 1;
 	}
 }

@@ -1,6 +1,10 @@
 import { message } from 'antd';
-import { isArray, isString, memoize } from 'lodash';
-import { APP_BRIGHTNESS_KEY, LOCAL_SERVER_URL_KEY } from '../global/constants';
+import { isArray, isNaN, isString, memoize, round, toString } from 'lodash';
+import {
+	APP_BRIGHTNESS_KEY,
+	EMPTY_CELL,
+	LOCAL_SERVER_URL_KEY,
+} from '../global/constants';
 import { userTypes } from '../global/types';
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -63,7 +67,9 @@ export const modifiedExtraCallback =
 
 // Formats
 
-export const zeroToO = (value) => value?.replace(/0/g, 'O');
+export const standardRound = (value) => round(value, 3).toFixed(2);
+
+export const zeroToO = (value) => toString(value)?.replace(/0/g, 'O');
 
 export const convertIntoArray = (errors, prefixMessage = null) => {
 	const prefix = prefixMessage ? `${prefixMessage}: ` : '';
@@ -86,4 +92,12 @@ export const formatPrintDetails = (detail) => {
 	}
 
 	return formattedDetail;
+};
+
+export const formatInPeso = (value) => {
+	const x = Number(value);
+
+	return isNaN(x)
+		? EMPTY_CELL
+		: `₱${numberWithCommas(standardRound(Number(x)))}`;
 };

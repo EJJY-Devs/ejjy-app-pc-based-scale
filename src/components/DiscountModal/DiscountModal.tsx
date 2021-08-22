@@ -1,7 +1,8 @@
 import { Modal } from 'antd';
 import React from 'react';
-import { AuthForm } from '../../../../components';
-import { ControlledInput, Label } from '../../../../components/elements';
+import { AuthForm } from '..';
+import { ControlledInput, Label } from '../elements';
+import './style.scss';
 
 interface Props {
 	visible: boolean;
@@ -11,7 +12,7 @@ interface Props {
 	discount?: string;
 }
 
-export const DiscountAuthModal = ({
+export const DiscountModal = ({
 	visible,
 	discount,
 	isLoading,
@@ -19,6 +20,7 @@ export const DiscountAuthModal = ({
 	onClose,
 }: Props) => (
 	<Modal
+		className="DiscountModal"
 		title="Manager's Approval for Discount"
 		visible={visible}
 		footer={null}
@@ -26,7 +28,7 @@ export const DiscountAuthModal = ({
 		centered
 		closable
 	>
-		<div style={{ marginBottom: '30px' }}>
+		<div className="DiscountModal_inputGroup">
 			<Label label="Discounted Price" spacing />
 			<ControlledInput value={discount} onChange={() => null} disabled />
 		</div>
