@@ -27,48 +27,47 @@
 
 	// Endpoints
 	app.get('/weight', cors(), (req, res, next) => {
-		res.json({ weight: parseFloat('0.205') });
-		// res.json({ weight: Number(Number(Math.random() * 10).toFixed(4)) });
-		// if(!process) {
-		//   res.status(500).send("Error");
-		//   return;
-		// }
+		// res.json({ weight: parseFloat('0.205') });
+		if (!process) {
+			res.status(500).send('Error');
+			return;
+		}
 
-		// process.stdout.once("data", function (data) {
-		//   const weight = parseFloat(data.toString());
-		//   res.json({ weight });
-		// });
-		// process.stdin.write("getWeight\r\n");
+		process.stdout.once('data', function (data) {
+			const weight = parseFloat(data.toString());
+			res.json({ weight });
+		});
+		process.stdin.write('getWeight\r\n');
 	});
 
 	app.post('/print-product', cors(), (req, res, next) => {
-		res.json(true);
-		// if (!process) {
-		// 	res.status(500).send('Error');
-		// 	return;
-		// }
+		// res.json(true);
+		if (!process) {
+			res.status(500).send('Error');
+			return;
+		}
 
-		// const { name, weight, price, totalPrice, code, branch } = req.body;
-		// process.stdout.once('data', function () {
-		// 	res.json(true);
-		// });
-		// process.stdin.write(
-		// 	`print ${name} ${weight} ${price} ${totalPrice} ${code} ${branch}\r\n`,
-		// );
+		const { name, weight, price, totalPrice, code, branch } = req.body;
+		process.stdout.once('data', function () {
+			res.json(true);
+		});
+		process.stdin.write(
+			`print ${name} ${weight} ${price} ${totalPrice} ${code} ${branch}\r\n`,
+		);
 	});
 
 	app.post('/print-transaction', cors(), (req, res, next) => {
-		res.json(true);
-		// if (!process) {
-		// 	res.status(500).send('Error');
-		// 	return;
-		// }
+		// res.json(true);
+		if (!process) {
+			res.status(500).send('Error');
+			return;
+		}
 
-		// const { transactionId, totalPrice, branch } = req.body;
-		// process.stdout.once('data', function () {
-		// 	res.json(true);
-		// });
-		// process.stdin.write(`print ${transactionId} ${totalPrice} ${branch}\r\n`);
+		const { transactionId, totalPrice, branch } = req.body;
+		process.stdout.once('data', function () {
+			res.json(true);
+		});
+		process.stdin.write(`print ${transactionId} ${totalPrice} ${branch}\r\n`);
 	});
 
 	app.post('/zero', cors(), (req, res, next) => {
