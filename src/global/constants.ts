@@ -1,5 +1,6 @@
 // App
 export const APP_KEY = process.env.REACT_APP_KEY;
+export const APP_TITLE = process.env.REACT_APP_TITLE;
 
 // Local Storage
 export const LOCAL_SERVER_URL_KEY = 'EJJY_LOCAL_SERVER_URL';

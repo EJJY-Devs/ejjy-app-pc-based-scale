@@ -67,7 +67,7 @@ export const modifiedExtraCallback =
 
 // Formats
 
-export const standardRound = (value) => round(value, 3).toFixed(2);
+export const standardRound = (value) => round(round(value, 3), 2).toFixed(2);
 
 export const zeroToO = (value) => toString(value)?.replace(/0/g, 'O');
 
@@ -97,7 +97,5 @@ export const formatPrintDetails = (detail) => {
 export const formatInPeso = (value) => {
 	const x = Number(value);
 
-	return isNaN(x)
-		? EMPTY_CELL
-		: `₱${numberWithCommas(standardRound(Number(x)))}`;
+	return isNaN(x) ? EMPTY_CELL : `₱${numberWithCommas(standardRound(x))}`;
 };

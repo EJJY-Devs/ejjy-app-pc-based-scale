@@ -1,8 +1,9 @@
 const { app, BrowserWindow, Menu, MenuItem } = require('electron');
+const path = require('path');
 
 let mainWindow;
 function createWindow() {
-	require('../public/js/server');
+	require('../build/js/server');
 
 	mainWindow = new BrowserWindow({
 		width: 800,
@@ -10,8 +11,7 @@ function createWindow() {
 		show: false,
 	});
 
-	mainWindow.loadURL('http://localhost:3000');
-
+	mainWindow.loadURL(`file://${path.join(__dirname, '../build/index.html')}`);
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.maximize();
 		mainWindow.show();

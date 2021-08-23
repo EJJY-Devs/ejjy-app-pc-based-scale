@@ -4,6 +4,6 @@ import './style.scss';
 
 export const AppVersion = () => (
 	<span className="AppVersion">
-		App Version {process.env.REACT_APP_VERSION}
+		App Version {process.env.REACT_APP_NPM_VERSION}
 	</span>
 );

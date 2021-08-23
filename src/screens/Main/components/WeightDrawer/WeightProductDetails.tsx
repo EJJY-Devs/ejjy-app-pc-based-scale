@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-wrap-multilines */
-import { Col, Divider, message, Row } from 'antd';
+import { Col, message, Row, Space } from 'antd';
 import React, { useCallback, useState } from 'react';
 import { DiscountModal, ScaleButton } from '../../../../components';
 import { ControlledInput, Label } from '../../../../components/elements';
@@ -116,91 +116,95 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 	return (
 		<>
 			<div className="WeightProductDetails">
-				<Label label="Total" spacing />
-				<ControlledInput
-					className="WeightProductDetails_inputAmount"
-					value={formatInPeso(weight * currentProduct.price_per_piece)}
-					onChange={() => null}
-					disabled
-				/>
+				<Space
+					className="WeightProductDetails_wrapper"
+					direction="vertical"
+					size={20}
+				>
+					<div className="WeightProductDetails_inputGroup">
+						<Label label="Total" spacing />
+						<ControlledInput
+							className="WeightProductDetails_inputGroup_inputAmount"
+							value={formatInPeso(weight * currentProduct.price_per_piece)}
+							onChange={() => null}
+							disabled
+						/>
+					</div>
 
-				<div className="WeightProductDetails_inputGroup">
-					<Label label="Name" spacing />
-					<ControlledInput
-						className="WeightProductDetails_inputGroup_input"
-						value={currentProduct.name}
-						onChange={() => null}
-						disabled
-					/>
-				</div>
+					<div className="WeightProductDetails_inputGroup">
+						<Label label="Name" spacing />
+						<ControlledInput
+							className="WeightProductDetails_inputGroup_input"
+							value={currentProduct.name}
+							onChange={() => null}
+							disabled
+						/>
+					</div>
 
-				<div className="WeightProductDetails_inputGroup">
-					<Label label="Weight" spacing />
-					<ControlledInput
-						className="WeightProductDetails_inputGroup_input"
-						value={weight}
-						onChange={() => null}
-						disabled
-					/>
-				</div>
+					<div className="WeightProductDetails_inputGroup">
+						<Label label="Weight" spacing />
+						<ControlledInput
+							className="WeightProductDetails_inputGroup_input"
+							value={weight}
+							onChange={() => null}
+							disabled
+						/>
+					</div>
 
-				<div className="WeightProductDetails_inputGroup">
-					<Label label="Price" spacing />
-					<ControlledInput
-						className="WeightProductDetails_inputGroup_input"
-						value={formatInPeso(currentProduct.price_per_piece)}
-						onChange={() => null}
-						disabled
-					/>
-				</div>
+					<div className="WeightProductDetails_inputGroup">
+						<Label label="Price" spacing />
+						<ControlledInput
+							className="WeightProductDetails_inputGroup_input"
+							value={formatInPeso(currentProduct.price_per_piece)}
+							onChange={() => null}
+							disabled
+						/>
+					</div>
 
-				<Divider />
-
-				<Row gutter={15}>
-					{isWithDiscount() ? (
-						<Col span={24}>
-							<ScaleButton
-								className="WeightProductDetails_btnDiscount__remove"
-								title="Remove Discount"
-								onClick={() => {
-									setSelectedDiscountType(discountTypes.NO_DISCOUNT);
-									setDiscountAuthModalVisible(true);
-								}}
-							/>
-						</Col>
-					) : (
-						<>
-							<Col span={12}>
+					<Row gutter={15}>
+						{isWithDiscount() ? (
+							<Col span={24}>
 								<ScaleButton
-									className="WeightProductDetails_btnDiscount"
-									title="D1"
+									className="WeightProductDetails_btnDiscount__remove"
+									title="Remove Discount"
 									onClick={() => {
-										setSelectedDiscountType(discountTypes.FIRST);
+										setSelectedDiscountType(discountTypes.NO_DISCOUNT);
 										setDiscountAuthModalVisible(true);
 									}}
 								/>
 							</Col>
-							<Col span={12}>
-								<ScaleButton
-									className="WeightProductDetails_btnDiscount"
-									title="D2"
-									onClick={() => {
-										setSelectedDiscountType(discountTypes.SECOND);
-										setDiscountAuthModalVisible(true);
-									}}
-								/>
-							</Col>
-						</>
-					)}
-				</Row>
+						) : (
+							<>
+								<Col span={12}>
+									<ScaleButton
+										className="WeightProductDetails_btnDiscount"
+										title="D1"
+										onClick={() => {
+											setSelectedDiscountType(discountTypes.FIRST);
+											setDiscountAuthModalVisible(true);
+										}}
+									/>
+								</Col>
+								<Col span={12}>
+									<ScaleButton
+										className="WeightProductDetails_btnDiscount"
+										title="D2"
+										onClick={() => {
+											setSelectedDiscountType(discountTypes.SECOND);
+											setDiscountAuthModalVisible(true);
+										}}
+									/>
+								</Col>
+							</>
+						)}
+					</Row>
 
-				<Divider />
-
-				<ScaleButton
-					className="WeightProductDetails_btnClear"
-					title="Remove Selected Product"
-					onClick={onClearSelectedProduct}
-				/>
+					<ScaleButton
+						className="WeightProductDetails_btnClear"
+						title="Remove Selected Product"
+						onClick={onClearSelectedProduct}
+					/>
+				</Space>
 
 				<div className="WeightProductDetails_btnGroup">
 					<ScaleButton title="Print" onClick={() => onPrint()} />

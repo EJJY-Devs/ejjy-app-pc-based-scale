@@ -15,18 +15,20 @@
 }
 
 .WeightProductDetails {
-	&_inputAmount {
-		@include font(2.5rem, bold);
-		color: $color-dark;
-		text-align: right;
+	&_wrapper {
+		width: 100%;
 	}
 
 	&_inputGroup {
-		margin: 30px 0 0 0;
-
 		&_input {
 			@include font(25px, bold);
 			color: $color-dark;
+		}
+
+		&_inputAmount {
+			@include font(2.5rem, bold);
+			color: $color-dark;
+			text-align: right;
 		}
 	}
 

@@ -27,7 +27,7 @@
 
 	// Endpoints
 	app.get('/weight', cors(), (req, res, next) => {
-		// res.json({ weight: parseFloat('0.205') });
+		// res.json({ weight: parseFloat('1.1807') });
 		if (!process) {
 			res.status(500).send('Error');
 			return;
