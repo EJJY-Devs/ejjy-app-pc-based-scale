@@ -1,7 +1,7 @@
 {
 	"name": "ejjy-pc-based-scale",
 	"productName": "EJJY PC-Based Scale",
-	"version": "1.1.18",
+	"version": "1.1.19",
 	"private": true,
 	"homepage": "./",
 	"main": "./electron/main.js",
@@ -13,7 +13,8 @@
 		"build": "react-scripts build",
 		"server": "node public/js/server.js",
 		"electron": "wait-on http://localhost:3000 && electron .",
-		"pack:build": "npm run build && mv build ./dist/build && electron-packager ./dist EJJY-PC-Based-Scale --platform=win32 --overwrite",
+		"pack:clean": "rm -rf build && rm -rf dist/build",
+		"pack:build": "npm run pack:clean && npm run build && mv build ./dist/build && electron-packager ./dist EJJY-PC-Based-Scale --platform=win32 --overwrite",
 		"pack:install": "cd EJJY-PC-Based-Scale-win32-x64/resources/app && npm install",
 		"pack:zip": "7z a -tzip EJJY-PC-Based-Scale.zip EJJY-PC-Based-Scale-win32-x64",
 		"pack": "npm version patch --no-git-tag-version && npm run pack:build && npm run pack:install && npm run pack:zip"
