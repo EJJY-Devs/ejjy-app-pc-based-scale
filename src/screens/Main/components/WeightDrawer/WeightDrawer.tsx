@@ -62,7 +62,7 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		printProduct(
 			{
 				name: formatPrintDetails(currentProduct.name),
-				weight: `${weight}kg`,
+				weight: `${zeroToO(weight.toFixed(3))}kg`,
 				price: `P${zeroToO(currentProduct.price_per_piece.toFixed(2))}`,
 				totalPrice: `P${zeroToO(total)}`,
 				code: `${currentProduct.barcode}${formattedWeight}`,

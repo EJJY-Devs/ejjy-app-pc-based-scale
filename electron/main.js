@@ -2,7 +2,7 @@ const { app, BrowserWindow, Menu, MenuItem } = require('electron');
 
 let mainWindow;
 function createWindow() {
-	require('../public/js/server');
+	require('../public/js/server-dev');
 
 	mainWindow = new BrowserWindow({
 		width: 800,

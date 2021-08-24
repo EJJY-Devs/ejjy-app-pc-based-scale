@@ -145,7 +145,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 						<Label label="Weight" spacing />
 						<ControlledInput
 							className="WeightProductDetails_inputGroup_input"
-							value={weight}
+							value={weight.toFixed(3)}
 							onChange={() => null}
 							disabled
 						/>

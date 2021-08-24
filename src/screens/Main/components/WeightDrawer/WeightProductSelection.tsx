@@ -103,7 +103,7 @@ export const WeightProductSelection = ({
 				<Label id="weight" label="Weight" spacing />
 				<ControlledInput
 					className="WeightProductSelection_inputWeight"
-					value={weight}
+					value={weight.toFixed(3)}
 					onChange={() => null}
 					disabled
 				/>

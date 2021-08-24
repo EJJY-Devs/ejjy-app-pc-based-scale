@@ -31,7 +31,7 @@ export const MainTableName = ({ product }: Props) => {
 			</div>
 
 			<div className="MainTableName_quantities">
-				{`${weight} x ${price}`}
+				{`${weight.toFixed(3)} x ${price}`}
 				{productDiscount}
 			</div>
 		</div>

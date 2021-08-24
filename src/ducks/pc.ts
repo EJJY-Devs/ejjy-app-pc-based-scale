@@ -51,7 +51,9 @@ export const actions = {
 const selectState = (state: any) => state[key] || initialState;
 export const selectors = {
 	selectWeight: () =>
-		createSelector(selectState, (state) => Number(state.weight.toFixed(3))),
+		createSelector(selectState, (state) =>
+			Number((state.weight || 0).toFixed(3)),
+		),
 };
 
 export default reducer;
