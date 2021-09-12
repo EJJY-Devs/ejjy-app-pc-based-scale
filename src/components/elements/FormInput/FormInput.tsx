@@ -10,7 +10,7 @@ export interface IInputProps {
 	disabled?: boolean;
 	max?: number;
 	min?: number;
-	classNames?: string;
+	className?: string;
 	autoFocus?: boolean;
 	inputRef?: any;
 	step?: string;
@@ -24,7 +24,7 @@ const FormInput = ({
 	placeholder,
 	disabled,
 	autoFocus,
-	classNames,
+	className,
 	inputRef,
 	step,
 }: IInputProps) => (
@@ -33,7 +33,7 @@ const FormInput = ({
 		type={type}
 		id={id}
 		name={id}
-		className={cn('FormInput', classNames)}
+		className={cn('FormInput', className)}
 		placeholder={placeholder}
 		max={max}
 		min={min}

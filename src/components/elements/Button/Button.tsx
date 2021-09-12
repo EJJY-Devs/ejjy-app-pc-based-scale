@@ -20,7 +20,7 @@ interface Props {
 	loading?: boolean;
 	disabled?: boolean;
 	block?: boolean;
-	classNames?: any;
+	className?: any;
 	tooltipPlacement?: TooltipPlacement;
 	tooltip?: string;
 	hasShortcutKey?: boolean;
@@ -38,7 +38,7 @@ const Button = React.forwardRef<HTMLInputElement, Props>(
 			block,
 			loading,
 			disabled,
-			classNames,
+			className,
 			tooltipPlacement,
 			tooltip,
 			size,
@@ -55,7 +55,7 @@ const Button = React.forwardRef<HTMLInputElement, Props>(
 				ref={ref}
 				// eslint-disable-next-line react/button-has-type
 				type={type}
-				className={cn('Button', classNames, {
+				className={cn('Button', className, {
 					[variant]: true,
 					[size]: true,
 					flex: !!icon,

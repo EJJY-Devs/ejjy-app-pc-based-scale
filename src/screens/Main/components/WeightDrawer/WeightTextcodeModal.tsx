@@ -2,8 +2,7 @@
 import { message, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { ScaleButton } from '../../../../components';
-import { Button } from '../../../../components/elements';
-import ControlledInput from '../../../../components/elements/ControlledInput/ControlledInput';
+import { Button, ControlledInput } from '../../../../components/elements';
 import { request } from '../../../../global/types';
 import { useBranchProducts } from '../../../../hooks/useBranchProducts';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
@@ -183,7 +182,7 @@ export const WeightTextcodeModal = ({
 					text="Cancel"
 					size="lg"
 					onClick={onClose}
-					classNames="WeightTextcodeModal_btnGroup_btnCancel"
+					className="WeightTextcodeModal_btnGroup_btnCancel"
 				/>
 				<Button
 					type="submit"

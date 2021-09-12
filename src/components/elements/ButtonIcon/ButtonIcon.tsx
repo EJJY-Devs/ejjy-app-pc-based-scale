@@ -14,7 +14,7 @@ interface Props {
 	tooltip: string;
 	loading?: boolean;
 	disabled?: boolean;
-	classNames?: any;
+	className?: any;
 }
 
 const ButtonIcon = ({
@@ -23,13 +23,13 @@ const ButtonIcon = ({
 	tooltip,
 	loading,
 	disabled,
-	classNames,
+	className,
 }: Props) => (
 	<Tooltip placement="top" title={tooltip}>
 		<button
 			type="button"
 			onClick={onClick}
-			className={cn('ButtonIcon', classNames, {
+			className={cn('ButtonIcon', className, {
 				ButtonIcon__disabled: disabled,
 				ButtonIcon__loading: loading,
 			})}
