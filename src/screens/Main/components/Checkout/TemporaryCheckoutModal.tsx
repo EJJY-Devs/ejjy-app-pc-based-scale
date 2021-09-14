@@ -130,7 +130,7 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 			>
 				<div className="form">
 					<div className="product-list">
-						<Label classNames="quantity-label" label="Products" spacing />
+						<Label className="quantity-label" label="Products" spacing />
 						<ul>
 							{getCheckoutProducts().map(({ name }) => (
 								<li>{name}</li>
@@ -138,7 +138,7 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 						</ul>
 					</div>
 
-					<Label classNames="quantity-label" label="Amount Due (₱)" spacing />
+					<Label className="quantity-label" label="Amount Due (₱)" spacing />
 					<ControlledInput
 						className="amount-due-input"
 						value={getTotal()}
@@ -152,7 +152,7 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 							text="Cancel"
 							size="lg"
 							onClick={onClose}
-							classNames="btn-cancel"
+							className="btn-cancel"
 						/>
 						<Button
 							type="submit"

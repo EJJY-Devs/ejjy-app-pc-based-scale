@@ -21,9 +21,9 @@ const FormInputLabel = ({
 	inputRef,
 }: Props) => (
 	<>
-		<Label id={id} label={inputLabel} classNames={labelClassname} spacing />
+		<Label id={id} label={inputLabel} className={labelClassname} spacing />
 		<FormInput
-			classNames={inputClassname}
+			className={inputClassname}
 			type={type}
 			id={id}
 			max={max}

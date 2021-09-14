@@ -2,8 +2,7 @@
 import { message, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { ScaleButton } from '../../../../components';
-import { Button } from '../../../../components/elements';
-import ControlledInput from '../../../../components/elements/ControlledInput/ControlledInput';
+import { Button, ControlledInput } from '../../../../components/elements';
 import { request } from '../../../../global/types';
 import { useBranchProducts } from '../../../../hooks/useBranchProducts';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
@@ -52,23 +51,26 @@ export const WeightTextcodeModal = ({
 		if (textcode.length > 0) {
 			listBranchProducts({ search: textcode }, ({ status, data }) => {
 				if (status === request.SUCCESS) {
-					const foundProduct = data?.[0];
-					const transactionProduct = transactionProducts.find(
-						({ id }) => id === foundProduct.id,
+					const branchProduct = data.find(
+						(item) => item.product.textcode === textcode,
 					);
 
-					if (transactionProduct) {
-						message.warning('Product is already on your cart.');
-						return;
-					}
+					if (branchProduct) {
+						const transactionProduct = transactionProducts.find(
+							({ id }) => id === branchProduct.id,
+						);
 
-					if (foundProduct) {
+						if (transactionProduct) {
+							message.warning('Product is already on your cart.');
+							return;
+						}
+
 						const {
 							product,
 							discounted_price_per_piece1,
 							discounted_price_per_piece2,
 							price_per_piece,
-						} = foundProduct;
+						} = branchProduct;
 
 						onSelectProduct({
 							...product,
@@ -183,7 +185,7 @@ export const WeightTextcodeModal = ({
 					text="Cancel"
 					size="lg"
 					onClick={onClose}
-					classNames="WeightTextcodeModal_btnGroup_btnCancel"
+					className="WeightTextcodeModal_btnGroup_btnCancel"
 				/>
 				<Button
 					type="submit"

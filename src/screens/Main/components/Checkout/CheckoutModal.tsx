@@ -57,7 +57,7 @@ export const CheckoutModal = ({ visible, onClose }: Props) => {
 			closable
 		>
 			<div className="form">
-				<Label classNames="quantity-label" label="Amount Due (₱)" spacing />
+				<Label className="quantity-label" label="Amount Due (₱)" spacing />
 				<ControlledInput
 					className="amount-due-input"
 					value={getTotal()}
@@ -71,7 +71,7 @@ export const CheckoutModal = ({ visible, onClose }: Props) => {
 						text="Cancel"
 						size="lg"
 						onClick={onClose}
-						classNames="btn-cancel"
+						className="btn-cancel"
 					/>
 					<Button
 						type="submit"

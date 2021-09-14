@@ -6,13 +6,13 @@ interface Props {
 	id?: string;
 	label: string | React.ReactNode;
 	spacing?: boolean;
-	classNames?: string;
+	className?: string;
 }
 
-const Label = ({ id, label: inputLabel, spacing, classNames }: Props) => (
+const Label = ({ id, label: inputLabel, spacing, className }: Props) => (
 	<label
 		htmlFor={id}
-		className={cn('Label', classNames, { Label__withSpacing: spacing })}
+		className={cn('Label', className, { Label__withSpacing: spacing })}
 	>
 		{inputLabel}
 	</label>
