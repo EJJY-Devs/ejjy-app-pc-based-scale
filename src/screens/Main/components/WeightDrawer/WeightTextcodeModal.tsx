@@ -51,23 +51,26 @@ export const WeightTextcodeModal = ({
 		if (textcode.length > 0) {
 			listBranchProducts({ search: textcode }, ({ status, data }) => {
 				if (status === request.SUCCESS) {
-					const foundProduct = data?.[0];
-					const transactionProduct = transactionProducts.find(
-						({ id }) => id === foundProduct.id,
+					const branchProduct = data.find(
+						(item) => item.product.textcode === textcode,
 					);
 
-					if (transactionProduct) {
-						message.warning('Product is already on your cart.');
-						return;
-					}
+					if (branchProduct) {
+						const transactionProduct = transactionProducts.find(
+							({ id }) => id === branchProduct.id,
+						);
 
-					if (foundProduct) {
+						if (transactionProduct) {
+							message.warning('Product is already on your cart.');
+							return;
+						}
+
 						const {
 							product,
 							discounted_price_per_piece1,
 							discounted_price_per_piece2,
 							price_per_piece,
-						} = foundProduct;
+						} = branchProduct;
 
 						onSelectProduct({
 							...product,
