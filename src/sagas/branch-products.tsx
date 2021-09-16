@@ -15,10 +15,11 @@ function* list({ payload }: any) {
 
 	try {
 		const response = yield retry(MAX_RETRY, RETRY_INTERVAL_MS, service.list, {
-			page: 1,
-			page_size: MAX_PAGE_SIZE,
 			search,
 			is_shown_in_scale_list: true,
+			page: 1,
+			page_size: MAX_PAGE_SIZE,
+			ordering: '-product__textcode',
 		});
 
 		callback({ status: request.SUCCESS, data: response.data.results });
