@@ -2,10 +2,11 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-one-expression-per-line */
 import { message } from 'antd';
-import { isEmpty, isEqual } from 'lodash';
+import { isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AppVersion, Container } from '../../components';
+import { SettingUrlModal } from '../../components/SettingUrl/SettingUrlModal';
 import { request } from '../../global/types';
 import { useAuth } from '../../hooks/useAuth';
 import { useBranchProducts } from '../../hooks/useBranchProducts';
@@ -14,10 +15,8 @@ import { Buttons } from './components/Buttons/Buttons';
 import { CheckoutModal } from './components/Checkout/CheckoutModal';
 import { TemporaryCheckoutModal } from './components/Checkout/TemporaryCheckoutModal';
 import { MainTable } from './components/MainTable/MainTable';
-import { SettingUrlModal } from '../../components/SettingUrl/SettingUrlModal';
 import { WeightDrawer } from './components/WeightDrawer/WeightDrawer';
 import './style.scss';
-import { useCurrentTransaction } from '../../hooks/useCurrentTransaction';
 
 const Main = () => {
 	// STATES
@@ -38,7 +37,6 @@ const Main = () => {
 		useBranchProducts();
 	const { listProductCategories, status: productCategoriesStatus } =
 		useProductCategories();
-	const { currentProduct, setCurrentProduct } = useCurrentTransaction();
 
 	// METHODS
 	useEffect(() => {
@@ -75,35 +73,36 @@ const Main = () => {
 		};
 	}, []);
 
-	useEffect(() => {
-		if (currentProduct) {
-			const branchProduct = branchProducts.find(
-				({ product }) => product.id === currentProduct.id,
-			);
+	// NOTE: Temporarily disable updating of branch product per now
+	// useEffect(() => {
+	// 	if (currentProduct) {
+	// 		const branchProduct = branchProducts.find(
+	// 			({ product }) => product.id === currentProduct.id,
+	// 		);
 
-			if (branchProduct) {
-				const newProduct = {
-					...currentProduct,
-					...branchProduct.product,
-					discounted_price_per_piece1:
-						branchProduct.discounted_price_per_piece1,
-					discounted_price_per_piece2:
-						branchProduct.discounted_price_per_piece2,
+	// 		if (branchProduct) {
+	// 			const newProduct = {
+	// 				...currentProduct,
+	// 				...branchProduct.product,
+	// 				discounted_price_per_piece1:
+	// 					branchProduct.discounted_price_per_piece1,
+	// 				discounted_price_per_piece2:
+	// 					branchProduct.discounted_price_per_piece2,
 
-					// We need to retain the current price_per_piece value if
-					// user applied discount
-					price_per_piece:
-						currentProduct?.discount > 0
-							? currentProduct.price_per_piece
-							: branchProduct.price_per_piece,
-				};
+	// 				// We need to retain the current price_per_piece value if
+	// 				// user applied discount
+	// 				price_per_piece:
+	// 					currentProduct?.discount > 0
+	// 						? currentProduct.price_per_piece
+	// 						: branchProduct.price_per_piece,
+	// 			};
 
-				if (!isEqual(currentProduct, newProduct)) {
-					setCurrentProduct(newProduct);
-				}
-			}
-		}
-	}, [branchProducts]);
+	// 			if (!isEqual(currentProduct, newProduct)) {
+	// 				setCurrentProduct(newProduct);
+	// 			}
+	// 		}
+	// 	}
+	// }, [branchProducts]);
 
 	useEffect(() => {
 		if (isEmpty(user)) {
