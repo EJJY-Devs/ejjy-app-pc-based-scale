@@ -74,11 +74,6 @@ export const AuthForm = ({
 						variant="secondary"
 						loading={loading || isSubmitting}
 						block
-						onClick={() => {
-							if (shouldFullScreen) {
-								document.documentElement?.requestFullscreen();
-							}
-						}}
 					/>
 				</Form>
 			)}

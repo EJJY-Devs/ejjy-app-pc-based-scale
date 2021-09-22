@@ -14,7 +14,7 @@ export const MainTableName = ({ product }: Props) => {
 	const productDiscount =
 		discount > 0 ? (
 			<span className="MainTableName_quantities_discount">
-				{`(${formatInPeso(product.price_per_piece + product.discount)}`}
+				{`(${formatInPeso(product.price_per_piece + product.discount)})`}
 			</span>
 		) : null;
 

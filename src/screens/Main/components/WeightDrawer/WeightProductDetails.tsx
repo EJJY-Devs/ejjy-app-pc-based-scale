@@ -31,13 +31,9 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 	const onPrintAndAddCart = () => {
 		onPrint(() => {
 			addProduct({ ...currentProduct, weight });
-			onClearSelectedProduct();
+			setCurrentProduct(null);
 			message.success('Product successfully added.');
 		});
-	};
-
-	const onClearSelectedProduct = () => {
-		setCurrentProduct(null);
 	};
 
 	const getDiscount = useCallback(() => {
@@ -202,7 +198,9 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 					<ScaleButton
 						className="WeightProductDetails_btnClear"
 						title="Remove Selected Product"
-						onClick={onClearSelectedProduct}
+						onClick={() => {
+							setCurrentProduct(null);
+						}}
 					/>
 				</Space>
 

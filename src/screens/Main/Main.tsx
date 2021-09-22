@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-one-expression-per-line */
+import { captureMessage } from '@sentry/react';
 import { message } from 'antd';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
@@ -58,9 +59,9 @@ const Main = () => {
 		};
 
 		fetchBranchProducts();
-		intervalRef.current = setInterval(() => {
-			fetchBranchProducts();
-		}, 10000);
+		// intervalRef.current = setInterval(() => {
+		// 	fetchBranchProducts();
+		// }, 10000);
 
 		listProductCategories(({ status }) => {
 			if (status === request.ERROR) {
@@ -74,35 +75,36 @@ const Main = () => {
 	}, []);
 
 	// NOTE: Temporarily disable updating of branch product per now
-	// useEffect(() => {
-	// 	if (currentProduct) {
-	// 		const branchProduct = branchProducts.find(
-	// 			({ product }) => product.id === currentProduct.id,
-	// 		);
+	useEffect(() => {
+		console.log('Fetched:', branchProducts);
+		// if (currentProduct) {
+		// 	const branchProduct = branchProducts.find(
+		// 		({ product }) => product.id === currentProduct.id,
+		// 	);
 
-	// 		if (branchProduct) {
-	// 			const newProduct = {
-	// 				...currentProduct,
-	// 				...branchProduct.product,
-	// 				discounted_price_per_piece1:
-	// 					branchProduct.discounted_price_per_piece1,
-	// 				discounted_price_per_piece2:
-	// 					branchProduct.discounted_price_per_piece2,
+		// 	if (branchProduct) {
+		// 		const newProduct = {
+		// 			...currentProduct,
+		// 			...branchProduct.product,
+		// 			discounted_price_per_piece1:
+		// 				branchProduct.discounted_price_per_piece1,
+		// 			discounted_price_per_piece2:
+		// 				branchProduct.discounted_price_per_piece2,
 
-	// 				// We need to retain the current price_per_piece value if
-	// 				// user applied discount
-	// 				price_per_piece:
-	// 					currentProduct?.discount > 0
-	// 						? currentProduct.price_per_piece
-	// 						: branchProduct.price_per_piece,
-	// 			};
+		// 			// We need to retain the current price_per_piece value if
+		// 			// user applied discount
+		// 			price_per_piece:
+		// 				currentProduct?.discount > 0
+		// 					? currentProduct.price_per_piece
+		// 					: branchProduct.price_per_piece,
+		// 		};
 
-	// 			if (!isEqual(currentProduct, newProduct)) {
-	// 				setCurrentProduct(newProduct);
-	// 			}
-	// 		}
-	// 	}
-	// }, [branchProducts]);
+		// 		if (!isEqual(currentProduct, newProduct)) {
+		// 			setCurrentProduct(newProduct);
+		// 		}
+		// 	}
+		// }
+	}, [branchProducts]);
 
 	useEffect(() => {
 		if (isEmpty(user)) {

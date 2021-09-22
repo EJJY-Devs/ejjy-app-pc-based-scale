@@ -11,8 +11,9 @@
 
 	.TableProducts {
 		height: 100%;
-		border-radius: 10px;
 		min-height: 480px;
+		max-height: 635px;
+		border-radius: 10px;
 		border: 2px solid $color-gray;
 	}
 }

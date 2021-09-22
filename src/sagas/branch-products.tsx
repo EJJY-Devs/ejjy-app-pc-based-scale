@@ -1,10 +1,5 @@
-import { retry, takeEvery } from 'redux-saga/effects';
+import { call, takeLatest } from 'redux-saga/effects';
 import { types } from '../ducks/branch-products';
-import {
-	MAX_PAGE_SIZE,
-	MAX_RETRY,
-	RETRY_INTERVAL_MS,
-} from '../global/constants';
 import { request } from '../global/types';
 import { service } from '../services/branch-products';
 
@@ -14,11 +9,11 @@ function* list({ payload }: any) {
 	callback({ status: request.REQUESTING });
 
 	try {
-		const response = yield retry(MAX_RETRY, RETRY_INTERVAL_MS, service.list, {
+		const response = yield call(service.list, {
 			search,
 			is_shown_in_scale_list: true,
 			page: 1,
-			page_size: MAX_PAGE_SIZE,
+			page_size: 100,
 			ordering: '-product__textcode',
 		});
 
@@ -30,7 +25,7 @@ function* list({ payload }: any) {
 
 /* WATCHERS */
 const listWatcherSaga = function* listWatcherSaga() {
-	yield takeEvery(types.LIST_BRANCH_PRODUCTS, list);
+	yield takeLatest(types.LIST_BRANCH_PRODUCTS, list);
 };
 
 export default [listWatcherSaga()];
