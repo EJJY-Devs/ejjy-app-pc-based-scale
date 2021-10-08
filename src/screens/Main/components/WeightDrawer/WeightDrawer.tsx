@@ -40,8 +40,6 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 	}, [weight]);
 
 	const onSelectProduct = (product) => {
-		console.log('Selected: ', product);
-
 		const foundProduct = transactionProducts.find(
 			({ id }) => id === product.id,
 		);

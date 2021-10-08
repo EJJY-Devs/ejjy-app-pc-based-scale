@@ -1,9 +1,8 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-one-expression-per-line */
-import { captureMessage } from '@sentry/react';
 import { message } from 'antd';
-import { isEmpty } from 'lodash';
+import { isEmpty, isEqual } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AppVersion, Container } from '../../components';
@@ -18,6 +17,7 @@ import { TemporaryCheckoutModal } from './components/Checkout/TemporaryCheckoutM
 import { MainTable } from './components/MainTable/MainTable';
 import { WeightDrawer } from './components/WeightDrawer/WeightDrawer';
 import './style.scss';
+import { useCurrentTransaction } from '../../hooks/useCurrentTransaction';
 
 const Main = () => {
 	// STATES
@@ -38,6 +38,7 @@ const Main = () => {
 		useBranchProducts();
 	const { listProductCategories, status: productCategoriesStatus } =
 		useProductCategories();
+	const { currentProduct, setCurrentProduct } = useCurrentTransaction();
 
 	// METHODS
 	useEffect(() => {
@@ -74,36 +75,34 @@ const Main = () => {
 		};
 	}, []);
 
-	// NOTE: Temporarily disable updating of branch product per now
 	useEffect(() => {
-		console.log('Fetched:', branchProducts);
-		// if (currentProduct) {
-		// 	const branchProduct = branchProducts.find(
-		// 		({ product }) => product.id === currentProduct.id,
-		// 	);
+		if (currentProduct) {
+			const branchProduct = branchProducts.find(
+				({ product }) => product.id === currentProduct.id,
+			);
 
-		// 	if (branchProduct) {
-		// 		const newProduct = {
-		// 			...currentProduct,
-		// 			...branchProduct.product,
-		// 			discounted_price_per_piece1:
-		// 				branchProduct.discounted_price_per_piece1,
-		// 			discounted_price_per_piece2:
-		// 				branchProduct.discounted_price_per_piece2,
+			if (branchProduct) {
+				const newProduct = {
+					...currentProduct,
+					...branchProduct.product,
+					discounted_price_per_piece1:
+						branchProduct.discounted_price_per_piece1,
+					discounted_price_per_piece2:
+						branchProduct.discounted_price_per_piece2,
 
-		// 			// We need to retain the current price_per_piece value if
-		// 			// user applied discount
-		// 			price_per_piece:
-		// 				currentProduct?.discount > 0
-		// 					? currentProduct.price_per_piece
-		// 					: branchProduct.price_per_piece,
-		// 		};
+					// We need to retain the current price_per_piece value if
+					// user applied discount
+					price_per_piece:
+						currentProduct?.discount > 0
+							? currentProduct.price_per_piece
+							: branchProduct.price_per_piece,
+				};
 
-		// 		if (!isEqual(currentProduct, newProduct)) {
-		// 			setCurrentProduct(newProduct);
-		// 		}
-		// 	}
-		// }
+				if (!isEqual(currentProduct, newProduct)) {
+					setCurrentProduct(newProduct);
+				}
+			}
+		}
 	}, [branchProducts]);
 
 	useEffect(() => {
