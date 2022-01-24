@@ -1,7 +1,7 @@
 {
 	"name": "ejjy-pc-based-scale",
 	"productName": "EJJY PC-Based Scale",
-	"version": "1.1.38",
+	"version": "1.1.39",
 	"private": true,
 	"homepage": "./",
 	"main": "./public/electron.js",
@@ -17,7 +17,7 @@
 		"electron": "wait-on http://localhost:3000 && electron .",
 		"build": "react-scripts build",
 		"postinstall": "electron-builder install-app-deps",
-		"publish": "npm version patch --no-git-tag-version && npm run build && GH_TOKEN=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 electron-builder -w -p always"
+		"publish": "npm version patch --no-git-tag-version && npm run build && electron-builder -w -p always"
 	},
 	"dependencies": {
 		"@ant-design/icons": "^4.2.2",
@@ -101,8 +101,7 @@
 			{
 				"provider": "github",
 				"owner": "EJJY-Devs",
-				"repo": "ejjy-app-pc-based-scale",
-				"token": "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"
+				"repo": "ejjy-app-pc-based-scale"
 			}
 		]
 	}
