@@ -8,5 +8,5 @@ interface IGetShownForScaleList extends IGetRequest {
 
 export const service = {
 	list: async (params: IGetShownForScaleList) =>
-		axios.get('branches-products/offline/', { params }),
+		axios.get('offline-branches-products/offline/', { params }),
 };

@@ -19,11 +19,16 @@ function* list({ payload }: any) {
 			page_size: MAX_PAGE_SIZE,
 		});
 
+		const sortedData = response.data.results.sort(
+			(a, b) => a.priority_level - b.priority_level,
+		);
+
 		yield put(
 			actions.save({
-				productCategories: response.data.results,
+				productCategories: sortedData,
 			}),
 		);
+
 		callback({ status: request.SUCCESS, data: response.data });
 	} catch (e) {
 		callback({ status: request.ERROR, errors: e.errors });

@@ -1,8 +1,10 @@
+/* eslint-disable prefer-destructuring */
 const { app, BrowserWindow, dialog } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const isDev = require('electron-is-dev');
 const log = require('electron-log');
 const path = require('path');
+const child_process = require('child_process');
 
 //-------------------------------------------------------------------
 // Auto Updater
@@ -15,10 +17,11 @@ log.info('App starting...');
 //-------------------------------------------------------------------
 // Initialization
 //-------------------------------------------------------------------
+let pid = null;
 let mainWindow;
 function createWindow() {
 	if (isDev) {
-		require('../public/server/server-dev');
+		require('./server/server-dev');
 	} else {
 		require('../build/server/server-prod');
 	}
@@ -34,6 +37,18 @@ function createWindow() {
 			? 'http://localhost:3000'
 			: `file://${path.join(__dirname, '../build/index.html')}`,
 	);
+
+	// const API_PATH = app.isPackaged
+	// 	? path.join(process.resourcesPath, 'api')
+	// 	: path.join(__dirname, '../api');
+
+	// const loader = child_process.spawn('poetry run python manage.py runserver', {
+	// 	cwd: API_PATH,
+	// 	detached: true,
+	// 	shell: true,
+	// });
+	// pid = loader.pid;
+
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.maximize();
 		mainWindow.show();
@@ -43,6 +58,27 @@ function createWindow() {
 		mainWindow = null;
 	});
 }
+
+// App close handler
+// app.on('before-quit', () => {
+// 	log.info(`pid: ${pid}`);
+// 	const result = process.kill(pid);
+// 	log.info(`result: ${result}`);
+// 	if (pid) {
+// 		process.kill(pid, (err) => {
+// 			if (err) {
+// 				throw new Error(err);
+// 			} else {
+// 				log.info(`Process %s has been killed! ${pid}`);
+// 			}
+// 		});
+// 	}
+// });
+
+process.on('uncaughtException', (error) => {
+	// Handle the error
+	log.error(`error: ${error}`);
+});
 
 //-------------------------------------------------------------------
 // Set single instance
