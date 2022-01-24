@@ -4,7 +4,7 @@ const { autoUpdater } = require('electron-updater');
 const isDev = require('electron-is-dev');
 const log = require('electron-log');
 const path = require('path');
-const child_process = require('child_process');
+// const child_process = require('child_process');
 
 //-------------------------------------------------------------------
 // Auto Updater
@@ -17,7 +17,6 @@ log.info('App starting...');
 //-------------------------------------------------------------------
 // Initialization
 //-------------------------------------------------------------------
-let pid = null;
 let mainWindow;
 function createWindow() {
 	if (isDev) {
@@ -156,7 +155,7 @@ if (process.platform === 'win32') {
 				type: 'info',
 				title: 'Software Update',
 				message:
-					'EJJY Cashiering App is successfully updated. Please press the button below to install the update.',
+					'EJJY PC-Based Scale App is successfully updated. Please press the button below to install the update.',
 				buttons: ['Install'],
 			})
 			.then(() => {
