@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { IGetRequest, ONLINE_API_URL } from '.';
+import { IGetRequest } from '.';
 
 export const service = {
 	list: async (params: IGetRequest) =>
-		axios.get('/offline-product-categories/', { baseURL: ONLINE_API_URL, params }),
+		axios.get('/offline-product-categories/', { params }),
 };
