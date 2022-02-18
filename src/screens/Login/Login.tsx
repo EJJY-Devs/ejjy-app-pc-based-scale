@@ -3,18 +3,18 @@ import { Divider } from 'antd';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { AppVersion, AuthForm, RequestErrors } from '../../components';
+import { AuthForm, RequestErrors } from '../../components';
+import { AppSettingsModal } from '../../components/AppSettings/AppSettingsModal';
 import { Box, Button } from '../../components/elements';
 import { request } from '../../global/types';
 import { useAuth } from '../../hooks/useAuth';
-import { convertIntoArray, getLocalServerUrl } from '../../utils/function';
-import { SettingUrlModal } from '../../components/SettingUrl/SettingUrlModal';
+import { convertIntoArray, getBranchServerUrl } from '../../utils/function';
 import './style.scss';
 
 const Login = () => {
 	// STATES
 	const [areSetupButtonsVisible, setSetupButtonsVisible] = useState(false);
-	const [urlModalVisible, setUrlModalVisible] = useState(false);
+	const [appSettingsModalVisible, setAppSettingsModalVisible] = useState(false);
 
 	// CUSTOM HOOKS
 	const history = useHistory();
@@ -22,7 +22,7 @@ const Login = () => {
 
 	// METHODS
 	useEffect(() => {
-		setSetupButtonsVisible(!getLocalServerUrl());
+		setSetupButtonsVisible(!getBranchServerUrl());
 	}, []);
 
 	useEffect(() => {
@@ -57,21 +57,18 @@ const Login = () => {
 						<Divider />
 
 						<Button
-							text="Set API URL"
+							text="Set App Settings"
 							variant="dark-gray"
-							onClick={() => setUrlModalVisible(true)}
+							onClick={() => setAppSettingsModalVisible(true)}
 							block
 						/>
 					</>
 				)}
 			</Box>
 
-			<AppVersion />
-
-			<SettingUrlModal
-				visible={urlModalVisible}
-				onClose={() => setUrlModalVisible(false)}
-			/>
+			{appSettingsModalVisible && (
+				<AppSettingsModal onClose={() => setAppSettingsModalVisible(false)} />
+			)}
 		</section>
 	);
 };

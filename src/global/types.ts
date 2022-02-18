@@ -21,3 +21,8 @@ export const discountTypes = {
 	SECOND: '2',
 	NO_DISCOUNT: '3',
 };
+
+export const connectivityTypes = {
+	ONLINE_TO_OFFLINE: 'online_to_offline',
+	OFFLINE_TO_ONLINE: 'offline_to_online',
+};

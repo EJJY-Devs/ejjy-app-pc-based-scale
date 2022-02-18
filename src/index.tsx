@@ -1,10 +1,11 @@
+import React from 'react';
 import { ConnectedRouter } from 'connected-react-router';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import React from 'react';
 import ReactDOM from 'react-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -25,15 +26,19 @@ dayjs.tz.setDefault('Asia/Manila');
 const store = configureStore({}, history);
 configureAxios(store);
 
+const queryClient = new QueryClient();
+
 ReactDOM.render(
 	<React.StrictMode>
-		<Provider store={store}>
-			<PersistGate loading={null} persistor={persistStore(store)}>
-				<ConnectedRouter history={history}>
-					<App />
-				</ConnectedRouter>
-			</PersistGate>
-		</Provider>
+		<QueryClientProvider client={queryClient}>
+			<Provider store={store}>
+				<PersistGate loading={null} persistor={persistStore(store)}>
+					<ConnectedRouter history={history}>
+						<App />
+					</ConnectedRouter>
+				</PersistGate>
+			</Provider>
+		</QueryClientProvider>
 	</React.StrictMode>,
 	document.getElementById('root'),
 );

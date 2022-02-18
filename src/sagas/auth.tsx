@@ -2,7 +2,7 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import { actions, types } from '../ducks/auth';
 import { request, userTypes } from '../global/types';
 import { service } from '../services/auth';
-import { getLocalServerUrl, getUserTypeDescription } from '../utils/function';
+import { getUserTypeDescription } from '../utils/function';
 
 /* WORKERS */
 function* login({ payload }: any) {
@@ -55,19 +55,7 @@ function* validateUser({ payload }: any) {
 	callback({ status: request.REQUESTING });
 
 	try {
-		const localServerUrl = getLocalServerUrl();
-		if (!localServerUrl) {
-			callback({
-				status: request.ERROR,
-				errors: ['Local Server URL not found.'],
-			});
-		}
-
-		const response = yield call(
-			service.login,
-			{ login: username, password },
-			localServerUrl,
-		);
+		const response = yield call(service.login, { login: username, password });
 
 		if (response.data.user_type === userType) {
 			callback({ status: request.SUCCESS });

@@ -12,14 +12,14 @@ import {
 } from '../elements';
 
 interface Props {
-	localServerUrl: string;
-	brightness: number;
+	branchServerUrl: string;
+	brightness: string;
 	onSubmit: any;
 	onClose: any;
 }
 
-export const SettingUrlForm = ({
-	localServerUrl,
+export const AppSettingsForm = ({
+	branchServerUrl,
 	brightness,
 	onSubmit,
 	onClose,
@@ -31,14 +31,15 @@ export const SettingUrlForm = ({
 	const getFormDetails = useCallback(
 		() => ({
 			DefaultValues: {
-				localServerUrl: localServerUrl || '',
+				branchServerUrl: branchServerUrl || '',
 				brightness: brightness || 100,
 			},
 			Schema: Yup.object().shape({
-				localServerUrl: Yup.string().required().label('Local Server URL'),
+				branchServerUrl: Yup.string().required().label('Branch Server URL'),
+				brightness: Yup.string().required().label('Brightness'),
 			}),
 		}),
-		[localServerUrl, brightness],
+		[branchServerUrl, brightness],
 	);
 
 	const onChangeSlider = (value) => {
@@ -62,12 +63,13 @@ export const SettingUrlForm = ({
 			<Form>
 				<Row gutter={[15, 15]}>
 					<Col span={24}>
-						<FormInputLabel id="localServerUrl" label="Local Server URL" />
+						<FormInputLabel id="branchServerUrl" label="Branch Server URL" />
 						<ErrorMessage
-							name="localServerUrl"
+							name="branchServerUrl"
 							render={(error) => <FieldError error={error} />}
 						/>
 					</Col>
+
 					<Col span={24}>
 						<Label id="brightness" label="Brightness" spacing />
 						<FormSlider id="brightness" onChange={onChangeSlider} />

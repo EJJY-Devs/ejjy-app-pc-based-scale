@@ -1,3 +1,5 @@
+export const LOCAL_API_URL = process.env.REACT_APP_LOCAL_API_URL;
+
 export const ONLINE_API_URL = process.env.REACT_APP_ONLINE_API_URL;
 
 export const EXPRESS_API_URL = process.env.REACT_APP_EXPRESS_API_URL;
@@ -14,3 +16,6 @@ export interface IGetRequest {
 	page_size: number;
 	fields?: string;
 }
+
+export { default as ConnectivityLogsService } from './ConnectivityLogsService';
+export { default as SiteSettingsService } from './SiteSettingsService';

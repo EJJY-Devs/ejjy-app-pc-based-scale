@@ -5,11 +5,12 @@ import { message } from 'antd';
 import { isEmpty, isEqual } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { AppVersion, Container } from '../../components';
-import { SettingUrlModal } from '../../components/SettingUrl/SettingUrlModal';
+import { Container } from '../../components';
+import { AppSettingsModal } from '../../components/AppSettings/AppSettingsModal';
 import { request } from '../../global/types';
 import { useAuth } from '../../hooks/useAuth';
 import { useBranchProducts } from '../../hooks/useBranchProducts';
+import { useCurrentTransaction } from '../../hooks/useCurrentTransaction';
 import { useProductCategories } from '../../hooks/useProductCategories';
 import { Buttons } from './components/Buttons/Buttons';
 import { CheckoutModal } from './components/Checkout/CheckoutModal';
@@ -17,14 +18,13 @@ import { TemporaryCheckoutModal } from './components/Checkout/TemporaryCheckoutM
 import { MainTable } from './components/MainTable/MainTable';
 import { WeightDrawer } from './components/WeightDrawer/WeightDrawer';
 import './style.scss';
-import { useCurrentTransaction } from '../../hooks/useCurrentTransaction';
 
 const Main = () => {
 	// STATES
 	const [checkoutModalVisible, setCheckoutModalVisible] = useState(false);
 	const [temporaryCheckoutModalVisible, setTemporaryCheckoutModalVisible] =
 		useState(false);
-	const [urlModalVisible, setUrlModalVisible] = useState(false);
+	const [appSettingsModalVisible, setAppSettingsModalVisible] = useState(false);
 	const [branchProducts, setBranchProducts] = useState([]);
 	const [isInitialFetch, setIsInitialFetch] = useState(true);
 
@@ -134,15 +134,16 @@ const Main = () => {
 			</section>
 
 			<div className="Footer">
-				<h2 className="Footer_setUrl" onClick={() => setUrlModalVisible(true)}>
+				<h2
+					className="Footer_setUrl"
+					onClick={() => setAppSettingsModalVisible(true)}
+				>
 					Set Server URL
 				</h2>
 				<h1 className="Footer_storeTitle">
 					EJ &amp; JY WET MARKET AND ENTERPRISES
 				</h1>
 			</div>
-
-			<AppVersion />
 
 			<CheckoutModal
 				visible={checkoutModalVisible}
@@ -154,10 +155,9 @@ const Main = () => {
 				onClose={() => setTemporaryCheckoutModalVisible(false)}
 			/>
 
-			<SettingUrlModal
-				visible={urlModalVisible}
-				onClose={() => setUrlModalVisible(false)}
-			/>
+			{appSettingsModalVisible && (
+				<AppSettingsModal onClose={() => setAppSettingsModalVisible(false)} />
+			)}
 		</Container>
 	);
 };

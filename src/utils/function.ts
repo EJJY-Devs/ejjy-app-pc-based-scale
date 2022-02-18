@@ -1,9 +1,9 @@
 import { message } from 'antd';
 import { isArray, isNaN, isString, memoize, round, toString } from 'lodash';
 import {
+	APP_BRANCH_SERVER_URL_KEY,
 	APP_BRIGHTNESS_KEY,
 	EMPTY_CELL,
-	LOCAL_SERVER_URL_KEY,
 } from '../global/constants';
 import { userTypes } from '../global/types';
 
@@ -26,8 +26,8 @@ export const showErrorMessages = (errors) => {
 
 // Local Storage Getters
 
-export const getLocalServerUrl = () =>
-	localStorage.getItem(LOCAL_SERVER_URL_KEY);
+export const getBranchServerUrl = () =>
+	localStorage.getItem(APP_BRANCH_SERVER_URL_KEY);
 
 export const getAppBrightness = () => localStorage.getItem(APP_BRIGHTNESS_KEY);
 

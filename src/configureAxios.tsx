@@ -2,8 +2,7 @@
 import axios from 'axios';
 import { flatten, values } from 'lodash';
 import { key as AUTH_KEY } from './ducks/auth';
-import { API_TIMEOUT, NO_VERIFICATION_NEEDED } from './services';
-import { getLocalServerUrl } from './utils/function';
+import { API_TIMEOUT, LOCAL_API_URL, NO_VERIFICATION_NEEDED } from './services';
 
 export default function configureAxios(store) {
 	axios.defaults.timeout = API_TIMEOUT;
@@ -25,7 +24,7 @@ export default function configureAxios(store) {
 			const { accessToken } = store.getState()?.[AUTH_KEY];
 
 			if (!config.baseURL) {
-				config.baseURL = getLocalServerUrl();
+				config.baseURL = LOCAL_API_URL;
 			}
 			// Get access token from store for every api request
 			config.headers.authorization = accessToken

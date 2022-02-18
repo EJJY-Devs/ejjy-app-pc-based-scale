@@ -12,7 +12,7 @@ interface IAcquireToken {
 }
 
 export const service = {
-	login: async (body: ILogin, baseURL) =>
+	login: async (body: ILogin, baseURL = null) =>
 		axios.post('users/login/', body, { baseURL }),
 
 	loginOnline: async (body: ILogin) =>
