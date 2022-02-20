@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import dayjs from 'dayjs';
 import { isArray, isNaN, isString, memoize, round, toString } from 'lodash';
 import {
 	APP_BRANCH_SERVER_URL_KEY,
@@ -66,6 +67,10 @@ export const modifiedExtraCallback =
 	};
 
 // Formats
+
+export const formatDateTime = memoize((datetime) =>
+	dayjs.tz(datetime).format('MM/DD/YYYY h:mma'),
+);
 
 export const standardRound = (value) => round(round(value, 3), 2).toFixed(2);
 

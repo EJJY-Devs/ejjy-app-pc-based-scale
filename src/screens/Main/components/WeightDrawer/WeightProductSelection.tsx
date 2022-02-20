@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-wrap-multilines */
 import { Divider, Table, Tabs } from 'antd';
 import { ColumnsType } from 'antd/lib/table/interface';
@@ -8,9 +9,11 @@ import {
 	ControlledInput,
 	Label,
 } from '../../../../components/elements';
+import { useSiteSettings } from '../../../../hooks';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
 import { useProductCategories } from '../../../../hooks/useProductCategories';
+import { formatDateTime } from '../../../../utils/function';
 import './style.scss';
 import { WeightTextcodeModal } from './WeightTextcodeModal';
 
@@ -45,6 +48,7 @@ export const WeightProductSelection = ({
 	const { weight } = usePc();
 	const { productCategories } = useProductCategories();
 	const { transactionProducts } = useCurrentTransaction();
+	const { data: siteSettings } = useSiteSettings();
 
 	// METHODS
 	useEffect(() => {
@@ -109,6 +113,14 @@ export const WeightProductSelection = ({
 				/>
 
 				<Divider />
+
+				{siteSettings?.datetime_last_updated_products && (
+					<p className="WeightProductSelection_productUpdateInfo">
+						Product last updated at{' '}
+						<b>{formatDateTime(siteSettings.datetime_last_updated_products)}</b>
+					</p>
+				)}
+
 				<Tabs className="WeightProductSelection_tabs" type="card">
 					{dataSource.map((data) => (
 						<Tabs.TabPane key={data.id} tab={data.title}>
