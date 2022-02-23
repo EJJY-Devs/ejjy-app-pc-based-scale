@@ -11,7 +11,7 @@ function* login({ payload }: any) {
 
 	try {
 		// Try to log user in
-		const loginResponse = yield call(service.loginOnline, {
+		const loginResponse = yield call(service.login, {
 			login: username,
 			password,
 		});

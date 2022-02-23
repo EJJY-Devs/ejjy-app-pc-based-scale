@@ -4,7 +4,7 @@ const { autoUpdater } = require('electron-updater');
 const isDev = require('electron-is-dev');
 const log = require('electron-log');
 const path = require('path');
-// const child_process = require('child_process');
+const { exec } = require('child_process');
 
 //-------------------------------------------------------------------
 // Auto Updater
@@ -37,17 +37,6 @@ function createWindow() {
 			: `file://${path.join(__dirname, '../build/index.html')}`,
 	);
 
-	// const API_PATH = app.isPackaged
-	// 	? path.join(process.resourcesPath, 'api')
-	// 	: path.join(__dirname, '../api');
-
-	// const loader = child_process.spawn('poetry run python manage.py runserver', {
-	// 	cwd: API_PATH,
-	// 	detached: true,
-	// 	shell: true,
-	// });
-	// pid = loader.pid;
-
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.maximize();
 		mainWindow.show();
@@ -56,23 +45,35 @@ function createWindow() {
 	mainWindow.on('closed', () => {
 		mainWindow = null;
 	});
-}
 
-// App close handler
-// app.on('before-quit', () => {
-// 	log.info(`pid: ${pid}`);
-// 	const result = process.kill(pid);
-// 	log.info(`result: ${result}`);
-// 	if (pid) {
-// 		process.kill(pid, (err) => {
-// 			if (err) {
-// 				throw new Error(err);
-// 			} else {
-// 				log.info(`Process %s has been killed! ${pid}`);
-// 			}
-// 		});
-// 	}
-// });
+	if (!isDev) {
+		// Start API
+		const controller = new AbortController();
+		const { signal } = controller;
+
+		mainWindow.once('ready-to-show', () => {
+			const API_PATH = path.join(process.resourcesPath, 'api');
+			exec(
+				`cd "${API_PATH}" && python manage.py runserver 0.0.0.0:8000`,
+				{ signal },
+				(error, stdout, stderr) => {
+					if (error) {
+						logStatus(`API Err: ${error}`);
+						return;
+					}
+
+					logStatus(`API Out: ${stdout}`);
+					logStatus(`API Err: ${stderr}`);
+				},
+			);
+			logStatus('API: Started');
+		});
+
+		mainWindow.once('closed', () => {
+			controller.abort();
+		});
+	}
+}
 
 process.on('uncaughtException', (error) => {
 	// Handle the error
