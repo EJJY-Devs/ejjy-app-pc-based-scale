@@ -3,18 +3,15 @@
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { message, Modal } from 'antd';
 import React, { useCallback, useState } from 'react';
-import { DiscountModal, ScaleButton } from '../../../../components';
-import { EMPTY_CELL, NO_INDEX_SELECTED } from '../../../../global/constants';
+import { ScaleButton } from '../../../../components';
+import { NO_INDEX_SELECTED } from '../../../../global/constants';
 import {
 	discountTypes,
 	productCategoryTypes,
 	request,
-	userTypes,
 } from '../../../../global/types';
-import { useAuth } from '../../../../hooks/useAuth';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
-import { formatInPeso, showErrorMessages } from '../../../../utils/function';
 import './style.scss';
 
 interface Props {
@@ -27,12 +24,12 @@ export const Buttons = ({
 	onOpenTemporaryCheckoutModal,
 }: Props) => {
 	// STATES
-	const [discountAuthModalVisible, setDiscountAuthModalVisible] =
-		useState(false);
+	// const [discountAuthModalVisible, setDiscountAuthModalVisible] =
+	useState(false);
 	const [selectedDiscountType, setSelectedDiscountType] = useState(null);
 
 	// CUSTOM HOOKS
-	const { validateUser, status: authStatus } = useAuth();
+	// const { validateUser, status: authStatus } = useAuth();
 	const {
 		transactionProducts,
 		selectedProductIndex,
@@ -61,21 +58,21 @@ export const Buttons = ({
 		[selectedProductIndex, transactionProducts],
 	);
 
-	const getDiscount = useCallback(() => {
-		let discount = 0;
-		const product = transactionProducts?.[selectedProductIndex];
+	// const getDiscount = useCallback(() => {
+	// 	let discount = 0;
+	// 	const product = transactionProducts?.[selectedProductIndex];
 
-		if (product?.discount > 0) {
-			discount = product.price_per_piece;
-		} else {
-			discount =
-				selectedDiscountType === discountTypes.FIRST
-					? product?.discounted_price_per_piece1
-					: product?.discounted_price_per_piece2;
-		}
+	// 	if (product?.discount > 0) {
+	// 		discount = product.price_per_piece;
+	// 	} else {
+	// 		discount =
+	// 			selectedDiscountType === discountTypes.FIRST
+	// 				? product?.discounted_price_per_piece1
+	// 				: product?.discounted_price_per_piece2;
+	// 	}
 
-		return discount >= 0 ? formatInPeso(discount) : EMPTY_CELL;
-	}, [transactionProducts, selectedProductIndex, selectedDiscountType]);
+	// 	return discount >= 0 ? formatInPeso(discount) : EMPTY_CELL;
+	// }, [transactionProducts, selectedProductIndex, selectedDiscountType]);
 
 	const onDiscountSuccess = () => {
 		const selectedProduct = transactionProducts?.[selectedProductIndex];
@@ -112,22 +109,22 @@ export const Buttons = ({
 			message.error('An error occurred while setting discount to a product');
 		}
 
-		setDiscountAuthModalVisible(false);
+		// setDiscountAuthModalVisible(false);
 	};
 
-	const onDiscount = (data, resetForm) => {
-		validateUser(
-			{ ...data, userType: userTypes.BRANCH_MANAGER },
-			({ status, errors }) => {
-				if (status === request.SUCCESS) {
-					onDiscountSuccess();
-					resetForm();
-				} else if (status === request.ERROR) {
-					showErrorMessages(errors);
-				}
-			},
-		);
-	};
+	// const onDiscount = (data, resetForm) => {
+	// 	validateUser(
+	// 		{ ...data, userType: userTypes.BRANCH_MANAGER },
+	// 		({ status, errors }) => {
+	// 			if (status === request.SUCCESS) {
+	// 				onDiscountSuccess();
+	// 				resetForm();
+	// 			} else if (status === request.ERROR) {
+	// 				showErrorMessages(errors);
+	// 			}
+	// 		},
+	// 	);
+	// };
 
 	const onReset = () => {
 		Modal.confirm({
@@ -166,7 +163,7 @@ export const Buttons = ({
 						title="Remove Discount"
 						onClick={() => {
 							setSelectedDiscountType(discountTypes.NO_DISCOUNT);
-							setDiscountAuthModalVisible(true);
+							onDiscountSuccess();
 						}}
 					/>
 				) : (
@@ -175,7 +172,7 @@ export const Buttons = ({
 							title="D1"
 							onClick={() => {
 								setSelectedDiscountType(discountTypes.FIRST);
-								setDiscountAuthModalVisible(true);
+								onDiscountSuccess();
 							}}
 							disabled={
 								selectedProductIndex === NO_INDEX_SELECTED ||
@@ -187,7 +184,7 @@ export const Buttons = ({
 							title="D2"
 							onClick={() => {
 								setSelectedDiscountType(discountTypes.SECOND);
-								setDiscountAuthModalVisible(true);
+								onDiscountSuccess();
 							}}
 							disabled={
 								selectedProductIndex === NO_INDEX_SELECTED ||
@@ -219,13 +216,14 @@ export const Buttons = ({
 				/>
 			</div>
 
-			<DiscountModal
-				discount={getDiscount()}
-				visible={discountAuthModalVisible}
-				isLoading={authStatus === request.REQUESTING}
-				onConfirm={onDiscount}
-				onClose={() => setDiscountAuthModalVisible(false)}
-			/>
+			{/* {discountAuthModalVisible && (
+				<DiscountModal
+					discount={getDiscount()}
+					isLoading={authStatus === request.REQUESTING}
+					onConfirm={onDiscount}
+					onClose={() => setDiscountAuthModalVisible(false)}
+				/>
+			)} */}
 		</>
 	);
 };

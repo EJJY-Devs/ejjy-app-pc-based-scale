@@ -21,7 +21,6 @@ interface IAuthForm {
 	onSubmit: any;
 	loading: boolean;
 	isManager?: boolean;
-	shouldFullScreen?: boolean;
 }
 
 export const AuthForm = ({
@@ -29,7 +28,6 @@ export const AuthForm = ({
 	onSubmit,
 	loading,
 	isManager,
-	shouldFullScreen,
 }: IAuthForm) => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 

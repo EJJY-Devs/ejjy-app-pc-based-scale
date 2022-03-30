@@ -1,14 +1,12 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import { Col, message, Row, Space } from 'antd';
 import React, { useCallback, useState } from 'react';
-import { DiscountModal, ScaleButton } from '../../../../components';
+import { ScaleButton } from '../../../../components';
 import { ControlledInput, Label } from '../../../../components/elements';
-import { EMPTY_CELL } from '../../../../global/constants';
-import { discountTypes, request, userTypes } from '../../../../global/types';
-import { useAuth } from '../../../../hooks/useAuth';
+import { discountTypes } from '../../../../global/types';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
-import { formatInPeso, showErrorMessages } from '../../../../utils/function';
+import { formatInPeso } from '../../../../utils/function';
 import './style.scss';
 
 interface Props {
@@ -17,13 +15,13 @@ interface Props {
 
 export const WeightProductDetails = ({ onPrint }: Props) => {
 	// STATES
-	const [discountAuthModalVisible, setDiscountAuthModalVisible] =
-		useState(false);
+	// const [discountAuthModalVisible, setDiscountAuthModalVisible] =
+	// useState(false);
 	const [selectedDiscountType, setSelectedDiscountType] = useState(null);
 
 	// CUSTOM HOOKS
 	const { weight } = usePc();
-	const { validateUser, status: authStatus } = useAuth();
+	// const { validateUser, status: authStatus } = useAuth();
 	const { currentProduct, addProduct, setCurrentProduct } =
 		useCurrentTransaction();
 
@@ -36,21 +34,21 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 		});
 	};
 
-	const getDiscount = useCallback(() => {
-		let discount = 0;
-		const product = currentProduct;
+	// const getDiscount = useCallback(() => {
+	// 	let discount = 0;
+	// 	const product = currentProduct;
 
-		if (product?.discount > 0) {
-			discount = product.price_per_piece;
-		} else {
-			discount =
-				selectedDiscountType === discountTypes.FIRST
-					? product?.discounted_price_per_piece1
-					: product?.discounted_price_per_piece2;
-		}
+	// 	if (product?.discount > 0) {
+	// 		discount = product.price_per_piece;
+	// 	} else {
+	// 		discount =
+	// 			selectedDiscountType === discountTypes.FIRST
+	// 				? product?.discounted_price_per_piece1
+	// 				: product?.discounted_price_per_piece2;
+	// 	}
 
-		return discount >= 0 ? formatInPeso(discount) : EMPTY_CELL;
-	}, [currentProduct, selectedDiscountType]);
+	// 	return discount >= 0 ? formatInPeso(discount) : EMPTY_CELL;
+	// }, [currentProduct, selectedDiscountType]);
 
 	const isWithDiscount = useCallback(
 		() => currentProduct?.discount > 0,
@@ -92,22 +90,22 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 			message.error('An error occurred while setting discount to a product');
 		}
 
-		setDiscountAuthModalVisible(false);
+		// setDiscountAuthModalVisible(false);
 	};
 
-	const onDiscount = (data, resetForm) => {
-		validateUser(
-			{ ...data, userType: userTypes.BRANCH_MANAGER },
-			({ status, errors }) => {
-				if (status === request.SUCCESS) {
-					onDiscountSuccess();
-					resetForm();
-				} else if (status === request.ERROR) {
-					showErrorMessages(errors);
-				}
-			},
-		);
-	};
+	// const onDiscount = (data, resetForm) => {
+	// 	validateUser(
+	// 		{ ...data, userType: userTypes.BRANCH_MANAGER },
+	// 		({ status, errors }) => {
+	// 			if (status === request.SUCCESS) {
+	// 				onDiscountSuccess();
+	// 				resetForm();
+	// 			} else if (status === request.ERROR) {
+	// 				showErrorMessages(errors);
+	// 			}
+	// 		},
+	// 	);
+	// };
 
 	return (
 		<>
@@ -165,7 +163,8 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 									title="Remove Discount"
 									onClick={() => {
 										setSelectedDiscountType(discountTypes.NO_DISCOUNT);
-										setDiscountAuthModalVisible(true);
+										onDiscountSuccess();
+										// setDiscountAuthModalVisible(true);
 									}}
 								/>
 							</Col>
@@ -174,20 +173,26 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 								<Col span={12}>
 									<ScaleButton
 										className="WeightProductDetails_btnDiscount"
-										title="D1"
+										title={`D1 (${formatInPeso(
+											currentProduct.discounted_price_per_piece1,
+										)})`}
 										onClick={() => {
 											setSelectedDiscountType(discountTypes.FIRST);
-											setDiscountAuthModalVisible(true);
+											onDiscountSuccess();
+											// setDiscountAuthModalVisible(true);
 										}}
 									/>
 								</Col>
 								<Col span={12}>
 									<ScaleButton
 										className="WeightProductDetails_btnDiscount"
-										title="D2"
+										title={`D2 (${formatInPeso(
+											currentProduct.discounted_price_per_piece2,
+										)})`}
 										onClick={() => {
 											setSelectedDiscountType(discountTypes.SECOND);
-											setDiscountAuthModalVisible(true);
+											onDiscountSuccess();
+											// setDiscountAuthModalVisible(true);
 										}}
 									/>
 								</Col>
@@ -218,13 +223,14 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 				</div>
 			</div>
 
-			<DiscountModal
-				discount={getDiscount()}
-				visible={discountAuthModalVisible}
-				isLoading={authStatus === request.REQUESTING}
-				onConfirm={onDiscount}
-				onClose={() => setDiscountAuthModalVisible(false)}
-			/>
+			{/* {discountAuthModalVisible && (
+				<DiscountModal
+					discount={getDiscount()}
+					isLoading={authStatus === request.REQUESTING}
+					onConfirm={onDiscount}
+					onClose={() => setDiscountAuthModalVisible(false)}
+				/>
+			)} */}
 		</>
 	);
 };

@@ -116,7 +116,7 @@ export const WeightProductSelection = ({
 
 				{siteSettings?.datetime_last_updated_products && (
 					<p className="WeightProductSelection_productUpdateInfo">
-						Product last updated at{' '}
+						Product last updated:{' '}
 						<b>{formatDateTime(siteSettings.datetime_last_updated_products)}</b>
 					</p>
 				)}

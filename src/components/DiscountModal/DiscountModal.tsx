@@ -5,7 +5,6 @@ import { ControlledInput, Label } from '../elements';
 import './style.scss';
 
 interface Props {
-	visible: boolean;
 	isLoading: boolean;
 	onConfirm: any;
 	onClose: any;
@@ -13,7 +12,6 @@ interface Props {
 }
 
 export const DiscountModal = ({
-	visible,
 	discount,
 	isLoading,
 	onConfirm,
@@ -22,8 +20,8 @@ export const DiscountModal = ({
 	<Modal
 		className="DiscountModal"
 		title="Manager's Approval for Discount"
-		visible={visible}
 		footer={null}
+		visible
 		onCancel={onClose}
 		centered
 		closable
