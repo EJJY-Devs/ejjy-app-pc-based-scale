@@ -85,10 +85,8 @@ const Main = () => {
 				const newProduct = {
 					...currentProduct,
 					...branchProduct.product,
-					discounted_price_per_piece1:
-						branchProduct.discounted_price_per_piece1,
-					discounted_price_per_piece2:
-						branchProduct.discounted_price_per_piece2,
+					markdown_price_per_piece1: branchProduct.markdown_price_per_piece1,
+					markdown_price_per_piece2: branchProduct.markdown_price_per_piece2,
 
 					// We need to retain the current price_per_piece value if
 					// user applied discount

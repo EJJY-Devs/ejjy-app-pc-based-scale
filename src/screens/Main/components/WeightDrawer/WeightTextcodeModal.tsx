@@ -67,15 +67,15 @@ export const WeightTextcodeModal = ({
 
 						const {
 							product,
-							discounted_price_per_piece1,
-							discounted_price_per_piece2,
+							markdown_price_per_piece1,
+							markdown_price_per_piece2,
 							price_per_piece,
 						} = branchProduct;
 
 						onSelectProduct({
 							...product,
-							discounted_price_per_piece1,
-							discounted_price_per_piece2,
+							markdown_price_per_piece1,
+							markdown_price_per_piece2,
 							price_per_piece,
 						});
 						onClose();

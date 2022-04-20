@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import { Col, message, Row, Space } from 'antd';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { ScaleButton } from '../../../../components';
 import { ControlledInput, Label } from '../../../../components/elements';
 import { discountTypes } from '../../../../global/types';
@@ -17,7 +17,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 	// STATES
 	// const [discountAuthModalVisible, setDiscountAuthModalVisible] =
 	// useState(false);
-	const [selectedDiscountType, setSelectedDiscountType] = useState(null);
+	// const [selectedDiscountType, setSelectedDiscountType] = useState(null);
 
 	// CUSTOM HOOKS
 	const { weight } = usePc();
@@ -43,8 +43,8 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 	// 	} else {
 	// 		discount =
 	// 			selectedDiscountType === discountTypes.FIRST
-	// 				? product?.discounted_price_per_piece1
-	// 				: product?.discounted_price_per_piece2;
+	// 				? product?.markdown_price_per_piece1
+	// 				: product?.markdown_price_per_piece2;
 	// 	}
 
 	// 	return discount >= 0 ? formatInPeso(discount) : EMPTY_CELL;
@@ -55,18 +55,18 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 		[currentProduct],
 	);
 
-	const onDiscountSuccess = () => {
+	const onDiscountSuccess = (discountType) => {
 		const product = currentProduct;
 
 		if (product) {
 			let currentDiscount = 0;
 
-			if (selectedDiscountType === discountTypes.FIRST) {
-				currentDiscount = product.discounted_price_per_piece1;
+			if (discountType === discountTypes.FIRST) {
+				currentDiscount = product.markdown_price_per_piece1;
 			}
 
-			if (selectedDiscountType === discountTypes.SECOND) {
-				currentDiscount = product.discounted_price_per_piece2;
+			if (discountType === discountTypes.SECOND) {
+				currentDiscount = product.markdown_price_per_piece2;
 			}
 
 			const newPricePerPiece =
@@ -162,8 +162,8 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 									className="WeightProductDetails_btnDiscount__remove"
 									title="Remove Discount"
 									onClick={() => {
-										setSelectedDiscountType(discountTypes.NO_DISCOUNT);
-										onDiscountSuccess();
+										// setSelectedDiscountType(discountTypes.NO_DISCOUNT);
+										onDiscountSuccess(discountTypes.NO_DISCOUNT);
 										// setDiscountAuthModalVisible(true);
 									}}
 								/>
@@ -173,12 +173,10 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 								<Col span={12}>
 									<ScaleButton
 										className="WeightProductDetails_btnDiscount"
-										title={`D1 (${formatInPeso(
-											currentProduct.discounted_price_per_piece1,
-										)})`}
+										title="Wholesale"
 										onClick={() => {
-											setSelectedDiscountType(discountTypes.FIRST);
-											onDiscountSuccess();
+											// setSelectedDiscountType(discountTypes.FIRST);
+											onDiscountSuccess(discountTypes.FIRST);
 											// setDiscountAuthModalVisible(true);
 										}}
 									/>
@@ -186,12 +184,10 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 								<Col span={12}>
 									<ScaleButton
 										className="WeightProductDetails_btnDiscount"
-										title={`D2 (${formatInPeso(
-											currentProduct.discounted_price_per_piece2,
-										)})`}
+										title="Special"
 										onClick={() => {
-											setSelectedDiscountType(discountTypes.SECOND);
-											onDiscountSuccess();
+											// setSelectedDiscountType(discountTypes.SECOND);
+											onDiscountSuccess(discountTypes.SECOND);
 											// setDiscountAuthModalVisible(true);
 										}}
 									/>

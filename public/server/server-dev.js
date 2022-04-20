@@ -5,10 +5,14 @@
 	const fs = require('fs');
 	const app = express();
 
-	app.use(cors());
+	app.use(
+		cors({
+			origin: '*',
+		}),
+	);
 	app.use(express.json());
 
-	const server = app.listen(5000, function () {
+	const server = app.listen(5001, function () {
 		console.log(`Express server listening on port ${server.address().port}`);
 	});
 
@@ -26,7 +30,7 @@
 	// });
 
 	// Endpoints
-	app.get('/weight', cors(), (req, res, next) => {
+	app.get('/weight', (req, res, next) => {
 		res.json({ weight: parseFloat('1.1807') });
 		// if (!process) {
 		// 	res.status(500).send('Error');
@@ -40,7 +44,7 @@
 		// process.stdin.write('getWeight\r\n');
 	});
 
-	app.post('/print-product', cors(), (req, res, next) => {
+	app.post('/print-product', (req, res, next) => {
 		res.json(true);
 		// if (!process) {
 		// 	res.status(500).send('Error');
@@ -56,7 +60,7 @@
 		// );
 	});
 
-	app.post('/print-transaction', cors(), (req, res, next) => {
+	app.post('/print-transaction', (req, res, next) => {
 		res.json(true);
 		// if (!process) {
 		// 	res.status(500).send('Error');
@@ -70,7 +74,7 @@
 		// process.stdin.write(`print ${transactionId} ${totalPrice} ${branch}\r\n`);
 	});
 
-	app.post('/zero', cors(), (req, res, next) => {
+	app.post('/zero', (req, res, next) => {
 		res.json(true);
 		// if (!process) {
 		// 	res.status(500).send('Error');

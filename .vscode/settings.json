@@ -1,11 +1,7 @@
 {
 	"editor.formatOnSave": true,
-	"editor.detectIndentation": true,
-	"[typescriptreact]": {
-		"editor.tabSize": 2,
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
 	"search.exclude": {
 		"**/api": true
-	}
+	},
+	"typescript.preferences.importModuleSpecifier": "non-relative"
 }

@@ -74,8 +74,8 @@ export const WeightProductSelection = ({
 			.map(
 				({
 					product,
-					discounted_price_per_piece1,
-					discounted_price_per_piece2,
+					markdown_price_per_piece1,
+					markdown_price_per_piece2,
 					price_per_piece,
 				}) => ({
 					description: product.name,
@@ -91,8 +91,8 @@ export const WeightProductSelection = ({
 							onClick={() => {
 								onSelectProduct({
 									...product,
-									discounted_price_per_piece1,
-									discounted_price_per_piece2,
+									markdown_price_per_piece1,
+									markdown_price_per_piece2,
 									price_per_piece,
 								});
 							}}

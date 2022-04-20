@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { message, Modal } from 'antd';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { ScaleButton } from '../../../../components';
 import { NO_INDEX_SELECTED } from '../../../../global/constants';
 import {
@@ -25,8 +25,8 @@ export const Buttons = ({
 }: Props) => {
 	// STATES
 	// const [discountAuthModalVisible, setDiscountAuthModalVisible] =
-	useState(false);
-	const [selectedDiscountType, setSelectedDiscountType] = useState(null);
+	// useState(false);
+	// const [selectedDiscountType, setSelectedDiscountType] = useState(null);
 
 	// CUSTOM HOOKS
 	// const { validateUser, status: authStatus } = useAuth();
@@ -67,25 +67,25 @@ export const Buttons = ({
 	// 	} else {
 	// 		discount =
 	// 			selectedDiscountType === discountTypes.FIRST
-	// 				? product?.discounted_price_per_piece1
-	// 				: product?.discounted_price_per_piece2;
+	// 				? product?.markdown_price_per_piece1
+	// 				: product?.markdown_price_per_piece2;
 	// 	}
 
 	// 	return discount >= 0 ? formatInPeso(discount) : EMPTY_CELL;
 	// }, [transactionProducts, selectedProductIndex, selectedDiscountType]);
 
-	const onDiscountSuccess = () => {
+	const onDiscountSuccess = (discountType) => {
 		const selectedProduct = transactionProducts?.[selectedProductIndex];
 
 		if (selectedProduct) {
 			let currentDiscount = 0;
 
-			if (selectedDiscountType === discountTypes.FIRST) {
-				currentDiscount = selectedProduct.discounted_price_per_piece1;
+			if (discountType === discountTypes.FIRST) {
+				currentDiscount = selectedProduct.markdown_price_per_piece1;
 			}
 
-			if (selectedDiscountType === discountTypes.SECOND) {
-				currentDiscount = selectedProduct.discounted_price_per_piece2;
+			if (discountType === discountTypes.SECOND) {
+				currentDiscount = selectedProduct.markdown_price_per_piece2;
 			}
 
 			const newPricePerPiece =
@@ -162,17 +162,17 @@ export const Buttons = ({
 						className="Buttons_btnRemoveDiscount"
 						title="Remove Discount"
 						onClick={() => {
-							setSelectedDiscountType(discountTypes.NO_DISCOUNT);
-							onDiscountSuccess();
+							// setSelectedDiscountType(discountTypes.NO_DISCOUNT);
+							onDiscountSuccess(discountTypes.NO_DISCOUNT);
 						}}
 					/>
 				) : (
 					<>
 						<ScaleButton
-							title="D1"
+							title="Wholesale"
 							onClick={() => {
-								setSelectedDiscountType(discountTypes.FIRST);
-								onDiscountSuccess();
+								// setSelectedDiscountType(discountTypes.FIRST);
+								onDiscountSuccess(discountTypes.FIRST);
 							}}
 							disabled={
 								selectedProductIndex === NO_INDEX_SELECTED ||
@@ -181,10 +181,10 @@ export const Buttons = ({
 						/>
 
 						<ScaleButton
-							title="D2"
+							title="Special"
 							onClick={() => {
-								setSelectedDiscountType(discountTypes.SECOND);
-								onDiscountSuccess();
+								// setSelectedDiscountType(discountTypes.SECOND);
+								onDiscountSuccess(discountTypes.SECOND);
 							}}
 							disabled={
 								selectedProductIndex === NO_INDEX_SELECTED ||
