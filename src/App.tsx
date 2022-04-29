@@ -10,7 +10,7 @@ import Main from './screens/Main/Main';
 
 const refetchQueryData = {
 	options: {
-		refetchInterval: 5000,
+		refetchInterval: 60000,
 		refetchIntervalInBackground: true,
 		notifyOnChangeProps: [],
 	},

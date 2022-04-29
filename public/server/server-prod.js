@@ -15,7 +15,7 @@
 	// Initiate Scale and Printer exe
 	let process = null;
 	const scaleAndPrinterPath =
-		'C:\\Users\\EJ-JY\\Desktop\\Scale and Printer\\bin\\Debug\\net4.0\\Scale and Printer.exe';
+		'C:\\Users\\Administrator\\Desktop\\Scale and Printer\\bin\\Debug\\net4.0\\Scale and Printer.exe';
 	fs.stat(scaleAndPrinterPath, function (err, stat) {
 		if (!err) {
 			const spawn = require('child_process').spawn;
@@ -27,7 +27,6 @@
 
 	// Endpoints
 	app.get('/weight', cors(), (req, res, next) => {
-		// res.json({ weight: parseFloat('1.1807') });
 		if (!process) {
 			res.status(500).send('Error');
 			return;
@@ -41,7 +40,6 @@
 	});
 
 	app.post('/print-product', cors(), (req, res, next) => {
-		// res.json(true);
 		if (!process) {
 			res.status(500).send('Error');
 			return;
@@ -57,7 +55,6 @@
 	});
 
 	app.post('/print-transaction', cors(), (req, res, next) => {
-		// res.json(true);
 		if (!process) {
 			res.status(500).send('Error');
 			return;

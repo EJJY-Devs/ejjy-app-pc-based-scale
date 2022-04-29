@@ -13,7 +13,7 @@ export const useConnectivity = () => {
 		() => SiteSettingsService.get(getBranchServerUrl()),
 		{
 			enabled: isEnabled,
-			refetchInterval: 5000,
+			refetchInterval: 60000,
 			refetchOnWindowFocus: false,
 			retry: false,
 			select: (query) => query.data,

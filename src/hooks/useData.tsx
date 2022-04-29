@@ -6,8 +6,6 @@ export const useInitializeData = () =>
 		['useInitializeData'],
 		() => DataService.initialize().catch((e) => Promise.reject(e.errors)),
 		{
-			refetchInterval: 60000,
-			refetchIntervalInBackground: true,
 			notifyOnChangeProps: [],
 		},
 	);
