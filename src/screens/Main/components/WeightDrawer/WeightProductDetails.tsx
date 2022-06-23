@@ -3,7 +3,7 @@ import { Col, message, Row, Space } from 'antd';
 import React, { useCallback } from 'react';
 import { ScaleButton } from '../../../../components';
 import { ControlledInput, Label } from '../../../../components/elements';
-import { discountTypes } from '../../../../global/types';
+import { discountTypes, markdownTypes } from '../../../../global/types';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
 import { formatInPeso } from '../../../../utils/function';
@@ -60,13 +60,16 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 
 		if (product) {
 			let currentDiscount = 0;
+			let markdownType = null;
 
 			if (discountType === discountTypes.FIRST) {
 				currentDiscount = product.markdown_price_per_piece1;
+				markdownType = markdownTypes.WHOLESALE;
 			}
 
 			if (discountType === discountTypes.SECOND) {
 				currentDiscount = product.markdown_price_per_piece2;
+				markdownType = markdownTypes.SPECIAL;
 			}
 
 			const newPricePerPiece =
@@ -83,6 +86,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 				discount: newDiscountPerPiece,
 				price_per_piece:
 					currentDiscount > 0 ? currentDiscount : newPricePerPiece,
+				markdownType,
 			});
 
 			message.success('Sucessfully applied discount to product.');

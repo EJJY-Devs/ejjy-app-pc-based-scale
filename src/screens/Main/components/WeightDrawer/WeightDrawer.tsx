@@ -2,7 +2,7 @@
 import { message, Spin } from 'antd';
 import { padStart } from 'lodash';
 import React, { useEffect } from 'react';
-import { request } from '../../../../global/types';
+import { markdownTypes, priceCodes, request } from '../../../../global/types';
 import { useAuth } from '../../../../hooks/useAuth';
 import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
@@ -59,13 +59,19 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 			'0',
 		);
 
+		const type =
+			currentProduct.price_markdown?.type ||
+			currentProduct.markdownType ||
+			markdownTypes.REGULAR;
+		const priceCode = priceCodes[type] || '';
+
 		printProduct(
 			{
 				name: formatPrintDetails(currentProduct.name),
 				weight: `${zeroToO(weight.toFixed(3))}kg`,
 				price: `P${zeroToO(currentProduct.price_per_piece.toFixed(2))}`,
 				totalPrice: `P${zeroToO(total)}`,
-				code: `${currentProduct.barcode}${formattedWeight}`,
+				code: `${priceCode}${currentProduct.barcode}${formattedWeight}`,
 				branch: formatPrintDetails(user?.branch?.name),
 			},
 			({ status }) => {

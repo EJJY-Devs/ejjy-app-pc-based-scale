@@ -7,6 +7,7 @@ import { ScaleButton } from '../../../../components';
 import { NO_INDEX_SELECTED } from '../../../../global/constants';
 import {
 	discountTypes,
+	markdownTypes,
 	productCategoryTypes,
 	request,
 } from '../../../../global/types';
@@ -79,13 +80,16 @@ export const Buttons = ({
 
 		if (selectedProduct) {
 			let currentDiscount = 0;
+			let markdownType = null;
 
 			if (discountType === discountTypes.FIRST) {
 				currentDiscount = selectedProduct.markdown_price_per_piece1;
+				markdownType = markdownTypes.WHOLESALE;
 			}
 
 			if (discountType === discountTypes.SECOND) {
 				currentDiscount = selectedProduct.markdown_price_per_piece2;
+				markdownType = markdownTypes.SPECIAL;
 			}
 
 			const newPricePerPiece =
@@ -102,6 +106,7 @@ export const Buttons = ({
 				discount: newDiscountPerPiece,
 				price_per_piece:
 					currentDiscount > 0 ? currentDiscount : newPricePerPiece,
+				markdownType,
 			});
 
 			message.success('Sucessfully applied discount to product.');

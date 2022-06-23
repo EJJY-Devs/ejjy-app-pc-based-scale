@@ -46,33 +46,33 @@ function createWindow() {
 		mainWindow = null;
 	});
 
-	if (!isDev) {
-		// Start API
-		const controller = new AbortController();
-		const { signal } = controller;
+	// if (!isDev) {
+	// 	// Start API
+	// 	const controller = new AbortController();
+	// 	const { signal } = controller;
 
-		mainWindow.once('ready-to-show', () => {
-			const API_PATH = path.join(process.resourcesPath, 'api');
-			exec(
-				`cd "${API_PATH}" && python manage.py runserver 0.0.0.0:8000`,
-				{ signal },
-				(error, stdout, stderr) => {
-					if (error) {
-						logStatus(`API Err: ${error}`);
-						return;
-					}
+	// 	mainWindow.once('ready-to-show', () => {
+	// 		const API_PATH = path.join(process.resourcesPath, 'api');
+	// 		exec(
+	// 			`cd "${API_PATH}" && python manage.py runserver 0.0.0.0:8000`,
+	// 			{ signal },
+	// 			(error, stdout, stderr) => {
+	// 				if (error) {
+	// 					logStatus(`API Err: ${error}`);
+	// 					return;
+	// 				}
 
-					logStatus(`API Out: ${stdout}`);
-					logStatus(`API Err: ${stderr}`);
-				},
-			);
-			logStatus('API: Started');
-		});
+	// 				logStatus(`API Out: ${stdout}`);
+	// 				logStatus(`API Err: ${stderr}`);
+	// 			},
+	// 		);
+	// 		logStatus('API: Started');
+	// 	});
 
-		mainWindow.once('closed', () => {
-			controller.abort();
-		});
-	}
+	// 	mainWindow.once('closed', () => {
+	// 		controller.abort();
+	// 	});
+	// }
 }
 
 process.on('uncaughtException', (error) => {

@@ -74,6 +74,7 @@ export const WeightProductSelection = ({
 			.map(
 				({
 					product,
+					price_markdown,
 					markdown_price_per_piece1,
 					markdown_price_per_piece2,
 					price_per_piece,
@@ -94,6 +95,7 @@ export const WeightProductSelection = ({
 									markdown_price_per_piece1,
 									markdown_price_per_piece2,
 									price_per_piece,
+									price_markdown,
 								});
 							}}
 						/>
