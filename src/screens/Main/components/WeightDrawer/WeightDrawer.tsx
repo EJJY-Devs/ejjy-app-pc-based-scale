@@ -8,6 +8,7 @@ import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
 import {
 	formatPrintDetails,
+	getPriceCodeFeature,
 	standardRound,
 	zeroToO,
 } from '../../../../utils/function';
@@ -59,11 +60,15 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 			'0',
 		);
 
-		const type =
-			currentProduct.price_markdown?.type ||
-			currentProduct.markdownType ||
-			markdownTypes.REGULAR;
-		const priceCode = priceCodes[type] || '';
+		let priceCode = '';
+		if (getPriceCodeFeature()) {
+			const type =
+				currentProduct.price_markdown?.type ||
+				currentProduct.markdownType ||
+				markdownTypes.REGULAR;
+
+			priceCode = priceCodes[type] || '';
+		}
 
 		printProduct(
 			{

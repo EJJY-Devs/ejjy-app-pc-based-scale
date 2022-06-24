@@ -1,8 +1,7 @@
-import { Col, Divider, Row, Space } from 'antd';
+import { Col, Divider, Radio, Row, Space } from 'antd';
 import { ErrorMessage, Form, Formik } from 'formik';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import * as Yup from 'yup';
-import { sleep } from '../../utils/function';
 import {
 	Button,
 	FieldError,
@@ -14,6 +13,7 @@ import {
 interface Props {
 	branchServerUrl: string;
 	brightness: string;
+	priceCodeFeature: string | number;
 	onSubmit: any;
 	onClose: any;
 }
@@ -21,22 +21,22 @@ interface Props {
 export const AppSettingsForm = ({
 	branchServerUrl,
 	brightness,
+	priceCodeFeature,
 	onSubmit,
 	onClose,
 }: Props) => {
-	// STATES
-	const [isSubmitting, setSubmitting] = useState(false);
-
 	// METHODS
 	const getFormDetails = useCallback(
 		() => ({
 			DefaultValues: {
 				branchServerUrl: branchServerUrl || '',
 				brightness: brightness || 100,
+				priceCodeFeature: priceCodeFeature || '0',
 			},
 			Schema: Yup.object().shape({
 				branchServerUrl: Yup.string().required().label('Branch Server URL'),
 				brightness: Yup.string().required().label('Brightness'),
+				priceCodeFeature: Yup.string().required().label('Price Code Feature'),
 			}),
 		}),
 		[branchServerUrl, brightness],
@@ -50,55 +50,64 @@ export const AppSettingsForm = ({
 		<Formik
 			initialValues={getFormDetails().DefaultValues}
 			validationSchema={getFormDetails().Schema}
-			onSubmit={async (values, { resetForm }) => {
-				setSubmitting(true);
-				await sleep(500);
-				setSubmitting(false);
-
+			onSubmit={async (values) => {
 				onSubmit(values);
-				resetForm();
 			}}
 			enableReinitialize
 		>
-			<Form>
-				<Row gutter={[15, 15]}>
-					<Col span={24}>
-						<FormInputLabel id="branchServerUrl" label="Branch Server URL" />
-						<ErrorMessage
-							name="branchServerUrl"
-							render={(error) => <FieldError error={error} />}
-						/>
-					</Col>
+			{({ setFieldValue, values }) => (
+				<Form>
+					<Row gutter={[15, 15]}>
+						<Col span={24}>
+							<FormInputLabel id="branchServerUrl" label="Branch Server URL" />
+							<ErrorMessage
+								name="branchServerUrl"
+								render={(error) => <FieldError error={error} />}
+							/>
+						</Col>
 
-					<Col span={24}>
-						<Label id="brightness" label="Brightness" spacing />
-						<FormSlider id="brightness" onChange={onChangeSlider} />
-						<ErrorMessage
-							name="brightness"
-							render={(error) => <FieldError error={error} />}
-						/>
-					</Col>
-				</Row>
+						<Col span={24}>
+							<Label id="brightness" label="Brightness" spacing />
+							<FormSlider id="brightness" onChange={onChangeSlider} />
+							<ErrorMessage
+								name="brightness"
+								render={(error) => <FieldError error={error} />}
+							/>
+						</Col>
 
-				<Divider />
+						<Col span={24}>
+							<Label id="priceCodeFeature" label="Price Code Feature" spacing />
+							<Radio.Group
+								buttonStyle="solid"
+								options={[
+									{ label: 'Enabled', value: '1' },
+									{
+										label: 'Disabled',
+										value: '0',
+									},
+								]}
+								optionType="button"
+								size="large"
+								value={values.priceCodeFeature}
+								onChange={(e) => {
+									setFieldValue('priceCodeFeature', e.target.value);
+								}}
+							/>
+							<ErrorMessage
+								name="priceCodeFeature"
+								render={(error) => <FieldError error={error} />}
+							/>
+						</Col>
+					</Row>
 
-				<Space style={{ width: '100%', justifyContent: 'center' }}>
-					<Button
-						type="button"
-						text="Cancel"
-						size="lg"
-						onClick={onClose}
-						disabled={isSubmitting}
-					/>
-					<Button
-						type="submit"
-						text="Submit"
-						size="lg"
-						variant="primary"
-						loading={isSubmitting}
-					/>
-				</Space>
-			</Form>
+					<Divider />
+
+					<Space style={{ width: '100%', justifyContent: 'center' }}>
+						<Button type="button" text="Cancel" size="lg" onClick={onClose} />
+						<Button type="submit" text="Submit" size="lg" variant="primary" />
+					</Space>
+				</Form>
+			)}
 		</Formik>
 	);
 };

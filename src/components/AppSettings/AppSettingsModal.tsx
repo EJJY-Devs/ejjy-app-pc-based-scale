@@ -3,8 +3,13 @@ import React from 'react';
 import {
 	APP_BRANCH_SERVER_URL_KEY,
 	APP_BRIGHTNESS_KEY,
+	APP_PRICE_CODE_FEATURE_KEY,
 } from '../../global/constants';
-import { getAppBrightness, getBranchServerUrl } from '../../utils/function';
+import {
+	getAppBrightness,
+	getBranchServerUrl,
+	getPriceCodeFeature,
+} from '../../utils/function';
 import { AppSettingsForm } from './AppSettingsForm';
 
 interface Props {
@@ -15,6 +20,7 @@ export const AppSettingsModal = ({ onClose }: Props) => {
 	const onSubmit = (data) => {
 		localStorage.setItem(APP_BRANCH_SERVER_URL_KEY, data.branchServerUrl);
 		localStorage.setItem(APP_BRIGHTNESS_KEY, data.brightness);
+		localStorage.setItem(APP_PRICE_CODE_FEATURE_KEY, data.priceCodeFeature);
 
 		message.success('Successfully updated the app settings.');
 		close();
@@ -39,6 +45,7 @@ export const AppSettingsModal = ({ onClose }: Props) => {
 			<AppSettingsForm
 				branchServerUrl={getBranchServerUrl()}
 				brightness={getAppBrightness()}
+				priceCodeFeature={getPriceCodeFeature()}
 				onSubmit={onSubmit}
 				onClose={close}
 			/>

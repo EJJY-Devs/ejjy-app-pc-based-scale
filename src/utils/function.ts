@@ -4,6 +4,7 @@ import { isArray, isNaN, isString, memoize, round, toString } from 'lodash';
 import {
 	APP_BRANCH_SERVER_URL_KEY,
 	APP_BRIGHTNESS_KEY,
+	APP_PRICE_CODE_FEATURE_KEY,
 	EMPTY_CELL,
 } from '../global/constants';
 import { userTypes } from '../global/types';
@@ -31,6 +32,9 @@ export const getBranchServerUrl = () =>
 	localStorage.getItem(APP_BRANCH_SERVER_URL_KEY);
 
 export const getAppBrightness = () => localStorage.getItem(APP_BRIGHTNESS_KEY);
+
+export const getPriceCodeFeature = () =>
+	Number(localStorage.getItem(APP_PRICE_CODE_FEATURE_KEY));
 
 export const getUserTypeDescription = memoize((userType) => {
 	let userTypeDescription = '';
