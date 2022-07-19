@@ -39,9 +39,9 @@ export const TableProducts = ({
 			<div className="TableProducts">
 				{!data.length && (
 					<img
-						src={require('../../assets/images/logo.jpg')}
 						alt="logo"
 						className="placeholder"
+						src={require('../../assets/images/logo.jpg')}
 					/>
 				)}
 
@@ -63,10 +63,10 @@ export const TableProducts = ({
 					<tbody>
 						{data?.map((row, rowIndex) => (
 							<tr
+								key={`tr-${rowIndex}`}
 								className={cn({
 									active: activeRow === rowIndex,
 								})}
-								key={`tr-${rowIndex}`}
 								style={{ height: `${ROW_HEIGHT}px` }}
 								onClick={() => onClick(rowIndex)}
 							>

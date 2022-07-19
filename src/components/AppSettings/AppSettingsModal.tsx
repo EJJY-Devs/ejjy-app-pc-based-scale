@@ -35,19 +35,19 @@ export const AppSettingsModal = ({ onClose }: Props) => {
 
 	return (
 		<Modal
-			title="App Settings"
 			footer={null}
-			onCancel={close}
+			title="App Settings"
 			centered
 			closable
 			visible
+			onCancel={close}
 		>
 			<AppSettingsForm
 				branchServerUrl={getBranchServerUrl()}
 				brightness={getAppBrightness()}
 				priceCodeFeature={getPriceCodeFeature()}
-				onSubmit={onSubmit}
 				onClose={close}
+				onSubmit={onSubmit}
 			/>
 		</Modal>
 	);

@@ -50,10 +50,10 @@ export const AppSettingsForm = ({
 		<Formik
 			initialValues={getFormDetails().DefaultValues}
 			validationSchema={getFormDetails().Schema}
+			enableReinitialize
 			onSubmit={async (values) => {
 				onSubmit(values);
 			}}
-			enableReinitialize
 		>
 			{({ setFieldValue, values }) => (
 				<Form>
@@ -103,8 +103,8 @@ export const AppSettingsForm = ({
 					<Divider />
 
 					<Space style={{ width: '100%', justifyContent: 'center' }}>
-						<Button type="button" text="Cancel" size="lg" onClick={onClose} />
-						<Button type="submit" text="Submit" size="lg" variant="primary" />
+						<Button size="lg" text="Cancel" type="button" onClick={onClose} />
+						<Button size="lg" text="Submit" type="submit" variant="primary" />
 					</Space>
 				</Form>
 			)}

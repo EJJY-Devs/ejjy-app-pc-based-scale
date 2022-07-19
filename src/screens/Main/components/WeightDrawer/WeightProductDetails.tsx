@@ -124,8 +124,8 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 						<ControlledInput
 							className="WeightProductDetails_inputGroup_inputAmount"
 							value={formatInPeso(weight * currentProduct.price_per_piece)}
-							onChange={() => null}
 							disabled
+							onChange={() => null}
 						/>
 					</div>
 
@@ -134,8 +134,8 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 						<ControlledInput
 							className="WeightProductDetails_inputGroup_input"
 							value={currentProduct.name}
-							onChange={() => null}
 							disabled
+							onChange={() => null}
 						/>
 					</div>
 
@@ -144,8 +144,8 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 						<ControlledInput
 							className="WeightProductDetails_inputGroup_input"
 							value={weight.toFixed(3)}
-							onChange={() => null}
 							disabled
+							onChange={() => null}
 						/>
 					</div>
 
@@ -154,8 +154,8 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 						<ControlledInput
 							className="WeightProductDetails_inputGroup_input"
 							value={formatInPeso(currentProduct.price_per_piece)}
-							onChange={() => null}
 							disabled
+							onChange={() => null}
 						/>
 					</div>
 
@@ -214,8 +214,8 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 					<ScaleButton
 						title={
 							<img
-								src={require('../../../../assets/images/icon-print-and-add-cart.svg')}
 								alt="icon"
+								src={require('../../../../assets/images/icon-print-and-add-cart.svg')}
 							/>
 						}
 						onClick={onPrintAndAddCart}

@@ -17,6 +17,7 @@ interface Props {
 	step?: string;
 }
 
+// eslint-disable-next-line react/display-name
 const ControlledInput = React.forwardRef<HTMLInputElement, Props>(
 	(
 		{
@@ -37,22 +38,22 @@ const ControlledInput = React.forwardRef<HTMLInputElement, Props>(
 	) => (
 		<input
 			ref={ref}
-			type={type}
-			id={id}
-			name={id}
+			// eslint-disable-next-line jsx-a11y/no-autofocus
+			autoFocus={autoFocus}
 			className={cn('Input', className)}
-			placeholder={placeholder}
+			disabled={disabled}
+			id={id}
 			max={max}
 			min={min}
-			disabled={disabled}
+			name={id}
+			placeholder={placeholder}
+			step={step}
+			type={type}
+			value={value}
 			onChange={(event) => onChange(event.target.value)}
 			onFocus={(event) => {
 				if (onFocus) onFocus(event.target.value);
 			}}
-			// eslint-disable-next-line jsx-a11y/no-autofocus
-			autoFocus={autoFocus}
-			value={value}
-			step={step}
 			onKeyDown={(evt) => {
 				if (type === 'number' && ['e', 'E', '+', '-'].includes(evt.key)) {
 					evt.preventDefault();

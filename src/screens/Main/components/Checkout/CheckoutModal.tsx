@@ -48,35 +48,35 @@ export const CheckoutModal = ({ visible, onClose }: Props) => {
 
 	return (
 		<Modal
-			title="Checkout"
 			className="CheckoutModal"
-			visible={visible}
 			footer={null}
-			onCancel={onClose}
+			title="Checkout"
+			visible={visible}
 			centered
 			closable
+			onCancel={onClose}
 		>
 			<div className="form">
 				<Label className="quantity-label" label="Amount Due (₱)" spacing />
 				<ControlledInput
 					className="amount-due-input"
 					value={getTotal()}
-					onChange={() => null}
 					disabled
+					onChange={() => null}
 				/>
 
 				<div className="custom-footer">
 					<Button
-						type="button"
-						text="Cancel"
-						size="lg"
-						onClick={onClose}
 						className="btn-cancel"
+						size="lg"
+						text="Cancel"
+						type="button"
+						onClick={onClose}
 					/>
 					<Button
-						type="submit"
-						text="Proceed"
 						size="lg"
+						text="Proceed"
+						type="submit"
 						variant="primary"
 						onClick={onSubmit}
 					/>

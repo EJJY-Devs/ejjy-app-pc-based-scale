@@ -21,21 +21,21 @@ export const ScaleButton = ({
 	loading,
 }: Props) => (
 	<button
-		type="button"
 		className={cn('ScaleButton', className, {
 			ScaleButton__disabled: disabled || loading,
 		})}
+		type="button"
 		onClick={onClick}
 	>
 		{loading ? (
 			<Spin
+				className="ScaleButton_spinner"
 				indicator={
 					<LoadingOutlined
 						style={{ fontSize: 17, color: 'rgba(35, 37, 46, 0.85)' }}
 						spin
 					/>
 				}
-				className="ScaleButton_spinner"
 			/>
 		) : (
 			title

@@ -10,10 +10,10 @@ interface Props {
 
 export const Container = ({ loading, loadingText, children }: Props) => (
 	<Spin
-		wrapperClassName="Container"
 		size="large"
 		spinning={loading}
 		tip={loadingText}
+		wrapperClassName="Container"
 	>
 		{children}
 	</Spin>

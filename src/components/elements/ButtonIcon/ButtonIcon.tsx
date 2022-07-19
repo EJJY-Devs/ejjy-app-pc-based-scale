@@ -27,13 +27,13 @@ const ButtonIcon = ({
 }: Props) => (
 	<Tooltip placement="top" title={tooltip}>
 		<button
-			type="button"
-			onClick={onClick}
 			className={cn('ButtonIcon', className, {
 				ButtonIcon__disabled: disabled,
 				ButtonIcon__loading: loading,
 			})}
 			tabIndex={-1}
+			type="button"
+			onClick={onClick}
 		>
 			{loading ? <Spin indicator={loadingIcon} /> : <>{icon}</>}
 		</button>

@@ -29,19 +29,19 @@ const FormInput = ({
 	step,
 }: IInputProps) => (
 	<Field
-		innerRef={inputRef}
-		type={type}
-		id={id}
-		name={id}
+		autoFocus={autoFocus}
 		className={cn('FormInput', className)}
-		placeholder={placeholder}
+		disabled={disabled}
+		id={id}
+		innerRef={inputRef}
 		max={max}
 		min={min}
-		disabled={disabled}
+		name={id}
+		placeholder={placeholder}
+		step={step}
 		// eslint-disable-next-line jsx-a11y/tabindex-no-positive
 		tabIndex={1}
-		autoFocus={autoFocus}
-		step={step}
+		type={type}
 	/>
 );
 

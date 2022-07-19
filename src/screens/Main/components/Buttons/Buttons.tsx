@@ -174,50 +174,50 @@ export const Buttons = ({
 				) : (
 					<>
 						<ScaleButton
+							disabled={
+								selectedProductIndex === NO_INDEX_SELECTED ||
+								transactionProducts.length === 0
+							}
 							title="Wholesale"
 							onClick={() => {
 								// setSelectedDiscountType(discountTypes.FIRST);
 								onDiscountSuccess(discountTypes.FIRST);
 							}}
+						/>
+
+						<ScaleButton
 							disabled={
 								selectedProductIndex === NO_INDEX_SELECTED ||
 								transactionProducts.length === 0
 							}
-						/>
-
-						<ScaleButton
 							title="Special"
 							onClick={() => {
 								// setSelectedDiscountType(discountTypes.SECOND);
 								onDiscountSuccess(discountTypes.SECOND);
 							}}
-							disabled={
-								selectedProductIndex === NO_INDEX_SELECTED ||
-								transactionProducts.length === 0
-							}
 						/>
 					</>
 				)}
 
 				<ScaleButton
 					className="Buttons_btnReset"
+					disabled={transactionProducts.length === 0}
 					title="Reset"
 					onClick={onReset}
-					disabled={transactionProducts.length === 0}
 				/>
 
 				<ScaleButton
 					className="Buttons_btnTempCheckout"
+					disabled={isTempCheckoutDisabled()}
 					title="Temp Checkout"
 					onClick={onOpenTemporaryCheckoutModal}
-					disabled={isTempCheckoutDisabled()}
 				/>
 
 				<ScaleButton
 					className="Buttons_btnCheckout"
+					disabled={transactionProducts.length === 0}
 					title="Checkout"
 					onClick={onOpenCheckoutModal}
-					disabled={transactionProducts.length === 0}
 				/>
 			</div>
 

@@ -25,10 +25,10 @@ const FormSlider = ({ id, className, onChange }: Props) => {
 	return (
 		<Slider
 			className={className}
-			tipFormatter={formatter}
-			step={5}
-			min={10}
 			max={100}
+			min={10}
+			step={5}
+			tipFormatter={formatter}
 			value={field.value}
 			onChange={onChangeSlider}
 		/>

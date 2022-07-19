@@ -114,7 +114,7 @@ const Main = () => {
 		productCategoriesStatus === request.REQUESTING;
 
 	return (
-		<Container loadingText="Fetching products..." loading={isLoading}>
+		<Container loading={isLoading} loadingText="Fetching products...">
 			<section className="Main">
 				<div className="Main_left">
 					<MainTable />

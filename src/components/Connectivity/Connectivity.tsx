@@ -9,13 +9,13 @@ export const Connectivity = () => {
 		<div className="Connectivity">
 			{isConnected ? (
 				<img
-					src={require('../../assets/images/server-connected.png')}
 					alt="connectivity-icon"
+					src={require('../../assets/images/server-connected.png')}
 				/>
 			) : (
 				<img
-					src={require('../../assets/images/server-not-connected.png')}
 					alt="connectivity-icon"
+					src={require('../../assets/images/server-not-connected.png')}
 				/>
 			)}
 		</div>

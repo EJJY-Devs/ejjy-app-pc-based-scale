@@ -57,9 +57,9 @@ export const AuthForm = ({
 
 					<div className="AuthForm_inputField">
 						<FormInputLabel
-							type="password"
 							id="password"
 							label={`${isManager ? "Manager's" : ''} Password`}
+							type="password"
 						/>
 						{errors.password && touched.password ? (
 							<FieldError error={errors.password} />
@@ -67,10 +67,10 @@ export const AuthForm = ({
 					</div>
 
 					<Button
-						type="submit"
-						text={submitText}
-						variant="secondary"
 						loading={loading || isSubmitting}
+						text={submitText}
+						type="submit"
+						variant="secondary"
 						block
 					/>
 				</Form>

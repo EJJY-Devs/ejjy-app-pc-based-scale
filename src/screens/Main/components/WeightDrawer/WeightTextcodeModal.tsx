@@ -93,107 +93,107 @@ export const WeightTextcodeModal = ({
 
 	return (
 		<Modal
-			title="Search Product By Textcode"
 			className="WeightTextcodeModal"
-			visible={visible}
 			footer={null}
-			onCancel={onClose}
+			title="Search Product By Textcode"
+			visible={visible}
 			centered
 			closable
+			onCancel={onClose}
 		>
 			<div className="WeightTextcodeModal_textcodeNumbers">
 				<ControlledInput
 					className="WeightTextcodeModal_textcodeNumbers_input"
 					value={textcode}
-					onChange={(value) => setTextcode(value)}
 					disabled
+					onChange={(value) => setTextcode(value)}
 				/>
 
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 					title="7"
 					onClick={() => onNumpadInput(7)}
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 					title="8"
 					onClick={() => onNumpadInput(8)}
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 					title="9"
 					onClick={() => onNumpadInput(9)}
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 					title="4"
 					onClick={() => onNumpadInput(4)}
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 					title="5"
 					onClick={() => onNumpadInput(5)}
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 					title="6"
 					onClick={() => onNumpadInput(6)}
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 					title="1"
 					onClick={() => onNumpadInput(1)}
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 					title="2"
 					onClick={() => onNumpadInput(2)}
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num"
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 					title="3"
 					onClick={() => onNumpadInput(3)}
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 
 				<ScaleButton
 					className="WeightTextcodeModal_textcodeNumbers_num WeightTextcodeModal_textcodeNumbers_num0"
+					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 					title="0"
 					onClick={() => onNumpadInput(0)}
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 				/>
 				<ScaleButton
+					disabled={textcode.length === 0}
 					title="C"
 					onClick={() => onNumpadInput(-1)}
-					disabled={textcode.length === 0}
 				/>
 			</div>
 
 			<div className="WeightTextcodeModal_btnGroup">
 				<Button
-					type="button"
-					text="Cancel"
-					size="lg"
-					onClick={onClose}
 					className="WeightTextcodeModal_btnGroup_btnCancel"
+					size="lg"
+					text="Cancel"
+					type="button"
+					onClick={onClose}
 				/>
 				<Button
-					type="submit"
-					text="Submit"
+					loading={branchProductsStatus === request.REQUESTING}
 					size="lg"
+					text="Submit"
+					type="submit"
 					variant="primary"
 					onClick={onSubmit}
-					loading={branchProductsStatus === request.REQUESTING}
 				/>
 			</div>
 		</Modal>

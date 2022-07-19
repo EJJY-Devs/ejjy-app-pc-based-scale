@@ -27,8 +27,8 @@ const App = () => {
 			<Connectivity />
 
 			<Switch>
-				<Route path="/" exact component={Login} />
-				<Route path="/main" exact component={Main} />
+				<Route component={Login} path="/" exact />
+				<Route component={Main} path="/main" exact />
 			</Switch>
 		</>
 	);

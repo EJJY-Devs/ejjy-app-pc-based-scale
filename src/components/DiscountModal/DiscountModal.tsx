@@ -19,23 +19,23 @@ export const DiscountModal = ({
 }: Props) => (
 	<Modal
 		className="DiscountModal"
-		title="Manager's Approval for Discount"
 		footer={null}
-		visible
-		onCancel={onClose}
+		title="Manager's Approval for Discount"
 		centered
 		closable
+		visible
+		onCancel={onClose}
 	>
 		<div className="DiscountModal_inputGroup">
 			<Label label="Discounted Price" spacing />
-			<ControlledInput value={discount} onChange={() => null} disabled />
+			<ControlledInput value={discount} disabled onChange={() => null} />
 		</div>
 
 		<AuthForm
-			submitText="Submit"
-			onSubmit={onConfirm}
 			loading={isLoading}
+			submitText="Submit"
 			isManager
+			onSubmit={onConfirm}
 		/>
 	</Modal>
 );

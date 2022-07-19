@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import { message, Spin } from 'antd';
-import _ from 'lodash';
-import { padStart } from 'lodash';
+import _, { padStart } from 'lodash';
 import React, { useEffect } from 'react';
 import { markdownTypes, priceCodes, request } from '../../../../global/types';
 import { useAuth } from '../../../../hooks/useAuth';
@@ -97,9 +96,9 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 
 	return (
 		<Spin
-			wrapperClassName="WeightDrawer"
 			size="large"
 			spinning={pcStatus === request.REQUESTING}
+			wrapperClassName="WeightDrawer"
 		>
 			<div className="WeightDrawer_container">
 				{currentProduct ? (

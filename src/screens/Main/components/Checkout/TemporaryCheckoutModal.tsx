@@ -116,13 +116,13 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 
 	return (
 		<Modal
-			title="Temporary Checkout"
 			className="TemporaryCheckoutModal"
-			visible={visible}
 			footer={null}
-			onCancel={onClose}
+			title="Temporary Checkout"
+			visible={visible}
 			centered
 			closable
+			onCancel={onClose}
 		>
 			<Spin
 				size="large"
@@ -133,7 +133,7 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 						<Label className="quantity-label" label="Products" spacing />
 						<ul>
 							{getCheckoutProducts().map(({ name }) => (
-								<li>{name}</li>
+								<li key={name}>{name}</li>
 							))}
 						</ul>
 					</div>
@@ -142,22 +142,22 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 					<ControlledInput
 						className="amount-due-input"
 						value={getTotal()}
-						onChange={() => null}
 						disabled
+						onChange={() => null}
 					/>
 
 					<div className="custom-footer">
 						<Button
-							type="button"
-							text="Cancel"
-							size="lg"
-							onClick={onClose}
 							className="btn-cancel"
+							size="lg"
+							text="Cancel"
+							type="button"
+							onClick={onClose}
 						/>
 						<Button
-							type="submit"
-							text="Proceed"
 							size="lg"
+							text="Proceed"
+							type="submit"
 							variant="primary"
 							onClick={onSubmit}
 						/>

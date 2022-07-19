@@ -84,8 +84,8 @@ export const WeightProductSelection = ({
 						<ButtonIcon
 							icon={
 								<img
-									src={require('../../../../assets/images/icon-add.svg')}
 									alt="icon"
+									src={require('../../../../assets/images/icon-add.svg')}
 								/>
 							}
 							tooltip="Add"
@@ -110,8 +110,8 @@ export const WeightProductSelection = ({
 				<ControlledInput
 					className="WeightProductSelection_inputWeight"
 					value={weight.toFixed(3)}
-					onChange={() => null}
 					disabled
+					onChange={() => null}
 				/>
 
 				<Divider />
@@ -129,8 +129,8 @@ export const WeightProductSelection = ({
 							<Table
 								columns={columns}
 								dataSource={data.dataSource}
-								scroll={{ y: 285 }}
 								pagination={false}
+								scroll={{ y: 285 }}
 							/>
 						</Tabs.TabPane>
 					))}
@@ -140,16 +140,16 @@ export const WeightProductSelection = ({
 
 				<ScaleButton
 					className="WeightProductSelection_btnInputTextcode"
+					disabled={weight === 0}
 					title="Input Textcode"
 					onClick={() => setTextcodeModalVisible(true)}
-					disabled={weight === 0}
 				/>
 			</div>
 
 			<WeightTextcodeModal
 				visible={textcodeModalVisible}
-				onSelectProduct={onSelectProduct}
 				onClose={() => setTextcodeModalVisible(false)}
+				onSelectProduct={onSelectProduct}
 			/>
 		</>
 	);

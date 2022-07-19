@@ -31,16 +31,17 @@ export const MainTable = () => {
 	useEffect(() => {
 		const formattedProducts = transactionProducts.map((product) => [
 			<ButtonIcon
+				key="remove"
 				icon={
 					<img
-						src={require('../../../../assets/images/icon-cancel.svg')}
 						alt="icon"
+						src={require('../../../../assets/images/icon-cancel.svg')}
 					/>
 				}
-				onClick={() => onRemoveProductConfirmation(product)}
 				tooltip="Remove"
+				onClick={() => onRemoveProductConfirmation(product)}
 			/>,
-			<MainTableName product={product} />,
+			<MainTableName key="table" product={product} />,
 			formatInPeso(product.weight * product.price_per_piece),
 		]);
 
@@ -62,9 +63,9 @@ export const MainTable = () => {
 	return (
 		<div className="MainTable">
 			<TableProducts
+				activeRow={selectedProductIndex}
 				columns={columns}
 				data={data}
-				activeRow={selectedProductIndex}
 				onClick={setSelectedProduct}
 			/>
 		</div>

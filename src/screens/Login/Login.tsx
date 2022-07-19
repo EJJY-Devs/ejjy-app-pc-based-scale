@@ -35,9 +35,9 @@ const Login = () => {
 		<section className="Login">
 			<Box className="Login_box">
 				<img
-					src={require('../../assets/images/logo.jpg')}
 					alt="logo"
 					className="Login_logo"
+					src={require('../../assets/images/logo.jpg')}
 				/>
 
 				<RequestErrors
@@ -47,9 +47,9 @@ const Login = () => {
 				/>
 
 				<AuthForm
+					loading={authStatus === request.REQUESTING}
 					submitText="Start Sesssion"
 					onSubmit={login}
-					loading={authStatus === request.REQUESTING}
 				/>
 
 				{areSetupButtonsVisible && (
@@ -59,8 +59,8 @@ const Login = () => {
 						<Button
 							text="Set App Settings"
 							variant="dark-gray"
-							onClick={() => setAppSettingsModalVisible(true)}
 							block
+							onClick={() => setAppSettingsModalVisible(true)}
 						/>
 					</>
 				)}

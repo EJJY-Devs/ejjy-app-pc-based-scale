@@ -3,7 +3,7 @@ import { Redirect, Route } from 'react-router-dom';
 import { userTypes } from '../../global/types';
 import { useAuth } from '../../hooks/useAuth';
 
-export const NoAuthRoute = ({ forUserType, ...rest }: any) => {
+export const NoAuthRoute = (props: any) => {
 	const { user } = useAuth();
 	const { user_type: userType } = user || {};
 
@@ -27,5 +27,5 @@ export const NoAuthRoute = ({ forUserType, ...rest }: any) => {
 		return <Route render={() => <Redirect to="/branch-personnel" />} />;
 	}
 
-	return <Route {...rest} />;
+	return <Route {...props} />;
 };

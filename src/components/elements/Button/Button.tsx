@@ -26,6 +26,7 @@ interface Props {
 	hasShortcutKey?: boolean;
 }
 
+// eslint-disable-next-line react/display-name
 const Button = React.forwardRef<HTMLInputElement, Props>(
 	(
 		{
@@ -47,14 +48,12 @@ const Button = React.forwardRef<HTMLInputElement, Props>(
 		ref,
 	) => (
 		<Tooltip
+			overlayClassName="ButtonTooltip"
 			placement={tooltipPlacement}
 			title={tooltip}
-			overlayClassName="ButtonTooltip"
 		>
 			<button
 				ref={ref}
-				// eslint-disable-next-line react/button-has-type
-				type={type}
 				className={cn('Button', className, {
 					[variant]: true,
 					[size]: true,
@@ -64,10 +63,12 @@ const Button = React.forwardRef<HTMLInputElement, Props>(
 					disabled,
 					loading,
 				})}
+				// eslint-disable-next-line react/button-has-type
+				type={type}
 				onClick={disabled ? null : onClick}
 			>
 				{loading ? (
-					<Spin indicator={loadingIcon} className="spinner" />
+					<Spin className="spinner" indicator={loadingIcon} />
 				) : (
 					<>
 						{iconDirection === 'left' && (
