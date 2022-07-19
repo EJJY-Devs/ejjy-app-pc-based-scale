@@ -13,7 +13,7 @@ import { useTransactions } from '../../../../hooks/useTransactions';
 import {
 	numberWithCommas,
 	standardRound,
-	zeroToO,
+	formatZeroToO,
 } from '../../../../utils/function';
 import './style.scss';
 
@@ -94,7 +94,7 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 					printTransaction(
 						{
 							transactionId: `T_${response.id}`,
-							totalPrice: `P${zeroToO(standardRound(total))}`,
+							totalPrice: `P${formatZeroToO(standardRound(total))}`,
 							branch: 'TEST',
 						},
 						({ status: printTransactionStatus }) => {

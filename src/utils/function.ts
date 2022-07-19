@@ -78,7 +78,7 @@ export const formatDateTime = memoize((datetime) =>
 
 export const standardRound = (value) => round(round(value, 3), 2).toFixed(2);
 
-export const zeroToO = (value) => toString(value)?.replace(/0/g, 'O');
+export const formatZeroToO = (value) => toString(value)?.replace(/0/g, 'O');
 
 export const convertIntoArray = (errors, prefixMessage = null) => {
 	const prefix = prefixMessage ? `${prefixMessage}: ` : '';

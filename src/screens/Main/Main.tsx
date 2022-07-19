@@ -62,7 +62,7 @@ const Main = () => {
 		fetchBranchProducts();
 		intervalRef.current = setInterval(() => {
 			fetchBranchProducts();
-		}, 10000);
+		}, 60000);
 
 		listProductCategories(({ status }) => {
 			if (status === request.ERROR) {

@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import { message, Spin } from 'antd';
+import _ from 'lodash';
 import { padStart } from 'lodash';
 import React, { useEffect } from 'react';
 import { markdownTypes, priceCodes, request } from '../../../../global/types';
@@ -10,7 +11,7 @@ import {
 	formatPrintDetails,
 	getPriceCodeFeature,
 	standardRound,
-	zeroToO,
+	formatZeroToO,
 } from '../../../../utils/function';
 import './style.scss';
 import { WeightProductDetails } from './WeightProductDetails';
@@ -54,8 +55,9 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 
 	const onPrint = (onSuccess = null) => {
 		const total = standardRound(currentProduct.price_per_piece * weight);
+		const roundedWeight = _.round(Number(weight), 3);
 		const formattedWeight = padStart(
-			weight.toFixed(4).replace(/\./g, ''),
+			roundedWeight.toFixed(4).replace(/\./g, ''),
 			6,
 			'0',
 		);
@@ -73,10 +75,10 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		printProduct(
 			{
 				name: formatPrintDetails(currentProduct.name),
-				weight: `${zeroToO(weight.toFixed(3))}kg`,
-				price: `P${zeroToO(currentProduct.price_per_piece.toFixed(2))}`,
-				totalPrice: `P${zeroToO(total)}`,
-				code: `${priceCode}${currentProduct.barcode}${formattedWeight}`,
+				weight: `${formatZeroToO(roundedWeight.toFixed(3))}kg`,
+				price: `P${formatZeroToO(currentProduct.price_per_piece.toFixed(2))}`,
+				totalPrice: `P${formatZeroToO(total)}`,
+				code: `${priceCode}${currentProduct.selling_barcode}${formattedWeight}`,
 				branch: formatPrintDetails(user?.branch?.name),
 			},
 			({ status }) => {
