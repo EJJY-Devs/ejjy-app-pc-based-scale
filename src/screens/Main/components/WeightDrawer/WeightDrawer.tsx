@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import { message, Spin } from 'antd';
-import _, { padStart } from 'lodash';
+import _ from 'lodash';
 import React, { useEffect } from 'react';
 import { markdownTypes, priceCodes, request } from '../../../../global/types';
 import { useAuth } from '../../../../hooks/useAuth';
@@ -8,9 +8,9 @@ import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import { usePc } from '../../../../hooks/usePc';
 import {
 	formatPrintDetails,
+	formatZeroToO,
 	getPriceCodeFeature,
 	standardRound,
-	formatZeroToO,
 } from '../../../../utils/function';
 import './style.scss';
 import { WeightProductDetails } from './WeightProductDetails';
@@ -53,14 +53,18 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 	};
 
 	const onPrint = (onSuccess = null) => {
+		// Get total
 		const total = standardRound(currentProduct.price_per_piece * weight);
+
+		// Get weight
 		const roundedWeight = _.round(Number(weight), 3);
-		const formattedWeight = padStart(
+		const formattedWeight = _.padStart(
 			roundedWeight.toFixed(4).replace(/\./g, ''),
 			6,
 			'0',
 		);
 
+		// Get price code
 		let priceCode = '';
 		if (getPriceCodeFeature()) {
 			const type =
@@ -71,13 +75,16 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 			priceCode = priceCodes[type] || '';
 		}
 
+		// Get code
+		const code = currentProduct.selling_barcode || currentProduct.barcode;
+
 		printProduct(
 			{
 				name: formatPrintDetails(currentProduct.name),
 				weight: `${formatZeroToO(roundedWeight.toFixed(3))}kg`,
 				price: `P${formatZeroToO(currentProduct.price_per_piece.toFixed(2))}`,
 				totalPrice: `P${formatZeroToO(total)}`,
-				code: `${priceCode}${currentProduct.selling_barcode}${formattedWeight}`,
+				code: `${priceCode}${code}${formattedWeight}`,
 				branch: formatPrintDetails(user?.branch?.name),
 			},
 			({ status }) => {
