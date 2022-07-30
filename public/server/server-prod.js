@@ -1,5 +1,6 @@
 /* eslint-disable */
 (function () {
+  const path = require("path");
 	const express = require('express');
 	const cors = require('cors');
 	const fs = require('fs');
@@ -13,9 +14,8 @@
 	});
 
 	// Initiate Scale and Printer exe
+  const scaleAndPrinterPath = path.join(process.resourcesPath, "Scale and Printer.exe");;
 	let process = null;
-	const scaleAndPrinterPath =
-		'C:\\Users\\Administrator\\Desktop\\Scale and Printer\\bin\\Debug\\net4.0\\Scale and Printer.exe';
 	fs.stat(scaleAndPrinterPath, function (err, stat) {
 		if (!err) {
 			const spawn = require('child_process').spawn;
