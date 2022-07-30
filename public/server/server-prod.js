@@ -8,13 +8,13 @@
 
 	app.use(cors());
 	app.use(express.json());
-
+p
 	const server = app.listen(5000, function () {
 		console.log(`Express server listening on port ${server.address().port}`);
 	});
 
 	// Initiate Scale and Printer exe
-  const scaleAndPrinterPath = path.join(process.resourcesPath, "Scale and Printer.exe");;
+  const scaleAndPrinterPath = path.join(process.resourcesPath, "scale","Scale and Printer.exe");;
 	let process = null;
 	fs.stat(scaleAndPrinterPath, function (err, stat) {
 		if (!err) {
