@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import { Col, message, Row, Space } from 'antd';
+import { ScaleButton } from 'components';
+import { ControlledInput, Label } from 'components/elements';
+import { discountTypes, markdownTypes } from 'global';
+import { useCurrentTransaction } from 'hooks';
 import React, { useCallback } from 'react';
-import { ScaleButton } from '../../../../components';
-import { ControlledInput, Label } from '../../../../components/elements';
-import { discountTypes, markdownTypes } from '../../../../global/types';
-import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
-import { usePc } from '../../../../hooks/usePc';
-import { formatInPeso } from '../../../../utils/function';
+import { useWeightStore } from 'stores';
+import { formatInPeso } from 'utils/function';
 import './style.scss';
 
 interface Props {
@@ -20,8 +20,8 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 	// const [selectedDiscountType, setSelectedDiscountType] = useState(null);
 
 	// CUSTOM HOOKS
-	const { weight } = usePc();
 	// const { validateUser, status: authStatus } = useAuth();
+	const weight = useWeightStore((state: any) => state.weight);
 	const { currentProduct, addProduct, setCurrentProduct } =
 		useCurrentTransaction();
 

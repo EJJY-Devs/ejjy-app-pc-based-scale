@@ -8,12 +8,22 @@
 
 .Buttons {
 	display: grid;
-	column-gap: 10px;
-	row-gap: 10px;
+	gap: 10px;
 	grid-template-columns: repeat(4, 1fr);
 	grid-template-rows: repeat(2, $button-height);
 
-	&_btnRecalibrate {
+	&_btnWrapper {
+		display: flex;
+		gap: 10px;
+	}
+
+	&_btnTare {
+		flex: 1;
+		@include redButton();
+	}
+
+	&_btnZero {
+		flex: 1;
 		@include redButton();
 	}
 

@@ -34,3 +34,5 @@ export const useTransactions = () => {
 		errors,
 	};
 };
+
+export default useTransactions;

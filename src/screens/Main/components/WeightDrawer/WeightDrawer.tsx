@@ -1,17 +1,18 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import { message, Spin } from 'antd';
+import { markdownTypes, priceCodes } from 'global';
+import { usePrintProduct, useWeight } from 'hooks';
+import { useAuth } from 'hooks/useAuth';
+import { useCurrentTransaction } from 'hooks/useCurrentTransaction';
 import _ from 'lodash';
 import React, { useEffect } from 'react';
-import { markdownTypes, priceCodes, request } from '../../../../global/types';
-import { useAuth } from '../../../../hooks/useAuth';
-import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
-import { usePc } from '../../../../hooks/usePc';
+import { useWeightStore } from 'stores';
 import {
 	formatPrintDetails,
 	formatZeroToO,
 	getPriceCodeFeature,
 	standardRound,
-} from '../../../../utils/function';
+} from 'utils/function';
 import './style.scss';
 import { WeightProductDetails } from './WeightProductDetails';
 import { WeightProductSelection } from './WeightProductSelection';
@@ -21,19 +22,18 @@ interface Props {
 }
 
 export const WeightDrawer = ({ branchProducts }: Props) => {
+	// STATES
+
 	// CUSTOM HOOKS
+	const weight = useWeightStore((state: any) => state.weight);
 	const { user } = useAuth();
-	const { resetWeight, getWeight } = usePc();
-	const { weight, printProduct, status: pcStatus } = usePc();
+	const { mutateAsync: printProduct, isLoading: isPrintingProduct } =
+		usePrintProduct();
 	const { transactionProducts, currentProduct, setCurrentProduct } =
 		useCurrentTransaction();
+	useWeight();
 
 	// METHODS
-	useEffect(() => {
-		resetWeight();
-		getWeight();
-	}, []);
-
 	useEffect(() => {
 		if (weight === 0 && currentProduct) {
 			setCurrentProduct(null);
@@ -78,35 +78,25 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		// Get code
 		const code = currentProduct.selling_barcode || currentProduct.barcode;
 
-		printProduct(
-			{
-				name: formatPrintDetails(currentProduct.name),
-				weight: `${formatZeroToO(roundedWeight.toFixed(3))}kg`,
-				price: `P${formatZeroToO(currentProduct.price_per_piece.toFixed(2))}`,
-				totalPrice: `P${formatZeroToO(total)}`,
-				code: `${priceCode}${code}${formattedWeight}`,
-				branch: formatPrintDetails(user?.branch?.name),
-			},
-			({ status }) => {
-				if (status === request.SUCCESS) {
-					if (!onSuccess) {
-						message.success('Successfully printed product details.');
-					} else {
-						onSuccess();
-					}
-				} else if (status === request.ERROR) {
-					message.error('An error occurred while printing the product details');
-				}
-			},
-		);
+		printProduct({
+			name: formatPrintDetails(currentProduct.name),
+			weight: `${formatZeroToO(roundedWeight.toFixed(3))}kg`,
+			price: `P${formatZeroToO(currentProduct.price_per_piece.toFixed(2))}`,
+			totalPrice: `P${formatZeroToO(total)}`,
+			code: `${priceCode}${code}${formattedWeight}`,
+			branch: formatPrintDetails(user?.branch?.name),
+		})
+			.then(() => {
+				message.success('Successfully printed product details.');
+				onSuccess();
+			})
+			.catch(() => {
+				message.error('An error occurred while printing the product details');
+			});
 	};
 
 	return (
-		<Spin
-			size="large"
-			spinning={pcStatus === request.REQUESTING}
-			wrapperClassName="WeightDrawer"
-		>
+		<Spin spinning={isPrintingProduct} wrapperClassName="WeightDrawer">
 			<div className="WeightDrawer_container">
 				{currentProduct ? (
 					<WeightProductDetails onPrint={onPrint} />

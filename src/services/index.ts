@@ -19,4 +19,5 @@ export interface IGetRequest {
 
 export { default as ConnectivityLogsService } from './ConnectivityLogsService';
 export { default as DataService } from './DataService';
+export { default as ScaleService } from './ScaleService';
 export { default as SiteSettingsService } from './SiteSettingsService';

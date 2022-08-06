@@ -45,3 +45,5 @@ export const useAuth = () => {
 		errors,
 	};
 };
+
+export default useAuth;

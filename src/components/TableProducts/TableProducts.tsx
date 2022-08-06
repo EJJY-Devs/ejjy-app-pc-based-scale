@@ -35,7 +35,7 @@ export const TableProducts = ({
 		} as React.CSSProperties);
 
 	return (
-		<Spin size="large" spinning={loading}>
+		<Spin spinning={loading}>
 			<div className="TableProducts">
 				{!data.length && (
 					<img

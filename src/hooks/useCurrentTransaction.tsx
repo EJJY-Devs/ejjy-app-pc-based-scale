@@ -30,3 +30,5 @@ export const useCurrentTransaction = () => {
 		setCurrentProduct,
 	};
 };
+
+export default useCurrentTransaction;

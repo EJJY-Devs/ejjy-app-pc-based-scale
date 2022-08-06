@@ -1,19 +1,12 @@
-/* eslint-disable react/jsx-one-expression-per-line */
-/* eslint-disable react/jsx-wrap-multilines */
 import { Divider, Table, Tabs } from 'antd';
 import { ColumnsType } from 'antd/lib/table/interface';
+import { ScaleButton } from 'components';
+import { ButtonIcon, ControlledInput, Label } from 'components/elements';
+import { useCurrentTransaction, useSiteSettings } from 'hooks';
+import { useProductCategories } from 'hooks/useProductCategories';
 import React, { useEffect, useState } from 'react';
-import { ScaleButton } from '../../../../components';
-import {
-	ButtonIcon,
-	ControlledInput,
-	Label,
-} from '../../../../components/elements';
-import { useSiteSettings } from '../../../../hooks';
-import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
-import { usePc } from '../../../../hooks/usePc';
-import { useProductCategories } from '../../../../hooks/useProductCategories';
-import { formatDateTime } from '../../../../utils/function';
+import { useWeightStore } from 'stores';
+import { formatDateTime } from 'utils/function';
 import './style.scss';
 import { WeightTextcodeModal } from './WeightTextcodeModal';
 
@@ -45,7 +38,7 @@ export const WeightProductSelection = ({
 	const [dataSource, setDataSource] = useState([]);
 
 	// CUSTOM HOOKS
-	const { weight } = usePc();
+	const weight = useWeightStore((state: any) => state.weight);
 	const { productCategories } = useProductCategories();
 	const { transactionProducts } = useCurrentTransaction();
 	const { data: siteSettings } = useSiteSettings();

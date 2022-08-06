@@ -4,7 +4,6 @@ const { autoUpdater } = require('electron-updater');
 const isDev = require('electron-is-dev');
 const log = require('electron-log');
 const path = require('path');
-const { exec } = require('child_process');
 
 //-------------------------------------------------------------------
 // Auto Updater
@@ -17,62 +16,73 @@ log.info('App starting...');
 //-------------------------------------------------------------------
 // Initialization
 //-------------------------------------------------------------------
-let mainWindow;
-function createWindow() {
-	if (isDev) {
-		require('./server/server-dev');
-	} else {
-		require('../build/server/server-prod');
-	}
+function logStatus(text) {
+	log.info(text);
 
+	if (mainWindow) {
+		mainWindow.webContents.send('message', text);
+	}
+}
+
+let mainWindow;
+let splashWindow;
+function createWindow() {
+	// Splash screen
+	splashWindow = new BrowserWindow({
+		width: 600,
+		height: 450,
+		transparent: true,
+		frame: false,
+		alwaysOnTop: true,
+	});
+	splashWindow.loadURL(`file://${__dirname}/splash.html`);
+
+	// Main screen
 	mainWindow = new BrowserWindow({
 		width: 800,
 		height: 600,
 		show: false,
 	});
 
-	mainWindow.loadURL(
-		isDev
-			? 'http://localhost:3004'
-			: `file://${path.join(__dirname, '../build/index.html')}`,
-	);
+	setTimeout(() => {
+		mainWindow.loadURL(
+			isDev
+				? 'http://localhost:3004'
+				: `file://${path.join(__dirname, '../build/index.html')}`,
+		);
+	}, 8000);
 
 	mainWindow.once('ready-to-show', () => {
+		splashWindow.destroy();
 		mainWindow.maximize();
 		mainWindow.show();
 	});
 
 	mainWindow.on('closed', () => {
 		mainWindow = null;
+		splashWindow = null;
 	});
 
-	// if (!isDev) {
-	// 	// Start API
-	// 	const controller = new AbortController();
-	// 	const { signal } = controller;
+	startServer();
+}
 
-	// 	mainWindow.once('ready-to-show', () => {
-	// 		const API_PATH = path.join(process.resourcesPath, 'api');
-	// 		exec(
-	// 			`cd "${API_PATH}" && python manage.py runserver 0.0.0.0:8000`,
-	// 			{ signal },
-	// 			(error, stdout, stderr) => {
-	// 				if (error) {
-	// 					logStatus(`API Err: ${error}`);
-	// 					return;
-	// 				}
+//-------------------------------------------------------------------
+// Server
+//-------------------------------------------------------------------
+function startServer() {
+	let startScaleServer = null;
+	if (isDev) {
+		startScaleServer = require('./server/server-dev');
+	} else {
+		startScaleServer = require('../build/server/server-prod');
+	}
 
-	// 				logStatus(`API Out: ${stdout}`);
-	// 				logStatus(`API Err: ${stderr}`);
-	// 			},
-	// 		);
-	// 		logStatus('API: Started');
-	// 	});
-
-	// 	mainWindow.once('closed', () => {
-	// 		controller.abort();
-	// 	});
-	// }
+	const scaleAndPrinterPath = path.join(
+		process.resourcesPath,
+		'scale',
+		'Scale and Printer.exe',
+	);
+	startScaleServer(scaleAndPrinterPath);
 }
 
 process.on('uncaughtException', (error) => {
@@ -105,11 +115,6 @@ if (!gotTheLock) {
 //
 // We must only perform auto update in Windows OS
 //-------------------------------------------------------------------
-
-function logStatus(text) {
-	log.info(text);
-	mainWindow.webContents.send('message', text);
-}
 if (process.platform === 'win32') {
 	autoUpdater.on('checking-for-update', () => {
 		logStatus('Checking for update...');

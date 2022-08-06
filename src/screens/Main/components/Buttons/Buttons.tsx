@@ -2,17 +2,16 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { message, Modal } from 'antd';
-import React, { useCallback } from 'react';
-import { ScaleButton } from '../../../../components';
-import { NO_INDEX_SELECTED } from '../../../../global/constants';
+import { ScaleButton } from 'components';
 import {
 	discountTypes,
 	markdownTypes,
+	NO_INDEX_SELECTED,
 	productCategoryTypes,
-	request,
-} from '../../../../global/types';
-import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
-import { usePc } from '../../../../hooks/usePc';
+} from 'global';
+import { useTare, useZero } from 'hooks';
+import { useCurrentTransaction } from 'hooks/useCurrentTransaction';
+import React, { useCallback } from 'react';
 import './style.scss';
 
 interface Props {
@@ -37,7 +36,8 @@ export const Buttons = ({
 		editProduct,
 		resetTransaction,
 	} = useCurrentTransaction();
-	const { recalibrate } = usePc();
+	const { mutateAsync: tare } = useTare();
+	const { mutateAsync: zero } = useZero();
 
 	// METHODS
 	const isTempCheckoutDisabled = useCallback(
@@ -131,7 +131,7 @@ export const Buttons = ({
 	// 	);
 	// };
 
-	const onReset = () => {
+	const handleReset = () => {
 		Modal.confirm({
 			className: 'EJJYModal',
 			title: 'Reset Confirmation',
@@ -143,24 +143,38 @@ export const Buttons = ({
 		});
 	};
 
-	const onRecalibrate = () => {
-		recalibrate(({ status }) => {
-			if (status === request.SUCCESS) {
-				message.success('Scale recalibrated successfully!');
-			} else if (status === request.ERROR) {
-				message.error('An error occurred while recalibrating scale.');
-			}
-		});
-	};
-
 	return (
 		<>
 			<div className="Buttons">
-				<ScaleButton
-					className="Buttons_btnRecalibrate"
-					title="Tare"
-					onClick={onRecalibrate}
-				/>
+				<div className="Buttons_btnWrapper">
+					<ScaleButton
+						className="Buttons_btnTare"
+						title="Tare"
+						onClick={() => {
+							tare()
+								.then(() => {
+									message.success('Scale tare was executed successfully!');
+								})
+								.catch(() => {
+									message.error('An error occurred while recalibrating scale.');
+								});
+						}}
+					/>
+
+					<ScaleButton
+						className="Buttons_btnZero"
+						title="Zero"
+						onClick={() => {
+							zero()
+								.then(() => {
+									message.success('Scale zero was executed  successfully!');
+								})
+								.catch(() => {
+									message.error('An error occurred while recalibrating scale.');
+								});
+						}}
+					/>
+				</div>
 
 				{isWithDiscount() ? (
 					<ScaleButton
@@ -203,7 +217,7 @@ export const Buttons = ({
 					className="Buttons_btnReset"
 					disabled={transactionProducts.length === 0}
 					title="Reset"
-					onClick={onReset}
+					onClick={handleReset}
 				/>
 
 				<ScaleButton

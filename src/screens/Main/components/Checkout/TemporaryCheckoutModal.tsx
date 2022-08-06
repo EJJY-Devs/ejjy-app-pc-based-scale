@@ -1,20 +1,14 @@
 import { message, Modal, Spin } from 'antd';
+import { Button, ControlledInput, Label } from 'components/elements';
+import { productCategoryTypes, request } from 'global';
+import {
+	useAuth,
+	useCurrentTransaction,
+	usePrintTransaction,
+	useTransactions,
+} from 'hooks';
 import React, { useCallback, useEffect, useRef } from 'react';
-import {
-	Button,
-	ControlledInput,
-	Label,
-} from '../../../../components/elements';
-import { productCategoryTypes, request } from '../../../../global/types';
-import { useAuth } from '../../../../hooks/useAuth';
-import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
-import { usePc } from '../../../../hooks/usePc';
-import { useTransactions } from '../../../../hooks/useTransactions';
-import {
-	numberWithCommas,
-	standardRound,
-	formatZeroToO,
-} from '../../../../utils/function';
+import { formatZeroToO, numberWithCommas, standardRound } from 'utils/function';
 import './style.scss';
 
 interface Props {
@@ -28,7 +22,8 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 
 	// CUSTOM HOOKS
 	const { user } = useAuth();
-	const { printTransaction, status: pcStatus } = usePc();
+	const { mutateAsync: printTranscation, isLoading: isPrintingTransaction } =
+		usePrintTransaction();
 	const { transactionProducts, editProduct } = useCurrentTransaction();
 	const { createTransaction, status: transactionStatus } = useTransactions();
 
@@ -91,22 +86,19 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 						0,
 					);
 
-					printTransaction(
-						{
-							transactionId: `T_${response.id}`,
-							totalPrice: `P${formatZeroToO(standardRound(total))}`,
-							branch: 'TEST',
-						},
-						({ status: printTransactionStatus }) => {
-							if (printTransactionStatus === request.SUCCESS) {
-								updateCheckedOutProducts();
-								onClose();
-								message.success('Transaction was created successfully.');
-							} else if (printTransactionStatus === request.ERROR) {
-								message.error('An error occurred while printing transaction.');
-							}
-						},
-					);
+					printTranscation({
+						branch: 'TEST',
+						totalPrice: `P${formatZeroToO(standardRound(total))}`,
+						transactionId: `T_${response.id}`,
+					})
+						.then(() => {
+							updateCheckedOutProducts();
+							onClose();
+							message.success('Transaction was created successfully.');
+						})
+						.catch(() => {
+							message.error('An error occurred while printing transaction.');
+						});
 				} else if (createTransactionStatus === request.ERROR) {
 					message.error('An error occurred while creating transaction.');
 				}
@@ -125,8 +117,10 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 			onCancel={onClose}
 		>
 			<Spin
-				size="large"
-				spinning={[transactionStatus, pcStatus].includes(request.REQUESTING)}
+				spinning={
+					[transactionStatus].includes(request.REQUESTING) ||
+					isPrintingTransaction
+				}
 			>
 				<div className="form">
 					<div className="product-list">

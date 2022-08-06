@@ -1,5 +1,4 @@
-/* eslint-disable */
-(function () {
+module.exports =  function (scaleAndPrinterPath) {
   const path = require("path");
 	const express = require('express');
 	const cors = require('cors');
@@ -13,7 +12,6 @@
 	});
 
 	// Initiate Scale and Printer exe
-  const scaleAndPrinterPath = path.join(process.resourcesPath, "scale","Scale and Printer.exe");
 	let process = null;
 	fs.stat(scaleAndPrinterPath, function (err, stat) {
 		if (!err) {
@@ -66,6 +64,18 @@
 		process.stdin.write(`print ${transactionId} ${totalPrice} ${branch}\r\n`);
 	});
 
+  app.post('/tare', cors(), (req, res, next) => {
+		if (!process) {
+			res.status(500).send('Error');
+			return;
+		}
+
+		process.stdout.once('data', function () {
+			res.json(true);
+		});
+		process.stdin.write('tare\r\n');
+	});
+
 	app.post('/zero', cors(), (req, res, next) => {
 		if (!process) {
 			res.status(500).send('Error');
@@ -77,6 +87,4 @@
 		});
 		process.stdin.write('zero\r\n');
 	});
-
-	module.exports = app;
-})();
+};

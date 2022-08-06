@@ -7,7 +7,6 @@ import authReducer, { key as AUTH_KEY, types as authTypes } from './auth';
 import currentTransactionReducer, {
 	key as CURRENT_TRANSACTION_KEY,
 } from './current-transaction';
-import pcReducer, { key as PC_KEY } from './pc';
 import productCategoriesReducer, {
 	key as PRODUCT_CATEGORIES_KEY,
 } from './product-categories';
@@ -17,7 +16,6 @@ const appReducer = combineReducers({
 	[AUTH_KEY]: authReducer,
 	[PRODUCT_CATEGORIES_KEY]: productCategoriesReducer,
 	[CURRENT_TRANSACTION_KEY]: currentTransactionReducer,
-	[PC_KEY]: pcReducer,
 });
 
 export default (state, action) => {

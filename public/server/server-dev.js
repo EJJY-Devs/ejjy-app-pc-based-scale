@@ -1,8 +1,6 @@
-/* eslint-disable */
-(function () {
+module.exports = function (scaleAndPrinterPath) {
 	const express = require('express');
 	const cors = require('cors');
-	const fs = require('fs');
 	const app = express();
 
 	app.use(
@@ -29,9 +27,11 @@
 		res.json(true);
 	});
 
-	app.post('/zero', (req, res, next) => {
+	app.post('/tare', (req, res, next) => {
 		res.json(true);
 	});
 
-	module.exports = app;
-})();
+  app.post('/zero', (req, res, next) => {
+		res.json(true);
+	});
+};
