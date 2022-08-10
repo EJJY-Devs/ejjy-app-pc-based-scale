@@ -4,6 +4,7 @@ import { ScaleButton } from 'components';
 import { ButtonIcon, ControlledInput, Label } from 'components/elements';
 import { useCurrentTransaction, useSiteSettings } from 'hooks';
 import { useProductCategories } from 'hooks/useProductCategories';
+import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useWeightStore } from 'stores';
 import { formatDateTime } from 'utils/function';
@@ -102,7 +103,7 @@ export const WeightProductSelection = ({
 				<Label id="weight" label="Weight" spacing />
 				<ControlledInput
 					className="WeightProductSelection_inputWeight"
-					value={weight.toFixed(3)}
+					value={_.round(weight, 3)}
 					disabled
 					onChange={() => null}
 				/>
