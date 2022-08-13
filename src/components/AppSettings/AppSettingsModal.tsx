@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const AppSettingsModal = ({ onClose }: Props) => {
-	const onSubmit = (data) => {
+	const handleSubmit = (data) => {
 		localStorage.setItem(APP_BRANCH_SERVER_URL_KEY, data.branchServerUrl);
 		localStorage.setItem(APP_BRIGHTNESS_KEY, data.brightness);
 		localStorage.setItem(APP_PRICE_CODE_FEATURE_KEY, data.priceCodeFeature);
@@ -47,7 +47,7 @@ export const AppSettingsModal = ({ onClose }: Props) => {
 				brightness={getAppBrightness()}
 				priceCodeFeature={getPriceCodeFeature()}
 				onClose={close}
-				onSubmit={onSubmit}
+				onSubmit={handleSubmit}
 			/>
 		</Modal>
 	);

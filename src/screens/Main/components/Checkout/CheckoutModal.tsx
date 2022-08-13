@@ -41,7 +41,7 @@ export const CheckoutModal = ({ visible, onClose }: Props) => {
 		return numberWithCommas(standardRound(total));
 	}, [transactionProducts]);
 
-	const onSubmit = () => {
+	const handleSubmit = () => {
 		resetTransaction();
 		onClose();
 	};
@@ -78,7 +78,7 @@ export const CheckoutModal = ({ visible, onClose }: Props) => {
 						text="Proceed"
 						type="submit"
 						variant="primary"
-						onClick={onSubmit}
+						onClick={handleSubmit}
 					/>
 				</div>
 			</div>

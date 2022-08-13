@@ -12,7 +12,7 @@ const FormSlider = ({ id, className, onChange }: Props) => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [field, , helpers] = useField(id);
 
-	const onChangeSlider = (value) => {
+	const handleChangeSlider = (value) => {
 		helpers.setValue(value);
 
 		if (onChange) {
@@ -30,7 +30,7 @@ const FormSlider = ({ id, className, onChange }: Props) => {
 			step={5}
 			tipFormatter={formatter}
 			value={field.value}
-			onChange={onChangeSlider}
+			onChange={handleChangeSlider}
 		/>
 	);
 };

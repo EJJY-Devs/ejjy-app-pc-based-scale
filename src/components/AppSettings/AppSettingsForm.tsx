@@ -42,7 +42,7 @@ export const AppSettingsForm = ({
 		[branchServerUrl, brightness],
 	);
 
-	const onChangeSlider = (value) => {
+	const handleChangeSlider = (value) => {
 		document.querySelector('html').style.filter = `brightness(${value}%)`;
 	};
 
@@ -68,7 +68,7 @@ export const AppSettingsForm = ({
 
 						<Col span={24}>
 							<Label id="brightness" label="Brightness" spacing />
-							<FormSlider id="brightness" onChange={onChangeSlider} />
+							<FormSlider id="brightness" onChange={handleChangeSlider} />
 							<ErrorMessage
 								name="brightness"
 								render={(error) => <FieldError error={error} />}

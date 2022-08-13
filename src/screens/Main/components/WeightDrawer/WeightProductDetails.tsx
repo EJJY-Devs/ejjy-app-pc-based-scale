@@ -26,7 +26,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 		useCurrentTransaction();
 
 	// METHODS
-	const onPrintAndAddCart = () => {
+	const handlePrintAndAddCart = () => {
 		onPrint(() => {
 			addProduct({ ...currentProduct, weight });
 			setCurrentProduct(null);
@@ -223,7 +223,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 								src={require('../../../../assets/images/icon-print-and-add-cart.svg')}
 							/>
 						}
-						onClick={onPrintAndAddCart}
+						onClick={handlePrintAndAddCart}
 					/>
 				</div>
 			</div>

@@ -53,7 +53,7 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		}
 	};
 
-	const onPrint = (onSuccess = null) => {
+	const handlePrint = (onSuccess = null) => {
 		// Get total
 		const total = standardRound(currentProduct.price_per_piece * weight);
 
@@ -98,7 +98,7 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		})
 			.then(() => {
 				message.success('Successfully printed product details.');
-				onSuccess();
+				onSuccess?.();
 			})
 			.catch(() => {
 				message.error('An error occurred while printing the product details');
@@ -109,7 +109,7 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		<Spin spinning={isPrintingProduct} wrapperClassName="WeightDrawer">
 			<div className="WeightDrawer_container">
 				{currentProduct ? (
-					<WeightProductDetails onPrint={onPrint} />
+					<WeightProductDetails onPrint={handlePrint} />
 				) : (
 					<WeightProductSelection
 						branchProducts={branchProducts}
