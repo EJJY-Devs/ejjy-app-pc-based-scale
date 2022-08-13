@@ -210,8 +210,13 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 				</Space>
 
 				<div className="WeightProductDetails_btnGroup">
-					<ScaleButton title="Print" onClick={() => onPrint()} />
 					<ScaleButton
+						disabled={weight === 0}
+						title="Print"
+						onClick={() => onPrint()}
+					/>
+					<ScaleButton
+						disabled={weight === 0}
 						title={
 							<img
 								alt="icon"

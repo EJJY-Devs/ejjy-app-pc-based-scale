@@ -1,8 +1,8 @@
 @import '../../assets/styles/main';
 
 .ScaleButton {
-	@include font(25px, bold);
-	padding: 15px 10px;
+	@include font(1.25rem, bold);
+	padding: 12px 8px;
 	background: $color-gray;
 	border: 0;
 	border-radius: 10px;
