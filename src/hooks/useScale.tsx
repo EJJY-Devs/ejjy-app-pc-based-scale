@@ -1,4 +1,5 @@
 import { wrapServiceWithCatch } from 'hooks/helper';
+import _ from 'lodash';
 import { useMutation, useQuery } from 'react-query';
 import { ScaleService } from 'services';
 import { useWeightStore } from 'stores';
@@ -16,7 +17,9 @@ export const useWeight = () => {
 			refetchIntervalInBackground: true,
 			notifyOnChangeProps: ['data'],
 			onSuccess: ({ data }) => {
-				setWeight(data);
+				setWeight({
+					weight: _.round(data.weight, 3),
+				});
 			},
 		},
 	);

@@ -1,6 +1,6 @@
 import { message } from 'antd';
 import dayjs from 'dayjs';
-import { isArray, isNaN, isString, memoize, round, toString } from 'lodash';
+import _, { isArray, isNaN, isString, memoize, round, toString } from 'lodash';
 import {
 	APP_BRANCH_SERVER_URL_KEY,
 	APP_BRIGHTNESS_KEY,
@@ -108,3 +108,5 @@ export const formatInPeso = (value) => {
 
 	return isNaN(x) ? EMPTY_CELL : `₱${numberWithCommas(standardRound(x))}`;
 };
+
+export const formatWeight = (weight) => Number(weight).toFixed(3);

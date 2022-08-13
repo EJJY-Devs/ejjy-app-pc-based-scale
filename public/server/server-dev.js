@@ -16,7 +16,7 @@ module.exports = function (scaleAndPrinterPath) {
 
 	// Endpoints
 	app.get('/weight', (req, res, next) => {
-		res.json({ weight: parseFloat('0') });
+		res.json({ weight: parseFloat('1.1807') });
 	});
 
 	app.post('/print-product', (req, res, next) => {

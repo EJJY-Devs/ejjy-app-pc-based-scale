@@ -6,7 +6,7 @@ import { discountTypes, markdownTypes } from 'global';
 import { useCurrentTransaction } from 'hooks';
 import React, { useCallback } from 'react';
 import { useWeightStore } from 'stores';
-import { formatInPeso } from 'utils/function';
+import { formatInPeso, formatWeight } from 'utils/function';
 import './style.scss';
 
 interface Props {
@@ -143,7 +143,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 						<Label label="Weight" spacing />
 						<ControlledInput
 							className="WeightProductDetails_inputGroup_input"
-							value={weight.toFixed(3)}
+							value={formatWeight(weight)}
 							disabled
 							onChange={() => null}
 						/>

@@ -9,6 +9,7 @@ import React, { useEffect } from 'react';
 import { useWeightStore } from 'stores';
 import {
 	formatPrintDetails,
+	formatWeight,
 	formatZeroToO,
 	getPriceCodeFeature,
 	standardRound,
@@ -57,9 +58,9 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		const total = standardRound(currentProduct.price_per_piece * weight);
 
 		// Get weight
-		const roundedWeight = _.round(Number(weight), 3);
+		const roundedWeight = formatWeight(weight);
 		const formattedWeight = _.padStart(
-			roundedWeight.toFixed(4).replace(/\./g, ''),
+			`${roundedWeight.replace('.', '')}0`,
 			6,
 			'0',
 		);
@@ -78,9 +79,18 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		// Get code
 		const code = currentProduct.selling_barcode || currentProduct.barcode;
 
+		console.log('print product', {
+			name: formatPrintDetails(currentProduct.name),
+			weight: `${formatZeroToO(roundedWeight)}kg`,
+			price: `P${formatZeroToO(currentProduct.price_per_piece.toFixed(2))}`,
+			totalPrice: `P${formatZeroToO(total)}`,
+			code: `${priceCode}${code}${formattedWeight}`,
+			branch: formatPrintDetails(user?.branch?.name),
+		});
+
 		printProduct({
 			name: formatPrintDetails(currentProduct.name),
-			weight: `${formatZeroToO(roundedWeight.toFixed(3))}kg`,
+			weight: `${formatZeroToO(roundedWeight)}kg`,
 			price: `P${formatZeroToO(currentProduct.price_per_piece.toFixed(2))}`,
 			totalPrice: `P${formatZeroToO(total)}`,
 			code: `${priceCode}${code}${formattedWeight}`,

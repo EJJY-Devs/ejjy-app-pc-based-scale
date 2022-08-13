@@ -1,8 +1,7 @@
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
-import _ from 'lodash';
 import React from 'react';
-import { formatInPeso } from 'utils/function';
+import { formatInPeso, formatWeight } from 'utils/function';
 import './style.scss';
 
 interface Props {
@@ -32,7 +31,7 @@ export const MainTableName = ({ product }: Props) => {
 			</div>
 
 			<div className="MainTableName_quantities">
-				{`${_.round(weight, 3)} x ${price}`}
+				{`${formatWeight(weight)} x ${price}`}
 				{productDiscount}
 			</div>
 		</div>
