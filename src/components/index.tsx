@@ -1,5 +1,5 @@
 export * from './AuthForm/AuthForm';
-export * from './Connectivity/Connectivity';
+export * from './AppIcons';
 export * from './Container/Container';
 export * from './DiscountModal/DiscountModal';
 export * from './RequestErrors/RequestErrors';

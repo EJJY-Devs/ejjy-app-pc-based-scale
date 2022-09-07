@@ -1,4 +1,4 @@
-@import './variables';
+@use './variables' as *;
 
 @mixin box-shadow($top, $left, $blur, $color) {
 	-webkit-box-shadow: $top $left $blur $color;
@@ -113,8 +113,7 @@
 	flex-direction: $direction;
 }
 
-@mixin font($size: 16px, $weight: normal, $family: $font-primary) {
-	font-family: $font-primary;
+@mixin font($size: 1rem, $weight: normal) {
 	font-weight: $weight;
 	font-size: $size;
 	line-height: 100%;

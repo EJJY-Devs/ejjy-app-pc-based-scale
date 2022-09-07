@@ -1,4 +1,4 @@
-@import '../../assets/styles/main';
+@use 'assets/styles' as *;
 
 .TableProducts {
 	width: 100%;
@@ -22,7 +22,7 @@
 				position: sticky;
 				top: 0;
 				padding: 25px 15px;
-				@include font(18px, bold);
+				@include font(1rem, bold);
 				color: $color-dark;
 				background-color: $color-main-background;
 			}
@@ -38,7 +38,7 @@
 				}
 
 				td {
-					@include font(18px, 600);
+					@include font(1rem, 600);
 					padding: 10px 15px;
 					color: $color-dark-gray;
 
