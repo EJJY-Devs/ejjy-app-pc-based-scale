@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Route, Switch } from 'react-router-dom';
+import NetworkError from 'screens/NetworkError';
 import npmPackage from '../package.json';
 import { AppIcons } from './components';
 import { APP_TITLE } from './global/constants';
@@ -30,6 +31,7 @@ const App = () => {
 			<Switch>
 				<Route component={Login} path="/" exact />
 				<Route component={Main} path="/main" exact />
+				<Route component={NetworkError} path="/error" exact />
 			</Switch>
 		</>
 	);
