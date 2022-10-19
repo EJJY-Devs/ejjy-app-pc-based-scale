@@ -6,7 +6,6 @@ import npmPackage from '../package.json';
 import { AppIcons } from './components';
 import { APP_TITLE } from './global/constants';
 import { useSiteSettings } from './hooks';
-import Login from './screens/Login/Login';
 import Main from './screens/Main/Main';
 
 const refetchQueryData = {
@@ -29,8 +28,8 @@ const App = () => {
 			<AppIcons />
 
 			<Switch>
-				<Route component={Login} path="/" exact />
-				<Route component={Main} path="/main" exact />
+				{/* <Route component={Login} path="/" exact /> */}
+				<Route component={Main} path="/" exact />
 				<Route component={NetworkError} path="/error" exact />
 			</Switch>
 		</>

@@ -32,9 +32,8 @@
 	margin-top: 20px;
 
 	&_setUrl {
-		position: absolute;
-		left: 15px;
-		color: $color-dark-gray;
+		position: absolute !important;
+		left: 0;
 		margin-bottom: 0;
 	}
 

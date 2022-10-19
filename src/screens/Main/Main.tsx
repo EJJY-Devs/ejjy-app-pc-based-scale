@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-one-expression-per-line */
-import { message, Spin } from 'antd';
+import { Button, message, Spin } from 'antd';
 import { Container } from 'components';
 import { AppSettingsModal } from 'components/AppSettings/AppSettingsModal';
 import { request } from 'global';
@@ -10,7 +10,7 @@ import { useAuth } from 'hooks/useAuth';
 import { useBranchProducts } from 'hooks/useBranchProducts';
 import { useCurrentTransaction } from 'hooks/useCurrentTransaction';
 import { useProductCategories } from 'hooks/useProductCategories';
-import { isEmpty, isEqual } from 'lodash';
+import { isEqual } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Buttons } from './components/Buttons/Buttons';
@@ -123,11 +123,12 @@ const Main = () => {
 		}
 	}, [branchProducts]);
 
-	useEffect(() => {
-		if (isEmpty(user)) {
-			history.replace('/');
-		}
-	}, [user]);
+	// NOTE: Temporarily disable the login screen
+	// useEffect(() => {
+	// 	if (isEmpty(user)) {
+	// 		history.replace('/');
+	// 	}
+	// }, [user]);
 
 	const isLoading =
 		(isInitialFetch && branchProductsStatus === request.REQUESTING) ||
@@ -163,12 +164,14 @@ const Main = () => {
 			</section>
 
 			<div className="Footer">
-				<h2
+				<Button
 					className="Footer_setUrl"
+					size="large"
+					type="link"
 					onClick={() => setAppSettingsModalVisible(true)}
 				>
-					Set Server URL
-				</h2>
+					Set App Settings
+				</Button>
 				<h1 className="Footer_storeTitle">
 					EJ &amp; JY WET MARKET AND ENTERPRISES
 				</h1>

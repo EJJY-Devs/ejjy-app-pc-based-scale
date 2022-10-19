@@ -70,7 +70,7 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 		createTransaction(
 			{
 				branchMachineId: null,
-				tellerId: user.id,
+				tellerId: user?.id, // TODO: Temporarily added a guard since login page is temporarily disabled
 				products: getCheckoutProducts().map((product) => ({
 					product_id: product.id,
 					quantity: Number(product.weight),
