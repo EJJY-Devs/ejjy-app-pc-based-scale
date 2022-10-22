@@ -18,7 +18,7 @@ const NetworkError = () => {
 		<div className="NetworkError">
 			<Result
 				extra={
-					<Button type="primary" onClick={() => history.push('/main')}>
+					<Button type="primary" onClick={() => history.push('/')}>
 						Reconnect
 					</Button>
 				}
