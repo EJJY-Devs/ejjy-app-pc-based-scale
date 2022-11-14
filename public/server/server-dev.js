@@ -1,6 +1,7 @@
 module.exports = function (scaleAndPrinterPath) {
 	const express = require('express');
 	const cors = require('cors');
+  const _ = require('lodash');
 	const app = express();
 
 	app.use(
@@ -16,7 +17,8 @@ module.exports = function (scaleAndPrinterPath) {
 
 	// Endpoints
 	app.get('/weight', (req, res, next) => {
-		res.json({ weight: parseFloat('0.1353') });
+    const weight = _.round(0.2255, 3);
+		res.json(weight);
 	});
 
 	app.post('/print-product', (req, res, next) => {

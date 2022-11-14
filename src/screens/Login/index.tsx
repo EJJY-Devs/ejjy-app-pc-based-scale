@@ -57,7 +57,7 @@ const Login = () => {
 						<Divider />
 
 						<Button
-							text="Set App Settings"
+							text="Edit App Settings"
 							variant="dark-gray"
 							block
 							onClick={() => setAppSettingsModalVisible(true)}

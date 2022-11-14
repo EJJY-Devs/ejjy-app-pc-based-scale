@@ -13,6 +13,7 @@ import { useProductCategories } from 'hooks/useProductCategories';
 import { isEqual } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { getBranchServerUrl } from 'utils/function';
 import { Buttons } from './components/Buttons/Buttons';
 import { CheckoutModal } from './components/Checkout/CheckoutModal';
 import { TemporaryCheckoutModal } from './components/Checkout/TemporaryCheckoutModal';
@@ -32,6 +33,9 @@ const Main = () => {
 	const [branchProducts, setBranchProducts] = useState([]);
 	const [isInitialFetch, setIsInitialFetch] = useState(true);
 
+	// VARIABLES
+	const branchServerURL = getBranchServerUrl();
+
 	// REFS
 	const intervalRef = useRef(null);
 
@@ -42,6 +46,7 @@ const Main = () => {
 	const { isFetching: isConnectingNetwork, isSuccess: isNetworkSuccess } =
 		useNetwork({
 			options: {
+				enabled: !!branchServerURL,
 				retry: NETWORK_RETRY,
 				retryDelay: NETWORK_RETRY_DELAY_MS,
 				onError: () => {
@@ -59,6 +64,15 @@ const Main = () => {
 	const { currentProduct, setCurrentProduct } = useCurrentTransaction();
 
 	// METHODS
+	useEffect(() => {
+		if (!branchServerURL) {
+			history.push({
+				pathname: 'error',
+				state: true,
+			});
+		}
+	}, [branchServerURL]);
+
 	useEffect(() => {
 		if (isNetworkSuccess) {
 			const fetchBranchProducts = () => {

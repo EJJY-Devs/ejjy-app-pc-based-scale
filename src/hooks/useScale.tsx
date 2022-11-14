@@ -17,9 +17,7 @@ export const useWeight = () => {
 			refetchIntervalInBackground: true,
 			notifyOnChangeProps: ['data'],
 			onSuccess: ({ data }) => {
-				setWeight({
-					weight: _.round(data.weight, 3),
-				});
+				setWeight({ weight: data });
 			},
 		},
 	);

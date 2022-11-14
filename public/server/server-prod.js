@@ -3,6 +3,7 @@ module.exports =  function (scaleAndPrinterPath) {
 	const express = require('express');
 	const cors = require('cors');
 	const fs = require('fs');
+  const _ = require('lodash');
 	const app = express();
 
 	app.use(cors());
@@ -30,8 +31,8 @@ module.exports =  function (scaleAndPrinterPath) {
 		}
 
 		process.stdout.once('data', function (data) {
-			const weight = parseFloat(data.toString());
-			res.json({ weight });
+      const weight = _.round(parseFloat(data.toString()), 3);
+			res.json(weight);
 		});
 		process.stdin.write('getWeight\r\n');
 	});
