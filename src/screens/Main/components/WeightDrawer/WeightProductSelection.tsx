@@ -141,7 +141,6 @@ export const WeightProductSelection = ({
 
 					<ScaleButton
 						className="WeightProductSelection_btnInputAmount"
-						disabled={weight === 0}
 						title="Input Amount"
 						onClick={() => setLamasAmountModalVisible(true)}
 					/>
