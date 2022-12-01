@@ -1,6 +1,6 @@
 import { Divider, Table, Tabs } from 'antd';
 import { ColumnsType } from 'antd/lib/table/interface';
-import { ScaleButton } from 'components';
+import { LamasAmountModal, ScaleButton, WeightTextcodeModal } from 'components';
 import { ButtonIcon, ControlledInput, Label } from 'components/elements';
 import { useCurrentTransaction, useSiteSettings } from 'hooks';
 import { useProductCategories } from 'hooks/useProductCategories';
@@ -8,7 +8,6 @@ import React, { useEffect, useState } from 'react';
 import { useWeightStore } from 'stores';
 import { formatDateTime, formatWeight } from 'utils/function';
 import './style.scss';
-import { WeightTextcodeModal } from './WeightTextcodeModal';
 
 const columns: ColumnsType = [
 	{
@@ -35,6 +34,7 @@ export const WeightProductSelection = ({
 }: Props) => {
 	// STATES
 	const [textcodeModalVisible, setTextcodeModalVisible] = useState(false);
+	const [lamasAmountModalVisible, setLamasAmountModalVisible] = useState(false);
 	const [dataSource, setDataSource] = useState([]);
 
 	// CUSTOM HOOKS
@@ -131,12 +131,21 @@ export const WeightProductSelection = ({
 
 				<Divider />
 
-				<ScaleButton
-					className="WeightProductSelection_btnInputTextcode"
-					disabled={weight === 0}
-					title="Input Textcode"
-					onClick={() => setTextcodeModalVisible(true)}
-				/>
+				<div className="WeightProductSelection_btnWrapper">
+					<ScaleButton
+						className="WeightProductSelection_btnInputTextcode"
+						disabled={weight === 0}
+						title="Input Textcode"
+						onClick={() => setTextcodeModalVisible(true)}
+					/>
+
+					<ScaleButton
+						className="WeightProductSelection_btnInputAmount"
+						disabled={weight === 0}
+						title="Input Amount"
+						onClick={() => setLamasAmountModalVisible(true)}
+					/>
+				</div>
 			</div>
 
 			<WeightTextcodeModal
@@ -144,6 +153,10 @@ export const WeightProductSelection = ({
 				onClose={() => setTextcodeModalVisible(false)}
 				onSelectProduct={onSelectProduct}
 			/>
+
+			{lamasAmountModalVisible && (
+				<LamasAmountModal onClose={() => setLamasAmountModalVisible(false)} />
+			)}
 		</>
 	);
 };

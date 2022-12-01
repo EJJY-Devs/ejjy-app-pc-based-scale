@@ -29,6 +29,10 @@ module.exports = function (scaleAndPrinterPath) {
 		res.json(true);
 	});
 
+  app.post('/print-total', (req, res, next) => {
+		res.json(true);
+	});
+
 	app.post('/tare', (req, res, next) => {
 		res.json(true);
 	});

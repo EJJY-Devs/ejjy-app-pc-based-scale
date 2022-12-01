@@ -18,7 +18,7 @@ import { Buttons } from './components/Buttons/Buttons';
 import { CheckoutModal } from './components/Checkout/CheckoutModal';
 import { TemporaryCheckoutModal } from './components/Checkout/TemporaryCheckoutModal';
 import { MainTable } from './components/MainTable/MainTable';
-import { WeightDrawer } from './components/WeightDrawer/WeightDrawer';
+import { WeightDrawer } from './components/WeightDrawer';
 import './style.scss';
 
 const NETWORK_RETRY = 10;

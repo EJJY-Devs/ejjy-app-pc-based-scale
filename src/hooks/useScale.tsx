@@ -1,5 +1,4 @@
 import { wrapServiceWithCatch } from 'hooks/helper';
-import _ from 'lodash';
 import { useMutation, useQuery } from 'react-query';
 import { ScaleService } from 'services';
 import { useWeightStore } from 'stores';
@@ -15,7 +14,7 @@ export const useWeight = () => {
 		{
 			refetchInterval: REFETCH_INTERVAL_MS,
 			refetchIntervalInBackground: true,
-			notifyOnChangeProps: ['data'],
+			notifyOnChangeProps: [],
 			onSuccess: ({ data }) => {
 				setWeight({ weight: data });
 			},
@@ -46,5 +45,13 @@ export const usePrintTransaction = () =>
 			branch,
 			totalPrice,
 			transactionId,
+		}),
+	);
+
+export const usePrintTotal = () =>
+	useMutation<any, any, any>(({ branch, totalPrice }: any) =>
+		ScaleService.printTotal({
+			branch,
+			totalPrice,
 		}),
 	);

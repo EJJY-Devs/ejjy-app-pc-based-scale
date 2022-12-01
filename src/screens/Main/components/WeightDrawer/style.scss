@@ -76,7 +76,17 @@
 		flex: 1;
 	}
 
+	&_btnWrapper {
+		display: grid;
+		grid-template-columns: 0.7fr 0.3fr;
+		column-gap: 1em;
+	}
+
 	&_btnInputTextcode {
+		height: $button-height;
+	}
+
+	&_btnInputAmount {
 		height: $button-height;
 	}
 
@@ -86,39 +96,5 @@
 		@include font(0.9rem, normal);
 		color: $color-secondary;
 		text-align: center;
-	}
-}
-
-.WeightTextcodeModal {
-	&_textcodeNumbers {
-		width: 100%;
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		grid-template-rows: repeat(5, auto);
-		column-gap: 10px;
-		row-gap: 10px;
-
-		&_input {
-			@include font(2.5rem, bold);
-			color: $color-dark;
-			text-align: center;
-			grid-column: 1 / span 3;
-		}
-
-		&_num {
-			font-size: 2rem;
-			height: 80px;
-
-			&0 {
-				grid-column: 1 / span 2;
-			}
-		}
-	}
-
-	&_btnGroup {
-		margin: 30px 0 0 0;
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		column-gap: 20px;
 	}
 }

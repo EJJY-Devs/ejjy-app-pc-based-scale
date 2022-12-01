@@ -16,6 +16,11 @@ interface PrintTransaction {
 	transactionId: number;
 }
 
+interface PrintTotal {
+	branch: string;
+	totalPrice: string;
+}
+
 const service = {
 	retrieveWeight: async () =>
 		axios.get('/weight', { baseURL: EXPRESS_API_URL }),
@@ -29,6 +34,9 @@ const service = {
 
 	printTransaction: async (body: PrintTransaction) =>
 		axios.post('/print-transaction', body, { baseURL: EXPRESS_API_URL }),
+
+	printTotal: async (body: PrintTotal) =>
+		axios.post('/print-total', body, { baseURL: EXPRESS_API_URL }),
 };
 
 export default service;

@@ -23,16 +23,15 @@ interface Props {
 }
 
 export const WeightDrawer = ({ branchProducts }: Props) => {
-	// STATES
-
 	// CUSTOM HOOKS
 	const weight = useWeightStore((state: any) => state.weight);
+
 	const { user } = useAuth();
+	useWeight();
 	const { mutateAsync: printProduct, isLoading: isPrintingProduct } =
 		usePrintProduct();
 	const { transactionProducts, currentProduct, setCurrentProduct } =
 		useCurrentTransaction();
-	useWeight();
 
 	// METHODS
 	useEffect(() => {
@@ -41,7 +40,7 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		}
 	}, [weight]);
 
-	const onSelectProduct = (product) => {
+	const handleSelectProduct = (product) => {
 		const foundProduct = transactionProducts.find(
 			({ id }) => id === product.id,
 		);
@@ -56,7 +55,6 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 	const handlePrint = (onSuccess = null) => {
 		// Get total
 		const total = standardRound(currentProduct.price_per_piece * weight);
-
 		// Get weight
 		const roundedWeight = formatWeight(weight);
 		const formattedWeight = _.padStart(
@@ -64,7 +62,6 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 			6,
 			'0',
 		);
-
 		// Get price code
 		let priceCode = '';
 		if (getPriceCodeFeature()) {
@@ -72,13 +69,10 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 				currentProduct.price_markdown?.type ||
 				currentProduct.markdownType ||
 				markdownTypes.REGULAR;
-
 			priceCode = priceCodes[type] || '';
 		}
-
 		// Get code
 		const code = currentProduct.selling_barcode || currentProduct.barcode;
-
 		console.log('print product', {
 			name: formatPrintDetails(currentProduct.name),
 			weight: `${formatZeroToO(roundedWeight)}kg`,
@@ -87,7 +81,6 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 			code: `${priceCode}${code}${formattedWeight}`,
 			branch: formatPrintDetails(user?.branch?.name),
 		});
-
 		printProduct({
 			name: formatPrintDetails(currentProduct.name),
 			weight: `${formatZeroToO(roundedWeight)}kg`,
@@ -113,7 +106,7 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 				) : (
 					<WeightProductSelection
 						branchProducts={branchProducts}
-						onSelectProduct={onSelectProduct}
+						onSelectProduct={handleSelectProduct}
 					/>
 				)}
 			</div>

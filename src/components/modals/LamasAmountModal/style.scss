@@ -1,0 +1,40 @@
+@use 'assets/styles' as *;
+
+.InputAmountModal {
+	&_textcodeNumbers {
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: repeat(5, auto);
+		column-gap: 10px;
+		row-gap: 10px;
+
+		&_input {
+			@include font(2.5rem, bold);
+			color: $color-dark;
+			text-align: center;
+			grid-column: 1 / span 3;
+		}
+
+		&_num {
+			font-size: 2rem;
+			height: 80px;
+
+			&0 {
+				grid-column: 1 / span 2;
+			}
+		}
+
+		&_clear:not(.ScaleButton__disabled) {
+			color: white !important;
+			background-color: $color-red !important;
+		}
+	}
+
+	&_btnGroup {
+		margin: 30px 0 0 0;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		column-gap: 20px;
+	}
+}

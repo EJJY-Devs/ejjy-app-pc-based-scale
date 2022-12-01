@@ -1,11 +1,11 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import { message, Modal } from 'antd';
+import { ScaleButton } from 'components';
+import { Button, ControlledInput } from 'components/elements';
+import { request } from 'global';
+import { useBranchProducts } from 'hooks/useBranchProducts';
+import { useCurrentTransaction } from 'hooks/useCurrentTransaction';
 import React, { useEffect, useState } from 'react';
-import { ScaleButton } from '../../../../components';
-import { Button, ControlledInput } from '../../../../components/elements';
-import { request } from '../../../../global/types';
-import { useBranchProducts } from '../../../../hooks/useBranchProducts';
-import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
 import './style.scss';
 
 const TEXTCODE_MAX_LENGTH = 10;
@@ -47,7 +47,7 @@ export const WeightTextcodeModal = ({
 		}
 	};
 
-	const onSubmit = () => {
+	const handleSubmit = () => {
 		if (textcode.length > 0) {
 			listBranchProducts({ search: textcode }, ({ status, data }) => {
 				if (status === request.SUCCESS) {
@@ -193,7 +193,7 @@ export const WeightTextcodeModal = ({
 					text="Submit"
 					type="submit"
 					variant="primary"
-					onClick={onSubmit}
+					onClick={handleSubmit}
 				/>
 			</div>
 		</Modal>

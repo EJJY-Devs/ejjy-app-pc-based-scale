@@ -65,6 +65,19 @@ module.exports =  function (scaleAndPrinterPath) {
 		process.stdin.write(`print ${transactionId} ${totalPrice} ${branch}\r\n`);
 	});
 
+  app.post('/print-total', cors(), (req, res, next) => {
+		if (!process) {
+			res.status(500).send('Error');
+			return;
+		}
+
+		const { totalPrice, branch } = req.body;
+		process.stdout.once('data', function () {
+			res.json(true);
+		});
+		process.stdin.write(`print ${totalPrice} ${branch}\r\n`);
+	});
+
   app.post('/tare', cors(), (req, res, next) => {
 		if (!process) {
 			res.status(500).send('Error');
