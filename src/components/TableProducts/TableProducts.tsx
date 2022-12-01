@@ -41,7 +41,7 @@ export const TableProducts = ({
 					<img
 						alt="logo"
 						className="placeholder"
-						src={require('../../assets/images/logo.jpg')}
+						src={require('../../assets/images/logo.png')}
 					/>
 				)}
 

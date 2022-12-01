@@ -37,7 +37,7 @@ const Login = () => {
 				<img
 					alt="logo"
 					className="Login_logo"
-					src={require('../../assets/images/logo.jpg')}
+					src={require('../../assets/images/logo.png')}
 				/>
 
 				<RequestErrors
