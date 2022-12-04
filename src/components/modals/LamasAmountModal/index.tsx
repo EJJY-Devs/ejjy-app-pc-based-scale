@@ -2,10 +2,10 @@
 import { message, Modal } from 'antd';
 import { ScaleButton } from 'components';
 import { Button, ControlledInput } from 'components/elements';
-import { useAuth, usePrintTotal } from 'hooks';
+import { usePrintTotal } from 'hooks';
 import React, { useCallback, useState } from 'react';
 import {
-	formatStringForPrinting,
+	formatPrintDetails,
 	formatZeroToO,
 	getBranchName,
 	getCompanyName,
@@ -55,8 +55,8 @@ export const LamasAmountModal = ({ onClose }: Props) => {
 		const totalAmount = Number(textcode);
 
 		await printTotal({
-			branchName: formatStringForPrinting(getBranchName()),
-			companyName: formatStringForPrinting(getCompanyName()),
+			branchName: formatPrintDetails(getBranchName()),
+			companyName: formatPrintDetails(getCompanyName()),
 			totalPrice: `P${formatZeroToO(totalAmount.toFixed(2))}`,
 		});
 

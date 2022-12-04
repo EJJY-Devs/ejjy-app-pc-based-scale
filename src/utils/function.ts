@@ -86,8 +86,15 @@ export const standardRound = (value) => _.round(round(value, 3), 2).toFixed(2);
 
 export const formatZeroToO = (value) => _.toString(value)?.replace(/0/g, 'O');
 
-export const formatStringForPrinting = (value) =>
-	_.toString(value)?.replaceAll(' ', '%');
+export const formatPrintDetails = (detail) => {
+	let formattedDetail = '';
+
+	if (detail) {
+		formattedDetail = detail?.replace(/\s/g, '%');
+	}
+
+	return formattedDetail;
+};
 
 export const convertIntoArray = (errors, prefixMessage = null) => {
 	const prefix = prefixMessage ? `${prefixMessage}: ` : '';
@@ -100,16 +107,6 @@ export const convertIntoArray = (errors, prefixMessage = null) => {
 	}
 
 	return array;
-};
-
-export const formatPrintDetails = (detail) => {
-	let formattedDetail = '';
-
-	if (detail) {
-		formattedDetail = detail?.replace(/\s/g, '%');
-	}
-
-	return formattedDetail;
 };
 
 export const formatInPeso = (value) => {
