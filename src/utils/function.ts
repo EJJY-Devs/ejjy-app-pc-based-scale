@@ -1,13 +1,15 @@
 import { message } from 'antd';
 import dayjs from 'dayjs';
-import _, { isArray, isNaN, isString, memoize, round, toString } from 'lodash';
 import {
+	APP_BRANCH_NAME_KEY,
 	APP_BRANCH_SERVER_URL_KEY,
 	APP_BRIGHTNESS_KEY,
+	APP_COMPANY_NAME_KEY,
 	APP_PRICE_CODE_FEATURE_KEY,
 	EMPTY_CELL,
-} from '../global/constants';
-import { userTypes } from '../global/types';
+	userTypes,
+} from 'global';
+import _, { isArray, isNaN, isString, memoize, round } from 'lodash';
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -28,10 +30,14 @@ export const showErrorMessages = (errors) => {
 
 // Local Storage Getters
 
+export const getBranchName = () => localStorage.getItem(APP_BRANCH_NAME_KEY);
+
 export const getBranchServerUrl = () =>
 	localStorage.getItem(APP_BRANCH_SERVER_URL_KEY);
 
 export const getAppBrightness = () => localStorage.getItem(APP_BRIGHTNESS_KEY);
+
+export const getCompanyName = () => localStorage.getItem(APP_COMPANY_NAME_KEY);
 
 export const getPriceCodeFeature = () =>
 	Number(localStorage.getItem(APP_PRICE_CODE_FEATURE_KEY));
@@ -76,9 +82,12 @@ export const formatDateTime = memoize((datetime) =>
 	dayjs.tz(datetime).format('MM/DD/YYYY h:mma'),
 );
 
-export const standardRound = (value) => round(round(value, 3), 2).toFixed(2);
+export const standardRound = (value) => _.round(round(value, 3), 2).toFixed(2);
 
-export const formatZeroToO = (value) => toString(value)?.replace(/0/g, 'O');
+export const formatZeroToO = (value) => _.toString(value)?.replace(/0/g, 'O');
+
+export const formatStringForPrinting = (value) =>
+	_.toString(value)?.replaceAll(' ', '%');
 
 export const convertIntoArray = (errors, prefixMessage = null) => {
 	const prefix = prefixMessage ? `${prefixMessage}: ` : '';

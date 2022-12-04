@@ -71,11 +71,11 @@ module.exports =  function (scaleAndPrinterPath) {
 			return;
 		}
 
-		const { totalPrice, branch } = req.body;
+		const { totalPrice, branchName, companyName } = req.body;
 		process.stdout.once('data', function () {
 			res.json(true);
 		});
-		process.stdin.write(`print ${totalPrice} ${branch}\r\n`);
+		process.stdin.write(`printTotal ${totalPrice} ${branchName} ${companyName}\r\n`);
 	});
 
   app.post('/tare', cors(), (req, res, next) => {

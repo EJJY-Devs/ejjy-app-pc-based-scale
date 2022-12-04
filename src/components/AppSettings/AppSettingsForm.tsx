@@ -1,45 +1,46 @@
-import { Col, Divider, Radio, Row, Space } from 'antd';
+import { Col, Divider, Input, Radio, Row, Space } from 'antd';
 import { ErrorMessage, Form, Formik } from 'formik';
 import React, { useCallback } from 'react';
 import * as Yup from 'yup';
-import {
-	Button,
-	FieldError,
-	FormInputLabel,
-	FormSlider,
-	Label,
-} from '../elements';
+import { Button, FieldError, FormSlider, Label } from '../elements';
 
 interface Props {
+	branchName: string;
 	branchServerUrl: string;
 	brightness: string;
-	priceCodeFeature: string | number;
-	onSubmit: any;
 	onClose: any;
+	onSubmit: any;
+	priceCodeFeature: string | number;
+	companyName: string;
 }
 
 export const AppSettingsForm = ({
+	branchName,
 	branchServerUrl,
 	brightness,
-	priceCodeFeature,
-	onSubmit,
+	companyName,
 	onClose,
+	onSubmit,
+	priceCodeFeature,
 }: Props) => {
 	// METHODS
 	const getFormDetails = useCallback(
 		() => ({
 			DefaultValues: {
+				branchName: branchName || '',
 				branchServerUrl: branchServerUrl || '',
 				brightness: brightness || 100,
+				companyName: companyName || '',
 				priceCodeFeature: priceCodeFeature || '0',
 			},
 			Schema: Yup.object().shape({
 				branchServerUrl: Yup.string().required().label('Branch Server URL'),
 				brightness: Yup.string().required().label('Brightness'),
+				companyName: Yup.string().required().label('Company Name'),
 				priceCodeFeature: Yup.string().required().label('Price Code Feature'),
 			}),
 		}),
-		[branchServerUrl, brightness],
+		[branchName, branchServerUrl, brightness, companyName],
 	);
 
 	const handleChangeSlider = (value) => {
@@ -57,9 +58,43 @@ export const AppSettingsForm = ({
 		>
 			{({ setFieldValue, values }) => (
 				<Form>
-					<Row gutter={[15, 15]}>
+					<Row gutter={[16, 16]}>
 						<Col span={24}>
-							<FormInputLabel id="branchServerUrl" label="Branch Server URL" />
+							<Label label="Branch Name" spacing />
+							<Input
+								value={values['branchName']}
+								onChange={(e) => {
+									setFieldValue('branchName', e.target.value);
+								}}
+							/>
+							<ErrorMessage
+								name="branchName"
+								render={(error) => <FieldError error={error} />}
+							/>
+						</Col>
+
+						<Col span={24}>
+							<Label label="Company Name" spacing />
+							<Input
+								value={values['companyName']}
+								onChange={(e) => {
+									setFieldValue('companyName', e.target.value);
+								}}
+							/>
+							<ErrorMessage
+								name="companyName"
+								render={(error) => <FieldError error={error} />}
+							/>
+						</Col>
+
+						<Col span={24}>
+							<Label label="Branch Server URL" spacing />
+							<Input
+								value={values['branchServerUrl']}
+								onChange={(e) => {
+									setFieldValue('branchServerUrl', e.target.value);
+								}}
+							/>
 							<ErrorMessage
 								name="branchServerUrl"
 								render={(error) => <FieldError error={error} />}
@@ -67,7 +102,7 @@ export const AppSettingsForm = ({
 						</Col>
 
 						<Col span={24}>
-							<Label id="brightness" label="Brightness" spacing />
+							<Label label="Brightness" spacing />
 							<FormSlider id="brightness" onChange={handleChangeSlider} />
 							<ErrorMessage
 								name="brightness"
@@ -87,7 +122,6 @@ export const AppSettingsForm = ({
 									},
 								]}
 								optionType="button"
-								size="large"
 								value={values.priceCodeFeature}
 								onChange={(e) => {
 									setFieldValue('priceCodeFeature', e.target.value);

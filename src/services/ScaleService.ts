@@ -17,7 +17,8 @@ interface PrintTransaction {
 }
 
 interface PrintTotal {
-	branch: string;
+	branchName: string;
+	companyName: string;
 	totalPrice: string;
 }
 

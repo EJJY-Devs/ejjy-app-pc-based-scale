@@ -4,7 +4,12 @@ import { ScaleButton } from 'components';
 import { Button, ControlledInput } from 'components/elements';
 import { useAuth, usePrintTotal } from 'hooks';
 import React, { useCallback, useState } from 'react';
-import { formatPrintDetails, formatZeroToO } from 'utils/function';
+import {
+	formatStringForPrinting,
+	formatZeroToO,
+	getBranchName,
+	getCompanyName,
+} from 'utils/function';
 import './style.scss';
 
 const DECIMAL_NUMBER_LIMIT = 2;
@@ -20,8 +25,8 @@ export const LamasAmountModal = ({ onClose }: Props) => {
 	const [textcode, setTextcode] = useState('');
 
 	// CUSTOM HOOKS
-	const { user } = useAuth();
-	const { mutateAsync: printTotal } = usePrintTotal();
+	const { mutateAsync: printTotal, isLoading: isPrintingTotal } =
+		usePrintTotal();
 
 	// METHODS
 	const handleNumpadClick = (key) => {
@@ -50,7 +55,8 @@ export const LamasAmountModal = ({ onClose }: Props) => {
 		const totalAmount = Number(textcode);
 
 		await printTotal({
-			branch: formatPrintDetails(user?.branch?.name),
+			branchName: formatStringForPrinting(getBranchName()),
+			companyName: formatStringForPrinting(getCompanyName()),
 			totalPrice: `P${formatZeroToO(totalAmount.toFixed(2))}`,
 		});
 
@@ -157,12 +163,14 @@ export const LamasAmountModal = ({ onClose }: Props) => {
 			<div className="InputAmountModal_btnGroup">
 				<Button
 					className="InputAmountModal_btnGroup_btnCancel"
+					disabled={isPrintingTotal}
 					size="lg"
 					text="Cancel"
 					type="button"
 					onClick={onClose}
 				/>
 				<Button
+					loading={isPrintingTotal}
 					size="lg"
 					text="Submit"
 					type="submit"

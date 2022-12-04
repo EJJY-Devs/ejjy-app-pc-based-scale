@@ -49,9 +49,10 @@ export const usePrintTransaction = () =>
 	);
 
 export const usePrintTotal = () =>
-	useMutation<any, any, any>(({ branch, totalPrice }: any) =>
+	useMutation<any, any, any>(({ branchName, companyName, totalPrice }: any) =>
 		ScaleService.printTotal({
-			branch,
+			branchName,
+			companyName,
 			totalPrice,
 		}),
 	);
