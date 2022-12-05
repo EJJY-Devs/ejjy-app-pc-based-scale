@@ -11,6 +11,8 @@ import {
 	formatPrintDetails,
 	formatWeight,
 	formatZeroToO,
+	getBranchName,
+	getCompanyName,
 	getPriceCodeFeature,
 	standardRound,
 } from 'utils/function';
@@ -79,15 +81,18 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 			price: `P${formatZeroToO(currentProduct.price_per_piece.toFixed(2))}`,
 			totalPrice: `P${formatZeroToO(total)}`,
 			code: `${priceCode}${code}${formattedWeight}`,
-			branch: formatPrintDetails(user?.branch?.name),
+			branchName: formatPrintDetails(getBranchName()),
+			companyName: formatPrintDetails(getCompanyName()),
 		});
+
 		printProduct({
 			name: formatPrintDetails(currentProduct.name),
 			weight: `${formatZeroToO(roundedWeight)}kg`,
 			price: `P${formatZeroToO(currentProduct.price_per_piece.toFixed(2))}`,
 			totalPrice: `P${formatZeroToO(total)}`,
 			code: `${priceCode}${code}${formattedWeight}`,
-			branch: formatPrintDetails(user?.branch?.name),
+			branchName: formatPrintDetails(getBranchName()),
+			companyName: formatPrintDetails(getCompanyName()),
 		})
 			.then(() => {
 				message.success('Successfully printed product details.');

@@ -8,7 +8,14 @@ import {
 	useTransactions,
 } from 'hooks';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { formatZeroToO, numberWithCommas, standardRound } from 'utils/function';
+import {
+	formatPrintDetails,
+	formatZeroToO,
+	getBranchName,
+	getCompanyName,
+	numberWithCommas,
+	standardRound,
+} from 'utils/function';
 import './style.scss';
 
 interface Props {
@@ -22,7 +29,7 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 
 	// CUSTOM HOOKS
 	const { user } = useAuth();
-	const { mutateAsync: printTranscation, isLoading: isPrintingTransaction } =
+	const { mutateAsync: printTransaction, isLoading: isPrintingTransaction } =
 		usePrintTransaction();
 	const { transactionProducts, editProduct } = useCurrentTransaction();
 	const { createTransaction, status: transactionStatus } = useTransactions();
@@ -86,8 +93,9 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 						0,
 					);
 
-					printTranscation({
-						branch: 'TEST',
+					printTransaction({
+						branchName: formatPrintDetails(getBranchName()),
+						companyName: formatPrintDetails(getCompanyName()),
 						totalPrice: `P${formatZeroToO(standardRound(total))}`,
 						transactionId: `T_${response.id}`,
 					})

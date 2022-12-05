@@ -30,14 +30,16 @@ export const showErrorMessages = (errors) => {
 
 // Local Storage Getters
 
-export const getBranchName = () => localStorage.getItem(APP_BRANCH_NAME_KEY);
+export const getBranchName = () =>
+	localStorage.getItem(APP_BRANCH_NAME_KEY) || 'Test Branch';
 
 export const getBranchServerUrl = () =>
 	localStorage.getItem(APP_BRANCH_SERVER_URL_KEY);
 
 export const getAppBrightness = () => localStorage.getItem(APP_BRIGHTNESS_KEY);
 
-export const getCompanyName = () => localStorage.getItem(APP_COMPANY_NAME_KEY);
+export const getCompanyName = () =>
+	localStorage.getItem(APP_COMPANY_NAME_KEY) || 'EJJY';
 
 export const getPriceCodeFeature = () =>
 	Number(localStorage.getItem(APP_PRICE_CODE_FEATURE_KEY));
