@@ -126,11 +126,11 @@ if (process.platform === 'win32') {
 				type: 'info',
 				title: 'Software Update',
 				message: `PC Based Scale App ${info.version} is now available. Please press the button below to download the update.`,
-				buttons: ['Update Now'],
+				buttons: ['Download Update'],
+				cancelId: -1,
 			})
 			.then(({ response }) => {
-				// eslint-disable-next-line eqeqeq
-				if (response == 0) {
+				if (response === 0) {
 					autoUpdater.downloadUpdate();
 				}
 			});

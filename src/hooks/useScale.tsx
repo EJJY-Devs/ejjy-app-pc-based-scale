@@ -28,11 +28,12 @@ export const useZero = () => useMutation(() => ScaleService.zero());
 
 export const usePrintProduct = () =>
 	useMutation<any, any, any>(
-		({ name, branch, code, price, totalPrice, weight }: any) =>
+		({ name, branchName, code, companyName, price, totalPrice, weight }: any) =>
 			ScaleService.printProduct({
-				name,
-				branch,
+				branchName,
 				code,
+				companyName,
+				name,
 				price,
 				totalPrice,
 				weight,
@@ -40,12 +41,14 @@ export const usePrintProduct = () =>
 	);
 
 export const usePrintTransaction = () =>
-	useMutation<any, any, any>(({ branch, totalPrice, transactionId }: any) =>
-		ScaleService.printTransaction({
-			branch,
-			totalPrice,
-			transactionId,
-		}),
+	useMutation<any, any, any>(
+		({ branchName, companyName, totalPrice, transactionId }: any) =>
+			ScaleService.printTransaction({
+				branchName,
+				companyName,
+				totalPrice,
+				transactionId,
+			}),
 	);
 
 export const usePrintTotal = () =>

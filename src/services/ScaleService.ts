@@ -2,8 +2,9 @@ import axios from 'axios';
 import { EXPRESS_API_URL } from '.';
 
 interface PrintProduct {
-	branch: string;
+	branchName: string;
 	code: string;
+	companyName: string;
 	name: string;
 	price: string;
 	totalPrice: string;
@@ -11,7 +12,8 @@ interface PrintProduct {
 }
 
 interface PrintTransaction {
-	branch: string;
+	branchName: string;
+	companyName: string;
 	totalPrice: string;
 	transactionId: number;
 }

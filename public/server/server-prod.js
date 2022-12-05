@@ -43,12 +43,12 @@ module.exports =  function (scaleAndPrinterPath) {
 			return;
 		}
 
-		const { name, weight, price, totalPrice, code, branch } = req.body;
+		const { name, weight, price, totalPrice, code, branchName, companyName } = req.body;
 		process.stdout.once('data', function () {
 			res.json(true);
 		});
 		process.stdin.write(
-			`print ${name} ${weight} ${price} ${totalPrice} ${code} ${branch}\r\n`,
+			`print ${name} ${weight} ${price} ${totalPrice} ${code} ${branchName} ${companyName}\r\n`,
 		);
 	});
 
@@ -58,11 +58,11 @@ module.exports =  function (scaleAndPrinterPath) {
 			return;
 		}
 
-		const { transactionId, totalPrice, branch } = req.body;
+		const { transactionId, totalPrice, branchName, companyName } = req.body;
 		process.stdout.once('data', function () {
 			res.json(true);
 		});
-		process.stdin.write(`print ${transactionId} ${totalPrice} ${branch}\r\n`);
+		process.stdin.write(`print ${transactionId} ${totalPrice} ${branchName} ${companyName}\r\n`);
 	});
 
   app.post('/print-total', cors(), (req, res, next) => {
