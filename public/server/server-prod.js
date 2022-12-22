@@ -1,9 +1,9 @@
-module.exports =  function (scaleAndPrinterPath) {
-  const path = require("path");
+module.exports = function (scaleAndPrinterPath) {
+	const path = require('path');
 	const express = require('express');
 	const cors = require('cors');
 	const fs = require('fs');
-  const _ = require('lodash');
+	const _ = require('lodash');
 	const app = express();
 
 	app.use(cors());
@@ -17,11 +17,22 @@ module.exports =  function (scaleAndPrinterPath) {
 	fs.stat(scaleAndPrinterPath, function (err, stat) {
 		if (!err) {
 			const spawn = require('child_process').spawn;
-			process = spawn(scaleAndPrinterPath);
+			process = spawn(scaleAndPrinterPath, {
+				detached: true,
+			});
 		} else {
 			console.log('Cannot find exe file.');
 		}
 	});
+
+	// Handle process output
+	const handleProcess = ({ res, onSuccess }) => {
+		process.stdout.once('data', onSuccess);
+		process.stderr.once('data', function (data) {
+			console.error(`stderr: ${data}`);
+			res.json(false);
+		});
+	};
 
 	// Endpoints
 	app.get('/weight', cors(), (req, res, next) => {
@@ -30,9 +41,12 @@ module.exports =  function (scaleAndPrinterPath) {
 			return;
 		}
 
-		process.stdout.once('data', function (data) {
-      const weight = _.round(parseFloat(data.toString()), 3);
-			res.json(weight);
+		handleProcess({
+			res,
+			onSuccess: function (data) {
+				const weight = _.round(parseFloat(data.toString()), 3);
+				res.json(weight);
+			},
 		});
 		process.stdin.write('getWeight\r\n');
 	});
@@ -43,10 +57,15 @@ module.exports =  function (scaleAndPrinterPath) {
 			return;
 		}
 
-		const { name, weight, price, totalPrice, code, branchName, companyName } = req.body;
-		process.stdout.once('data', function () {
-			res.json(true);
+		handleProcess({
+			res,
+			onSuccess: function () {
+				res.json(true);
+			},
 		});
+
+		const { name, weight, price, totalPrice, code, branchName, companyName } =
+			req.body;
 		process.stdin.write(
 			`print ${name} ${weight} ${price} ${totalPrice} ${code} ${branchName} ${companyName}\r\n`,
 		);
@@ -58,34 +77,49 @@ module.exports =  function (scaleAndPrinterPath) {
 			return;
 		}
 
-		const { transactionId, totalPrice, branchName, companyName } = req.body;
-		process.stdout.once('data', function () {
-			res.json(true);
+		handleProcess({
+			res,
+			onSuccess: function () {
+				res.json(true);
+			},
 		});
-		process.stdin.write(`print ${transactionId} ${totalPrice} ${branchName} ${companyName}\r\n`);
+
+		const { transactionId, totalPrice, branchName, companyName } = req.body;
+		process.stdin.write(
+			`print ${transactionId} ${totalPrice} ${branchName} ${companyName}\r\n`,
+		);
 	});
 
-  app.post('/print-total', cors(), (req, res, next) => {
+	app.post('/print-total', cors(), (req, res, next) => {
 		if (!process) {
 			res.status(500).send('Error');
 			return;
 		}
+
+		handleProcess({
+			res,
+			onSuccess: function () {
+				res.json(true);
+			},
+		});
 
 		const { totalPrice, branchName, companyName } = req.body;
-		process.stdout.once('data', function () {
-			res.json(true);
-		});
-		process.stdin.write(`printTotal ${totalPrice} ${branchName} ${companyName}\r\n`);
+		process.stdin.write(
+			`printTotalOnly ${totalPrice} ${branchName} ${companyName}\r\n`,
+		);
 	});
 
-  app.post('/tare', cors(), (req, res, next) => {
+	app.post('/tare', cors(), (req, res, next) => {
 		if (!process) {
 			res.status(500).send('Error');
 			return;
 		}
 
-		process.stdout.once('data', function () {
-			res.json(true);
+		handleProcess({
+			res,
+			onSuccess: function () {
+				res.json(true);
+			},
 		});
 		process.stdin.write('tare\r\n');
 	});
@@ -96,8 +130,11 @@ module.exports =  function (scaleAndPrinterPath) {
 			return;
 		}
 
-		process.stdout.once('data', function () {
-			res.json(true);
+		handleProcess({
+			res,
+			onSuccess: function () {
+				res.json(true);
+			},
 		});
 		process.stdin.write('zero\r\n');
 	});

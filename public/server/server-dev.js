@@ -22,14 +22,17 @@ module.exports = function (scaleAndPrinterPath) {
 	});
 
 	app.post('/print-product', (req, res, next) => {
+    console.log(req.body)
 		res.json(true);
 	});
 
 	app.post('/print-transaction', (req, res, next) => {
+    console.log(req.body)
 		res.json(true);
 	});
 
   app.post('/print-total', (req, res, next) => {
+    console.log(req.body)
 		res.json(true);
 	});
 
