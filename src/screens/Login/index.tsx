@@ -1,14 +1,13 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import { Divider } from 'antd';
+import { AppSettingsModal, AuthForm, RequestErrors } from 'components';
+import { Box, Button } from 'components/elements';
+import { request } from 'global/types';
+import { useAuth } from 'hooks/useAuth';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { AuthForm, RequestErrors } from '../../components';
-import { AppSettingsModal } from '../../components/AppSettings/AppSettingsModal';
-import { Box, Button } from '../../components/elements';
-import { request } from '../../global/types';
-import { useAuth } from '../../hooks/useAuth';
-import { convertIntoArray, getBranchServerUrl } from '../../utils/function';
+import { convertIntoArray, getBranchServerUrl } from 'utils/function';
 import './style.scss';
 
 const Login = () => {
@@ -37,7 +36,7 @@ const Login = () => {
 				<img
 					alt="logo"
 					className="Login_logo"
-					src={require('../../assets/images/logo.png')}
+					src={require('assets/images/logo.png')}
 				/>
 
 				<RequestErrors

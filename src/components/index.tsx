@@ -1,5 +1,4 @@
 export * from './AppIcons';
-export * from './AppSettings/AppSettingsModal';
 export * from './AuthForm/AuthForm';
 export * from './Container/Container';
 export * from './DiscountModal/DiscountModal';

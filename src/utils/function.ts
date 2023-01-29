@@ -1,6 +1,9 @@
 import { message } from 'antd';
 import dayjs from 'dayjs';
 import {
+	APP_BRANCH_ID_KEY,
+	APP_BRANCH_MACHINE_ID_KEY,
+	APP_BRANCH_MACHINE_KEY,
 	APP_BRANCH_NAME_KEY,
 	APP_BRANCH_SERVER_URL_KEY,
 	APP_BRIGHTNESS_KEY,
@@ -32,6 +35,16 @@ export const showErrorMessages = (errors) => {
 
 export const getBranchName = () =>
 	localStorage.getItem(APP_BRANCH_NAME_KEY) || 'Test Branch';
+
+export const getBranchId = () => localStorage.getItem(APP_BRANCH_ID_KEY);
+
+export const getBranchMachineId = () =>
+	localStorage.getItem(APP_BRANCH_MACHINE_ID_KEY);
+
+export const getBranchMachine = (isParsed = false) => {
+	const branchMachine = localStorage.getItem(APP_BRANCH_MACHINE_KEY);
+	return isParsed ? JSON.parse(branchMachine) : branchMachine;
+};
 
 export const getBranchServerUrl = () =>
 	localStorage.getItem(APP_BRANCH_SERVER_URL_KEY);
@@ -118,3 +131,6 @@ export const formatInPeso = (value) => {
 };
 
 export const formatWeight = (weight) => Number(weight).toFixed(3);
+
+export const filterOption = (input, option) =>
+	option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0;

@@ -1,20 +1,28 @@
-import { Col, Divider, Input, Radio, Row, Space } from 'antd';
+import { Col, Divider, Input, Radio, Row, Select, Space } from 'antd';
 import { ErrorMessage, Form, Formik } from 'formik';
-import React, { useCallback } from 'react';
+import { useBranches, useBranchMachines } from 'hooks';
+import React, { useCallback, useState } from 'react';
+import { filterOption } from 'utils/function';
 import * as Yup from 'yup';
-import { Button, FieldError, FormSlider, Label } from '../elements';
+import { Button, FieldError, FormSlider, Label } from '../../elements';
 
 interface Props {
+	branchId: number;
+	branchMachine: string;
+	branchMachineId: number;
 	branchName: string;
 	branchServerUrl: string;
 	brightness: string;
+	companyName: string;
 	onClose: any;
 	onSubmit: any;
 	priceCodeFeature: string | number;
-	companyName: string;
 }
 
 export const AppSettingsForm = ({
+	branchId,
+	branchMachine,
+	branchMachineId,
 	branchName,
 	branchServerUrl,
 	brightness,
@@ -23,10 +31,28 @@ export const AppSettingsForm = ({
 	onSubmit,
 	priceCodeFeature,
 }: Props) => {
+	// STATES
+	const [selectedBranchId, setSelectedBranchId] = useState(branchId);
+
+	// CUSTOM HOOKS
+	const {
+		isFetching: isFetchingBranches,
+		data: { branches },
+	} = useBranches();
+	const {
+		isFetching: isFetchingBranchMachines,
+		data: { branchMachines },
+	} = useBranchMachines({
+		params: { branchId: selectedBranchId },
+	});
+
 	// METHODS
 	const getFormDetails = useCallback(
 		() => ({
 			DefaultValues: {
+				branchId: branchId || '',
+				branchMachine: branchMachine || '',
+				branchMachineId: branchMachineId || '',
 				branchName: branchName || '',
 				branchServerUrl: branchServerUrl || '',
 				brightness: brightness || 100,
@@ -34,6 +60,8 @@ export const AppSettingsForm = ({
 				priceCodeFeature: priceCodeFeature || '0',
 			},
 			Schema: Yup.object().shape({
+				branchId: Yup.string().required().label('Branch ID'),
+				branchMachineId: Yup.string().required().label('Branch Machine ID'),
 				branchServerUrl: Yup.string().required().label('Branch Server URL'),
 				brightness: Yup.string().required().label('Brightness'),
 				companyName: Yup.string().required().label('Company Name'),
@@ -100,6 +128,71 @@ export const AppSettingsForm = ({
 								render={(error) => <FieldError error={error} />}
 							/>
 						</Col>
+
+						<Col span={24}>
+							<Label id="branchId" label="Branch" spacing />
+							<Select
+								className="w-100"
+								filterOption={filterOption}
+								loading={isFetchingBranches}
+								optionFilterProp="children"
+								value={values.branchId}
+								allowClear
+								showSearch
+								onChange={(value) => {
+									setFieldValue('branchId', value);
+									setSelectedBranchId(Number(value));
+								}}
+							>
+								{branches.map((branch) => (
+									<Select.Option key={branch.id} value={branch.id}>
+										{branch.name}
+									</Select.Option>
+								))}
+							</Select>
+							<ErrorMessage
+								name="branchId"
+								render={(error) => <FieldError error={error} />}
+							/>
+						</Col>
+
+						{values.branchId && (
+							<Col span={24}>
+								<Label id="branchMachineId" label="Branch Machine" spacing />
+								<Select
+									className="w-100"
+									filterOption={filterOption}
+									loading={isFetchingBranchMachines}
+									optionFilterProp="children"
+									value={values.branchMachineId}
+									allowClear
+									showSearch
+									onChange={(value) => {
+										setFieldValue('branchMachineId', value);
+
+										const selectedBranchMachine = branchMachines.find(
+											(bm) => bm.id === value,
+										);
+										if (selectedBranchMachine) {
+											setFieldValue(
+												'branchMachine',
+												JSON.stringify(selectedBranchMachine),
+											);
+										}
+									}}
+								>
+									{branchMachines.map((bm) => (
+										<Select.Option key={bm.id} value={bm.id}>
+											{bm.name}
+										</Select.Option>
+									))}
+								</Select>
+								<ErrorMessage
+									name="branchMachineId"
+									render={(error) => <FieldError error={error} />}
+								/>
+							</Col>
+						)}
 
 						<Col span={24}>
 							<Label label="Brightness" spacing />

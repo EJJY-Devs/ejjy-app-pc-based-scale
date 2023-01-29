@@ -2,8 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-one-expression-per-line */
 import { Button, message, Spin } from 'antd';
-import { Container } from 'components';
-import { AppSettingsModal } from 'components/AppSettings/AppSettingsModal';
+import { AppSettingsModal, Container } from 'components';
 import { request } from 'global';
 import { useNetwork } from 'hooks';
 import { useAuth } from 'hooks/useAuth';

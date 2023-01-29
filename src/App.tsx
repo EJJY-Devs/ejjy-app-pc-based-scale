@@ -2,10 +2,12 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Route, Switch } from 'react-router-dom';
 import NetworkError from 'screens/NetworkError';
+import useInterval from 'use-interval';
+import { getBranchMachine } from 'utils/function';
 import npmPackage from '../package.json';
 import { AppIcons } from './components';
 import { APP_TITLE } from './global/constants';
-import { useSiteSettings } from './hooks';
+import { useBranchMachinePing, useSiteSettings } from './hooks';
 import Main from './screens/Main/Main';
 
 const refetchQueryData = {
@@ -17,9 +19,20 @@ const refetchQueryData = {
 };
 
 const App = () => {
+	// VARIABLES
+	const branchMachine = getBranchMachine(true);
+
+	// CUSTOM HOOKS
 	useSiteSettings(refetchQueryData);
-	// TODO: Disable temporarily
-	// useInitializeData();
+	// useInitializeData(); // TODO: Disable temporarily
+
+	const { mutateAsync: pingBranchMachine } = useBranchMachinePing();
+	useInterval(
+		async () => {
+			await pingBranchMachine({ id: branchMachine.id });
+		},
+		branchMachine ? 5000 : null,
+	);
 
 	return (
 		<>

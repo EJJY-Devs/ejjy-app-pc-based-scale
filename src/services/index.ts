@@ -17,6 +17,8 @@ export interface IGetRequest {
 	fields?: string;
 }
 
+export { default as BranchesService } from './BranchesService';
+export { default as BranchMachinesService } from './BranchMachinesService';
 export { default as ConnectivityLogsService } from './ConnectivityLogsService';
 export { default as DataService } from './DataService';
 export { default as NetworkService } from './NetworkService';
