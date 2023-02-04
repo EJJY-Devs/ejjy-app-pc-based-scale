@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-one-expression-per-line */
-import { Button, message, Spin } from 'antd';
-import { AppSettingsModal, Container } from 'components';
+import { message, Spin } from 'antd';
+import { Container } from 'components';
 import { request } from 'global';
 import { useNetwork } from 'hooks';
 import { useAuth } from 'hooks/useAuth';
@@ -28,7 +28,6 @@ const Main = () => {
 	const [checkoutModalVisible, setCheckoutModalVisible] = useState(false);
 	const [temporaryCheckoutModalVisible, setTemporaryCheckoutModalVisible] =
 		useState(false);
-	const [appSettingsModalVisible, setAppSettingsModalVisible] = useState(false);
 	const [branchProducts, setBranchProducts] = useState([]);
 	const [isInitialFetch, setIsInitialFetch] = useState(true);
 
@@ -177,14 +176,6 @@ const Main = () => {
 			</section>
 
 			<div className="Footer">
-				<Button
-					className="Footer_setUrl"
-					size="large"
-					type="link"
-					onClick={() => setAppSettingsModalVisible(true)}
-				>
-					Set App Settings
-				</Button>
 				<h1 className="Footer_storeTitle">
 					EJ &amp; JY WET MARKET AND ENTERPRISES
 				</h1>
@@ -199,10 +190,6 @@ const Main = () => {
 				visible={temporaryCheckoutModalVisible}
 				onClose={() => setTemporaryCheckoutModalVisible(false)}
 			/>
-
-			{appSettingsModalVisible && (
-				<AppSettingsModal onClose={() => setAppSettingsModalVisible(false)} />
-			)}
 		</Container>
 	);
 };

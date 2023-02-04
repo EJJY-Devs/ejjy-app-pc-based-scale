@@ -1,14 +1,10 @@
 import { Button, Result } from 'antd';
-import { AppSettingsModal } from 'components';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { getBranchServerUrl } from 'utils/function';
 import './style.scss';
 
 const NetworkError = () => {
-	// STATES
-	const [appSettingsModalVisible, setAppSettingsModalVisible] = useState(false);
-
 	// VARIABLES
 	const branchServerURL = getBranchServerUrl();
 
@@ -34,21 +30,11 @@ const NetworkError = () => {
 					>
 						Reconnect
 					</Button>,
-					<Button
-						key="settings"
-						onClick={() => setAppSettingsModalVisible(true)}
-					>
-						Edit App Settings
-					</Button>,
 				]}
 				status="500"
 				subTitle="Cannot connect to the server."
 				title="Server Error"
 			/>
-
-			{appSettingsModalVisible && (
-				<AppSettingsModal onClose={() => setAppSettingsModalVisible(false)} />
-			)}
 		</div>
 	);
 };

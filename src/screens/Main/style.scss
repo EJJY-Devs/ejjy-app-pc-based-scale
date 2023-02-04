@@ -31,12 +31,6 @@
 	@include flex(center, center);
 	margin-top: 20px;
 
-	&_setUrl {
-		position: absolute !important;
-		left: 0;
-		margin-bottom: 0;
-	}
-
 	&_storeTitle {
 		font-size: 30px;
 		font-weight: bold;

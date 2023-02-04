@@ -4,7 +4,7 @@ import { connectivityTypes } from '../global/types';
 import { ConnectivityLogsService, SiteSettingsService } from '../services';
 import { getBranchServerUrl } from '../utils/function';
 
-export const useConnectivity = () => {
+const useConnectivity = () => {
 	const [isEnabled, setIsEnabled] = useState(false);
 	const isConnected = useRef(null);
 
@@ -45,3 +45,5 @@ export const useConnectivity = () => {
 		isConnected: isConnected.current,
 	};
 };
+
+export default useConnectivity;

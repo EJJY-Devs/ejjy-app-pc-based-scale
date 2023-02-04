@@ -1,29 +1,20 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-import { Divider } from 'antd';
-import { AppSettingsModal, AuthForm, RequestErrors } from 'components';
-import { Box, Button } from 'components/elements';
+import { AuthForm, RequestErrors } from 'components';
+import { Box } from 'components/elements';
 import { request } from 'global/types';
 import { useAuth } from 'hooks/useAuth';
 import { isEmpty } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { convertIntoArray, getBranchServerUrl } from 'utils/function';
+import { convertIntoArray } from 'utils/function';
 import './style.scss';
 
 const Login = () => {
-	// STATES
-	const [areSetupButtonsVisible, setSetupButtonsVisible] = useState(false);
-	const [appSettingsModalVisible, setAppSettingsModalVisible] = useState(false);
-
 	// CUSTOM HOOKS
 	const history = useHistory();
 	const { user, login, status: authStatus, errors } = useAuth();
 
 	// METHODS
-	useEffect(() => {
-		setSetupButtonsVisible(!getBranchServerUrl());
-	}, []);
-
 	useEffect(() => {
 		if (!isEmpty(user)) {
 			history.replace('main');
@@ -50,24 +41,7 @@ const Login = () => {
 					submitText="Start Sesssion"
 					onSubmit={login}
 				/>
-
-				{areSetupButtonsVisible && (
-					<>
-						<Divider />
-
-						<Button
-							text="Edit App Settings"
-							variant="dark-gray"
-							block
-							onClick={() => setAppSettingsModalVisible(true)}
-						/>
-					</>
-				)}
 			</Box>
-
-			{appSettingsModalVisible && (
-				<AppSettingsModal onClose={() => setAppSettingsModalVisible(false)} />
-			)}
 		</section>
 	);
 };
