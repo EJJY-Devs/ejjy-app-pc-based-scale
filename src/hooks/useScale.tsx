@@ -1,18 +1,52 @@
 import { wrapServiceWithCatch } from 'hooks/helper';
+import { useRef } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { ScaleService } from 'services';
 import { useWeightStore } from 'stores';
 
-const REFETCH_INTERVAL_MS = 10;
+const REFETCH_INTERVAL_SHORT_MS = 10;
+const REFETCH_INTERVAL_LONG_MS = 1000;
+
+const THRESHOLD_LENGTH_MS = 5000;
+const THRESHOLD_LENGTH = THRESHOLD_LENGTH_MS / REFETCH_INTERVAL_SHORT_MS;
 
 export const useWeight = () => {
 	const setWeight = useWeightStore((state: any) => state.setWeight);
 
+	const counter = useRef(0);
+	const previousValue = useRef(0);
+	const refetchInterval = useRef(REFETCH_INTERVAL_SHORT_MS);
+
 	return useQuery<any>(
-		['useWeight'],
-		async () => wrapServiceWithCatch(ScaleService.retrieveWeight()),
+		'useWeight',
+		async () => {
+			const response = await wrapServiceWithCatch(
+				ScaleService.retrieveWeight(),
+			);
+
+			if (response) {
+				counter.current += 1;
+
+				const { data } = response;
+
+				if (
+					previousValue.current === data &&
+					counter.current > THRESHOLD_LENGTH
+				) {
+					refetchInterval.current = REFETCH_INTERVAL_LONG_MS;
+				}
+
+				if (previousValue.current !== data) {
+					previousValue.current = data;
+					counter.current = 0;
+					refetchInterval.current = REFETCH_INTERVAL_SHORT_MS;
+				}
+			}
+
+			return response;
+		},
 		{
-			refetchInterval: REFETCH_INTERVAL_MS,
+			refetchInterval: () => refetchInterval.current,
 			refetchIntervalInBackground: true,
 			notifyOnChangeProps: [],
 			onSuccess: ({ data }) => {

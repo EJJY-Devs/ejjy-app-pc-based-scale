@@ -1,7 +1,7 @@
 module.exports = function (scaleAndPrinterPath) {
 	const express = require('express');
 	const cors = require('cors');
-  const _ = require('lodash');
+	const _ = require('lodash');
 	const app = express();
 
 	app.use(
@@ -15,24 +15,31 @@ module.exports = function (scaleAndPrinterPath) {
 		console.log(`Express server listening on port ${server.address().port}`);
 	});
 
+	let counter = 0;
+
 	// Endpoints
 	app.get('/weight', (req, res, next) => {
-    const weight = _.round(0.2255, 3);
+		counter += 1;
+		let weight = _.round(0.2255, 3);
+
+		if (counter > 320) {
+			weight = _.round(0.423, 3);
+		}
 		res.json(weight);
 	});
 
 	app.post('/print-product', (req, res, next) => {
-    console.log(req.body)
+		console.log(req.body);
 		res.json(true);
 	});
 
 	app.post('/print-transaction', (req, res, next) => {
-    console.log(req.body)
+		console.log(req.body);
 		res.json(true);
 	});
 
-  app.post('/print-total', (req, res, next) => {
-    console.log(req.body)
+	app.post('/print-total', (req, res, next) => {
+		console.log(req.body);
 		res.json(true);
 	});
 
@@ -40,7 +47,8 @@ module.exports = function (scaleAndPrinterPath) {
 		res.json(true);
 	});
 
-  app.post('/zero', (req, res, next) => {
+	app.post('/zero', (req, res, next) => {
+		counter = 0;
 		res.json(true);
 	});
 };

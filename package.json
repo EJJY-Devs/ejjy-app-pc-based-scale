@@ -1,125 +1,126 @@
 {
-  "name": "ejjy-pc-based-scale",
-  "productName": "EJJY PC-Based Scale",
-  "version": "1.1.96",
-  "private": true,
-  "homepage": "./",
-  "main": "./public/electron.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/EJJY-Devs/ejjy-app-pc-based-scale"
-  },
-  "scripts": {
-    "lint": "cd src && eslint . --ext .tsx --ext .ts",
-    "lint:fix": "cd src && eslint . --ext .tsx --ext .ts --fix",
-    "prettify": "prettier --write ./src",
-    "start:electron": "concurrently \"PORT=3004 react-scripts start\" \"wait-on http://localhost:3004 && electron .\"",
-    "electron": "wait-on http://localhost:3004 && electron .",
-    "build": "react-scripts build",
-    "build:electron": "electron-builder -w --x64 -p always",
-    "postinstall": "electron-builder install-app-deps",
-    "publish": "npm version patch --no-git-tag-version && npm run build && npm run build:electron",
-    "server": "cd api; poetry run python manage.py runserver 0.0.0.0:8001",
-    "server:branch": "concurrently \"npm run server\" \"cd ../ejjy-app/api && poetry run python manage.py runserver 8000\"",
-    "start": "concurrently \"npm run server:branch\"  \"npm run start:electron\""
-  },
-  "dependencies": {
-    "@ant-design/icons": "^4.2.2",
-    "@sentry/react": "^6.13.2",
-    "@sentry/tracing": "^6.13.2",
-    "antd": "4.19.1",
-    "antd-css-utilities": "^1.0.3",
-    "axios": "^0.20.0",
-    "classnames": "^2.2.6",
-    "connected-react-router": "^6.8.0",
-    "cors": "^2.8.5",
-    "dayjs": "^1.9.4",
-    "electron-is-dev": "^2.0.0",
-    "electron-log": "^4.4.1",
-    "electron-updater": "^4.6.5",
-    "formik": "^2.1.5",
-    "history": "^4.10.1",
-    "lodash": "^4.17.20",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-helmet": "^6.1.0",
-    "react-query": "^3.34.15",
-    "react-redux": "^7.2.1",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3",
-    "redux": "^4.1.0",
-    "redux-actions": "^2.6.5",
-    "redux-persist": "^6.0.0",
-    "redux-saga": "^1.1.3",
-    "reselect": "^4.0.0",
-    "typescript": "^3.7.5",
-    "use-interval": "^1.4.0",
-    "yup": "^0.29.3",
-    "zustand": "^4.0.0"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.14.8",
-    "@babel/core": "^7.15.0",
-    "@babel/preset-env": "^7.15.0",
-    "@babel/preset-react": "^7.14.5",
-    "@types/classnames": "^2.2.10",
-    "@types/lodash": "^4.14.161",
-    "@types/node": "^12.12.55",
-    "@types/react": "^16.9.49",
-    "@types/react-dom": "^16.9.8",
-    "@types/react-redux": "^7.1.9",
-    "@types/react-router-dom": "^5.1.5",
-    "@types/redux-actions": "^2.6.1",
-    "@types/yup": "^0.29.6",
-    "@typescript-eslint/eslint-plugin": "^5.30.6",
-    "babel-plugin-import": "^1.13.3",
-    "concurrently": "^5.3.0",
-    "electron": "^17.4.7",
-    "electron-builder": "^22.14.5",
-    "eslint": "^7.15.0",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-prettier": "^7.0.0",
-    "eslint-import-resolver-typescript": "^2.7.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^3.3.0",
-    "eslint-plugin-react": "^7.21.5",
-    "eslint-plugin-react-hooks": "^4",
-    "express": "^4.17.1",
-    "prettier": "^2.3.2",
-    "sass": "^1.51.0",
-    "wait-on": "^5.2.1"
-  },
-  "build": {
-    "appId": "com.ejjy.scale",
-    "extraResources": [
-      "api/**",
-      "!api/.venv",
-      "!api/db.sqlite3",
-      "!api/backend/.env",
-      "scale/**"
-    ],
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "EJJY-Devs",
-        "repo": "ejjy-app-pc-based-scale"
-      }
-    ]
-  }
+	"name": "ejjy-pc-based-scale",
+	"productName": "EJJY PC-Based Scale",
+	"version": "1.1.97",
+	"private": true,
+	"homepage": "./",
+	"main": "./public/electron.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/EJJY-Devs/ejjy-app-pc-based-scale"
+	},
+	"scripts": {
+		"lint": "cd src && eslint . --ext .tsx --ext .ts",
+		"lint:fix": "cd src && eslint . --ext .tsx --ext .ts --fix",
+		"prettify": "prettier --write ./src",
+		"start:electron": "concurrently \"PORT=3004 react-scripts start\" \"wait-on http://localhost:3004 && electron .\"",
+		"electron": "wait-on http://localhost:3004 && electron .",
+		"build": "react-scripts build",
+		"build:electron": "electron-builder -w --x64 -p always",
+		"postinstall": "electron-builder install-app-deps",
+		"publish": "npm version patch --no-git-tag-version && npm run build && npm run build:electron",
+		"server": "cd api; poetry run python manage.py runserver 0.0.0.0:8001",
+		"server:branch": "concurrently \"npm run server\" \"cd ../ejjy-app/api && poetry run python manage.py runserver 8000\"",
+		"start": "concurrently \"npm run server:branch\"  \"npm run start:electron\""
+	},
+	"dependencies": {
+		"@ant-design/icons": "^4.2.2",
+		"@sentry/react": "^6.13.2",
+		"@sentry/tracing": "^6.13.2",
+		"antd": "4.19.1",
+		"antd-css-utilities": "^1.0.3",
+		"axios": "^0.20.0",
+		"classnames": "^2.2.6",
+		"connected-react-router": "^6.8.0",
+		"cors": "^2.8.5",
+		"dayjs": "^1.9.4",
+		"electron-is-dev": "^2.0.0",
+		"electron-log": "^4.4.1",
+		"electron-updater": "^4.6.5",
+		"formik": "^2.1.5",
+		"history": "^4.10.1",
+		"lodash": "^4.17.20",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1",
+		"react-helmet": "^6.1.0",
+		"react-query": "^3.34.15",
+		"react-redux": "^7.2.1",
+		"react-router-dom": "^5.2.0",
+		"react-scripts": "3.4.3",
+		"redux": "^4.1.0",
+		"redux-actions": "^2.6.5",
+		"redux-persist": "^6.0.0",
+		"redux-saga": "^1.1.3",
+		"reselect": "^4.0.0",
+		"typescript": "^3.7.5",
+		"use-interval": "^1.4.0",
+		"yup": "^0.29.3",
+		"zustand": "^4.0.0"
+	},
+	"eslintConfig": {
+		"extends": "react-app"
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.14.8",
+		"@babel/core": "^7.15.0",
+		"@babel/preset-env": "^7.15.0",
+		"@babel/preset-react": "^7.14.5",
+		"@types/classnames": "^2.2.10",
+		"@types/lodash": "^4.14.161",
+		"@types/node": "^12.12.55",
+		"@types/react": "^16.9.49",
+		"@types/react-dom": "^16.9.8",
+		"@types/react-redux": "^7.1.9",
+		"@types/react-router-dom": "^5.1.5",
+		"@types/redux-actions": "^2.6.1",
+		"@types/yup": "^0.29.6",
+		"@typescript-eslint/eslint-plugin": "^5.30.6",
+		"babel-plugin-import": "^1.13.3",
+		"concurrently": "^5.3.0",
+		"electron": "^17.4.7",
+		"electron-builder": "^22.14.5",
+		"eslint": "^7.15.0",
+		"eslint-config-airbnb": "^18.2.1",
+		"eslint-config-prettier": "^7.0.0",
+		"eslint-import-resolver-typescript": "^2.7.0",
+		"eslint-plugin-import": "^2.22.1",
+		"eslint-plugin-jsx-a11y": "^6.4.1",
+		"eslint-plugin-prettier": "^3.3.0",
+		"eslint-plugin-react": "^7.21.5",
+		"eslint-plugin-react-hooks": "^4",
+		"express": "^4.17.1",
+		"prettier": "^2.3.2",
+		"sass": "^1.51.0",
+		"wait-on": "^5.2.1"
+	},
+	"build": {
+		"appId": "com.ejjy.scale",
+		"extraResources": [
+			"api/**",
+			"!api/.venv",
+			"!api/db.sqlite3",
+			"!api/backend/.env",
+			"scale/**"
+		],
+		"publish": [
+			{
+				"provider": "github",
+				"owner": "EJJY-Devs",
+				"repo": "ejjy-app-pc-based-scale",
+				"releaseType": "prerelease"
+			}
+		]
+	}
 }
