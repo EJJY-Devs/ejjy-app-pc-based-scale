@@ -1,4 +1,6 @@
+import { DEFAULT_PAGE, MAX_PAGE_SIZE } from 'global';
 import { call, takeLatest } from 'redux-saga/effects';
+import { getBranchId } from 'utils/function';
 import { types } from '../ducks/branch-products';
 import { request } from '../global/types';
 import { service } from '../services/branch-products';
@@ -10,11 +12,12 @@ function* list({ payload }: any) {
 
 	try {
 		const response = yield call(service.list, {
-			search,
+			branch_id: getBranchId(),
 			is_shown_in_scale_list: true,
-			page: 1,
-			page_size: 100,
 			ordering: '-product__textcode',
+			page_size: MAX_PAGE_SIZE,
+			page: DEFAULT_PAGE,
+			search,
 		});
 
 		callback({ status: request.SUCCESS, data: response.data.results });

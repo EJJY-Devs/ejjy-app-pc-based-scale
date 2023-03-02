@@ -4,6 +4,7 @@ import { IGetRequest } from '.';
 interface IGetShownForScaleList extends IGetRequest {
 	is_shown_in_scale_list: boolean;
 	search?: string;
+	branch_id: string;
 }
 
 export const service = {
