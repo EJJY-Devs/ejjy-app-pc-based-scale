@@ -44,6 +44,7 @@ const Main = () => {
 	const { isFetching: isConnectingNetwork, isSuccess: isNetworkSuccess } =
 		useNetwork({
 			options: {
+				refetchOnWindowFocus: false,
 				enabled: !!branchServerURL,
 				retry: NETWORK_RETRY,
 				retryDelay: NETWORK_RETRY_DELAY_MS,

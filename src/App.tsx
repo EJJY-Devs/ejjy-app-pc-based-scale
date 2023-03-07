@@ -8,7 +8,7 @@ import npmPackage from '../package.json';
 import { AppIcons } from './components';
 import { APP_TITLE } from './global/constants';
 import { useBranchMachinePing, useSiteSettings } from './hooks';
-import Main from './screens/Main/Main';
+import Main from './screens/Main';
 
 const refetchQueryData = {
 	options: {
