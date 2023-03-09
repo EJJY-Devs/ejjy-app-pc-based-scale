@@ -29,11 +29,11 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 	const weight = useWeightStore((state: any) => state.weight);
 
 	const { user } = useAuth();
-	useWeight();
 	const { mutateAsync: printProduct, isLoading: isPrintingProduct } =
 		usePrintProduct();
 	const { transactionProducts, currentProduct, setCurrentProduct } =
 		useCurrentTransaction();
+	useWeight();
 
 	// METHODS
 	useEffect(() => {

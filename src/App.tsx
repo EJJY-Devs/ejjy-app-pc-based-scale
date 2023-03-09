@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Route, Switch } from 'react-router-dom';
+import Inactive from 'screens/Inactive';
 import NetworkError from 'screens/NetworkError';
 import useInterval from 'use-interval';
 import { getBranchMachine } from 'utils/function';
@@ -44,6 +45,7 @@ const App = () => {
 				{/* <Route component={Login} path="/" exact /> */}
 				<Route component={Main} path="/" exact />
 				<Route component={NetworkError} path="/error" exact />
+				<Route component={Inactive} path="/inactive" exact />
 			</Switch>
 		</>
 	);

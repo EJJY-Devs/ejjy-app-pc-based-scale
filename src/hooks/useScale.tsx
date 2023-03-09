@@ -1,6 +1,8 @@
+import dayjs from 'dayjs';
 import { wrapServiceWithCatch } from 'hooks/helper';
 import { useRef } from 'react';
 import { useMutation, useQuery } from 'react-query';
+import { useHistory } from 'react-router-dom';
 import { ScaleService } from 'services';
 import { useWeightStore } from 'stores';
 
@@ -10,12 +12,16 @@ const REFETCH_INTERVAL_LONG_MS = 1000;
 const THRESHOLD_LENGTH_MS = 5000;
 const THRESHOLD_LENGTH = THRESHOLD_LENGTH_MS / REFETCH_INTERVAL_SHORT_MS;
 
+const INACTIVE_MINUTES = 10;
+
 export const useWeight = () => {
+	const history = useHistory();
 	const setWeight = useWeightStore((state: any) => state.setWeight);
 
 	const counter = useRef(0);
 	const previousValue = useRef(0);
 	const refetchInterval = useRef(REFETCH_INTERVAL_SHORT_MS);
+	const dateInactive = useRef(null);
 
 	return useQuery<any>(
 		'useWeight',
@@ -34,12 +40,24 @@ export const useWeight = () => {
 					counter.current > THRESHOLD_LENGTH
 				) {
 					refetchInterval.current = REFETCH_INTERVAL_LONG_MS;
+
+					if (dateInactive.current === null) {
+						dateInactive.current = dayjs();
+					} else if (
+						dayjs().diff(dateInactive.current, 'minute') >= INACTIVE_MINUTES
+					) {
+						history.push({
+							pathname: 'inactive',
+							state: true,
+						});
+					}
 				}
 
 				if (previousValue.current !== data) {
 					previousValue.current = data;
 					counter.current = 0;
 					refetchInterval.current = REFETCH_INTERVAL_SHORT_MS;
+					dateInactive.current = null;
 				}
 			}
 
