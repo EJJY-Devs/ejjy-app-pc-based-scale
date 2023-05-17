@@ -107,8 +107,6 @@ export const WeightProductSelection = ({
 					onChange={() => null}
 				/>
 
-				<Divider />
-
 				{siteSettings?.datetime_last_updated_products && (
 					<p className="WeightProductSelection_productUpdateInfo">
 						Product last updated:{' '}

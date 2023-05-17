@@ -1,7 +1,7 @@
 {
 	"name": "ejjy-pc-based-scale",
 	"productName": "EJJY PC-Based Scale",
-	"version": "1.1.101",
+	"version": "1.1.102",
 	"private": true,
 	"homepage": "./",
 	"main": "./public/electron.js",
@@ -20,7 +20,7 @@
 		"postinstall": "electron-builder install-app-deps",
 		"publish": "npm version patch --no-git-tag-version && npm run build && npm run build:electron",
 		"server": "cd api; poetry run python manage.py runserver 0.0.0.0:8001",
-		"server:branch": "concurrently \"npm run server\" \"cd ../ejjy-app/api && poetry run python manage.py runserver 8000\"",
+		"server:branch": "concurrently \"npm run server\"",
 		"start": "concurrently \"npm run server:branch\"  \"npm run start:electron\""
 	},
 	"dependencies": {
