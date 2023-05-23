@@ -70,6 +70,7 @@
 	&_inputWeight {
 		@include font(2.5rem, bold);
 		color: $color-dark;
+		margin-bottom: 1em;
 	}
 
 	&_tabs {
@@ -91,7 +92,6 @@
 	}
 
 	&_productUpdateInfo {
-		margin-top: 0.5em;
 		margin-bottom: 1em;
 
 		@include font(0.9rem, normal);

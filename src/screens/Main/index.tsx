@@ -4,7 +4,7 @@
 import { message, Spin } from 'antd';
 import { Container } from 'components';
 import { request } from 'global';
-import { useNetwork } from 'hooks';
+import { useNetwork, useSiteSettings } from 'hooks';
 import { useAuth } from 'hooks/useAuth';
 import { useBranchProducts } from 'hooks/useBranchProducts';
 import { useCurrentTransaction } from 'hooks/useCurrentTransaction';
@@ -41,6 +41,7 @@ const Main = () => {
 	const history = useHistory();
 
 	const { user } = useAuth();
+	const { data: siteSettings } = useSiteSettings();
 	const { isFetching: isConnectingNetwork, isSuccess: isNetworkSuccess } =
 		useNetwork({
 			options: {
@@ -176,11 +177,11 @@ const Main = () => {
 				</div>
 			</section>
 
-			<div className="Footer">
-				<h1 className="Footer_storeTitle">
-					EJ &amp; JY WET MARKET AND ENTERPRISES
-				</h1>
-			</div>
+			{siteSettings && (
+				<div className="Footer">
+					<h1 className="Footer_storeTitle">{siteSettings?.store_name}</h1>
+				</div>
+			)}
 
 			<CheckoutModal
 				visible={checkoutModalVisible}
