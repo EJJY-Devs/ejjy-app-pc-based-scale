@@ -1,5 +1,4 @@
 module.exports = function (scaleAndPrinterPath) {
-	const path = require('path');
 	const express = require('express');
 	const cors = require('cors');
 	const fs = require('fs');
@@ -35,6 +34,22 @@ module.exports = function (scaleAndPrinterPath) {
 	};
 
 	// Endpoints
+	app.post('/connect', cors(), (req, res, next) => {
+		if (!process) {
+			res.status(500).send('Error');
+			return;
+		}
+
+		const { comPort } = req.body;
+		handleProcess({
+			res,
+			onSuccess: function (data) {
+				res.json(true);
+			},
+		});
+		process.stdin.write(`setPort COM${comPort}\r\n`);
+	});
+
 	app.get('/weight', cors(), (req, res, next) => {
 		if (!process) {
 			res.status(500).send('Error');
