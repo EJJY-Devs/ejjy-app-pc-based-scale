@@ -73,7 +73,7 @@ export const LamasAmountModal = ({ onClose }: Props) => {
 			visible
 			onCancel={onClose}
 		>
-			<div className="grid w-full grid-cols-3 grid-rows-5 gap-3">
+			<div className="grid w-full grid-cols-3 grid-rows-4 gap-3">
 				<ControlledInput
 					className="col-span-3 col-start-1 text-center text-4xl font-bold text-dark"
 					value={textcode}
@@ -84,11 +84,7 @@ export const LamasAmountModal = ({ onClose }: Props) => {
 				{inputs.map((number) => (
 					<ScaleButton
 						key={number}
-						className={
-							number === 0
-								? 'col-span-2 col-start-1 h-20 text-[2rem]'
-								: 'h-20 text-[2rem]'
-						}
+						className="h-20 text-[2rem]"
 						disabled={isDigitsDisabled() || textcode.includes(NUMPAD_DOT)}
 						title={String(number)}
 						onClick={() => handleNumpadInput(number)}
@@ -96,7 +92,7 @@ export const LamasAmountModal = ({ onClose }: Props) => {
 				))}
 
 				<ScaleButton
-					className={cn('col-span-3 h-20 text-[2rem]', {
+					className={cn('h-20 text-[2rem]', {
 						'bg-red-500 text-white': textcode.length > 0,
 					})}
 					disabled={textcode.length === 0}

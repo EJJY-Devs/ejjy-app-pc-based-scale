@@ -49,9 +49,14 @@ export const AppSettingsModal = ({ onClose }: Props) => {
 	};
 
 	const handleClose = () => {
-		document.querySelector('html').style.filter =
-			`brightness(${getAppBrightness()}%)`;
+		const html = document.querySelector('html');
 
+		if (html === null) {
+			message.error('Unable to change brightness.');
+			return;
+		}
+
+		html.style.filter = `brightness(${getAppBrightness()}%)`;
 		onClose();
 	};
 

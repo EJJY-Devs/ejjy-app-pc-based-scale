@@ -29,14 +29,18 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 				message.error('An error occurred while printing the product details');
 			},
 		});
-	const { transactionProducts, currentProduct, setCurrentProduct } =
-		useCurrentTransactionStore();
+	const {
+		transactionProducts,
+		currentProduct,
+		setCurrentProduct,
+		resetCurrentProduct,
+	} = useCurrentTransactionStore();
 	useWeight();
 
 	// METHODS
 	useEffect(() => {
 		if (weight === 0 && currentProduct) {
-			setCurrentProduct(null);
+			resetCurrentProduct();
 		}
 	}, [weight]);
 
@@ -53,6 +57,11 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 	};
 
 	const handlePrint = async (onSuccess?: () => void) => {
+		if (!currentProduct) {
+			message.error('Cannot find selected product.');
+			return;
+		}
+
 		// Get total
 		const total = standardRound(currentProduct.price_per_piece * weight);
 

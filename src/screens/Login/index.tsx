@@ -40,7 +40,7 @@ const Login = () => {
 
 				<RequestErrors
 					className="w-full"
-					errors={convertIntoArray(loginError.errors)}
+					errors={convertIntoArray(loginError?.errors)}
 					withSpaceBottom
 				/>
 

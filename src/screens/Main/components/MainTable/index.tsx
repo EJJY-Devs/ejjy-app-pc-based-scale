@@ -15,7 +15,9 @@ const columns = [
 
 export const MainTable = () => {
 	// STATES
-	const [dataSource, setDataSource] = useState([]);
+	const [dataSource, setDataSource] = useState<
+		(string | Element | React.ReactNode)[][]
+	>([]);
 
 	// CUSTOM HOOKS
 	const {

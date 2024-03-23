@@ -1,32 +1,19 @@
 import { Modal } from 'antd';
 import { Button, ControlledInput, Label } from 'components/elements';
 import { formatNumberWithCommas, standardRound } from 'ejjy-global';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback } from 'react';
 import { useCurrentTransactionStore } from 'stores';
 
 type Props = {
-	visible: boolean;
 	onClose: () => void;
 };
 
-export const CheckoutModal = ({ visible, onClose }: Props) => {
-	// STATES
-	const inputRef = useRef(null);
-
+export const CheckoutModal = ({ onClose }: Props) => {
 	// CUSTOM HOOKS
 	const { transactionProducts, resetTransaction } =
 		useCurrentTransactionStore();
 
 	// METHODS
-	useEffect(() => {
-		if (inputRef && inputRef.current) {
-			setTimeout(() => {
-				const input = inputRef.current;
-				input.focus();
-			}, 500);
-		}
-	}, [visible, inputRef]);
-
 	const getTotal = useCallback(() => {
 		const total = transactionProducts.reduce(
 			(prev: number, { weight, price_per_piece }) =>
@@ -46,9 +33,9 @@ export const CheckoutModal = ({ visible, onClose }: Props) => {
 		<Modal
 			footer={null}
 			title="Checkout"
-			visible={visible}
 			centered
 			closable
+			visible
 			onCancel={onClose}
 		>
 			<Label className="text-xl" label="Amount Due (₱)" spacing />
@@ -59,14 +46,8 @@ export const CheckoutModal = ({ visible, onClose }: Props) => {
 				onChange={() => null}
 			/>
 
-			<div className="custom-footer">
-				<Button
-					className="btn-cancel"
-					size="lg"
-					text="Cancel"
-					type="button"
-					onClick={onClose}
-				/>
+			<div className="mt-8 grid grid-cols-2 gap-x-5">
+				<Button size="lg" text="Cancel" type="button" onClick={onClose} />
 				<Button
 					size="lg"
 					text="Proceed"

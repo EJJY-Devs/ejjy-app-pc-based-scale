@@ -21,14 +21,14 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 	// CUSTOM HOOKS
 	// const { validateUser, status: authStatus } = useAuth();
 	const { weight } = useWeightStore();
-	const { currentProduct, addProduct, setCurrentProduct } =
+	const { currentProduct, addProduct, setCurrentProduct, resetCurrentProduct } =
 		useCurrentTransactionStore();
-	console.log('currentProduct', currentProduct);
+
 	// METHODS
 	const handlePrintAndAddCart = () => {
 		onPrint(() => {
 			addProduct({ ...currentProduct, weight });
-			setCurrentProduct(null);
+			resetCurrentProduct();
 
 			message.success('Product successfully added.');
 		});
@@ -51,11 +51,11 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 	// }, [currentProduct, selectedDiscountType]);
 
 	const isWithDiscount = useCallback(
-		() => currentProduct?.discount > 0,
+		() => Number(currentProduct?.discount) > 0,
 		[currentProduct],
 	);
 
-	const handleDiscountSuccess = (discountType) => {
+	const handleDiscountSuccess = (discountType: string) => {
 		const product = currentProduct;
 
 		if (product) {
@@ -86,7 +86,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 				discount: newDiscountPerPiece,
 				price_per_piece:
 					currentDiscount > 0 ? currentDiscount : newPricePerPiece,
-				markdownType,
+				markdownType: markdownType as string,
 			});
 
 			message.success('Sucessfully applied discount to product.');
@@ -112,116 +112,115 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 	// };
 
 	return (
-		<>
-			<div>
-				<Space className="w-full" direction="vertical" size={20}>
-					<div>
-						<Label label="Total" spacing />
-						<ControlledInput
-							className="text-right text-[2.5rem] font-bold text-dark"
-							value={formatInPeso(weight * currentProduct.price_per_piece)}
-							disabled
-							onChange={() => null}
-						/>
-					</div>
+		currentProduct && (
+			<>
+				<div>
+					<Space className="w-full" direction="vertical" size={20}>
+						<div>
+							<Label label="Total" spacing />
+							<ControlledInput
+								className="text-right text-[2.5rem] font-bold text-dark"
+								value={formatInPeso(weight * currentProduct.price_per_piece)}
+								disabled
+								onChange={() => null}
+							/>
+						</div>
 
-					<div>
-						<Label label="Name" spacing />
-						<ControlledInput
-							className="text-2xl font-bold text-dark"
-							value={currentProduct.product.name}
-							disabled
-							onChange={() => null}
-						/>
-					</div>
+						<div>
+							<Label label="Name" spacing />
+							<ControlledInput
+								className="text-2xl font-bold text-dark"
+								value={currentProduct.product.name}
+								disabled
+								onChange={() => null}
+							/>
+						</div>
 
-					<div>
-						<Label label="Weight" spacing />
-						<ControlledInput
-							className="text-2xl font-bold text-dark"
-							value={formatWeight(weight)}
-							disabled
-							onChange={() => null}
-						/>
-					</div>
+						<div>
+							<Label label="Weight" spacing />
+							<ControlledInput
+								className="text-2xl font-bold text-dark"
+								value={formatWeight(weight)}
+								disabled
+								onChange={() => null}
+							/>
+						</div>
 
-					<div>
-						<Label label="Price" spacing />
-						<ControlledInput
-							className="text-2xl font-bold text-dark"
-							value={formatInPeso(currentProduct.price_per_piece)}
-							disabled
-							onChange={() => null}
-						/>
-					</div>
+						<div>
+							<Label label="Price" spacing />
+							<ControlledInput
+								className="text-2xl font-bold text-dark"
+								value={formatInPeso(currentProduct.price_per_piece)}
+								disabled
+								onChange={() => null}
+							/>
+						</div>
 
-					<Row gutter={15}>
-						{isWithDiscount() ? (
-							<Col span={24}>
-								<ScaleButton
-									className="w-full border-b-4 border-[#ab363d] bg-red-500 text-white"
-									title="Remove Discount"
-									onClick={() => {
-										// setSelectedDiscountType(discountTypes.NO_DISCOUNT);
-										handleDiscountSuccess(discountTypes.NO_DISCOUNT);
-										// setDiscountAuthModalVisible(true);
-									}}
-								/>
-							</Col>
-						) : (
-							<>
-								<Col span={12}>
+						<Row gutter={15}>
+							{isWithDiscount() ? (
+								<Col span={24}>
 									<ScaleButton
-										className="w-full"
-										title="Wholesale"
+										className="w-full border-b-4 border-[#ab363d] bg-red-500 text-white"
+										title="Remove Discount"
 										onClick={() => {
-											// setSelectedDiscountType(discountTypes.FIRST);
-											handleDiscountSuccess(discountTypes.FIRST);
+											// setSelectedDiscountType(discountTypes.NO_DISCOUNT);
+											handleDiscountSuccess(discountTypes.NO_DISCOUNT);
 											// setDiscountAuthModalVisible(true);
 										}}
 									/>
 								</Col>
-								<Col span={12}>
-									<ScaleButton
-										className="w-full"
-										title="Special"
-										onClick={() => {
-											// setSelectedDiscountType(discountTypes.SECOND);
-											handleDiscountSuccess(discountTypes.SECOND);
-											// setDiscountAuthModalVisible(true);
-										}}
-									/>
-								</Col>
-							</>
-						)}
-					</Row>
+							) : (
+								<>
+									<Col span={12}>
+										<ScaleButton
+											className="w-full"
+											title="Wholesale"
+											onClick={() => {
+												// setSelectedDiscountType(discountTypes.FIRST);
+												handleDiscountSuccess(discountTypes.FIRST);
+												// setDiscountAuthModalVisible(true);
+											}}
+										/>
+									</Col>
+									<Col span={12}>
+										<ScaleButton
+											className="w-full"
+											title="Special"
+											onClick={() => {
+												// setSelectedDiscountType(discountTypes.SECOND);
+												handleDiscountSuccess(discountTypes.SECOND);
+												// setDiscountAuthModalVisible(true);
+											}}
+										/>
+									</Col>
+								</>
+							)}
+						</Row>
 
-					<ScaleButton
-						className="w-full border-2 border-red-500 bg-transparent text-base text-red-500 hover:bg-red-500 hover:text-white hover:opacity-100"
-						title="REMOVE SELECTED PRODUCT"
-						onClick={() => {
-							setCurrentProduct(null);
-						}}
-					/>
-				</Space>
+						<ScaleButton
+							className="w-full border-2 border-red-500 bg-transparent text-base text-red-500 hover:bg-red-500 hover:text-white hover:opacity-100"
+							title="REMOVE SELECTED PRODUCT"
+							onClick={resetCurrentProduct}
+						/>
+					</Space>
 
-				<div className="absolute bottom-0 grid h-button w-full grid-cols-12 gap-x-3">
-					<ScaleButton
-						className="col-span-8"
-						disabled={weight === 0}
-						title="Print"
-						onClick={() => onPrint()}
-					/>
-					<ScaleButton
-						className="col-span-4"
-						disabled={weight === 0}
-						title={<img alt="icon" src={iconPrintAndAddCart} />}
-						onClick={handlePrintAndAddCart}
-					/>
+					<div className="absolute bottom-0 grid h-button w-full grid-cols-12 gap-x-3">
+						<ScaleButton
+							className="col-span-8"
+							disabled={weight === 0}
+							title="Print"
+							onClick={() => onPrint()}
+						/>
+						<ScaleButton
+							className="col-span-4"
+							disabled={weight === 0}
+							title={<img alt="icon" src={iconPrintAndAddCart} />}
+							onClick={handlePrintAndAddCart}
+						/>
+					</div>
 				</div>
-			</div>
 
-			{/* {discountAuthModalVisible && (
+				{/* {discountAuthModalVisible && (
 				<DiscountModal
 					discount={getDiscount()}
 					isLoading={authStatus === request.REQUESTING}
@@ -229,6 +228,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 					onClose={() => setDiscountAuthModalVisible(false)}
 				/>
 			)} */}
-		</>
+			</>
+		)
 	);
 };

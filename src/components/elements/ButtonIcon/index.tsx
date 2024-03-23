@@ -27,7 +27,7 @@ export const ButtonIcon = ({
 	<Tooltip placement="top" title={tooltip}>
 		<button
 			className={cn(
-				'block flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-solid border-gray bg-white p-0',
+				'flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-solid border-gray bg-white p-0',
 				className,
 				{
 					'pointer-events-none !border-0 bg-darkGray opacity-50 !shadow-none':

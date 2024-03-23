@@ -5,7 +5,7 @@ import { ControlledInput, Label } from '../../elements';
 
 type Props = {
 	isLoading: boolean;
-	discount?: string;
+	discount: string;
 	onConfirm: () => void;
 	onClose: () => void;
 };
@@ -26,7 +26,7 @@ export const DiscountModal = ({
 	>
 		<div className="mb-7">
 			<Label label="Discounted Price" spacing />
-			<ControlledInput value={discount} disabled onChange={() => null} />
+			<ControlledInput value={discount} disabled />
 		</div>
 
 		<AuthForm

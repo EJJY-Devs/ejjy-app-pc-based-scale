@@ -83,8 +83,12 @@ export const AppSettingsForm = ({
 		[branchName, branchServerUrl, brightness, companyName],
 	);
 
-	const handleChangeSlider = (value) => {
-		document.querySelector('html').style.filter = `brightness(${value}%)`;
+	const handleChangeSlider = (value: number) => {
+		const html = document.querySelector('html');
+
+		if (html !== null) {
+			html.style.filter = `brightness(${value}%)`;
+		}
 	};
 
 	return (

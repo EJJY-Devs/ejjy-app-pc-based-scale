@@ -4,17 +4,17 @@ import { cn } from 'utils';
 
 type Props = {
 	id?: string;
-	value: any;
+	value: string | number;
 	type?: string;
 	placeholder?: string;
 	disabled?: boolean;
 	max?: number;
 	min?: number;
-	onChange: any;
-	onFocus?: any;
 	autoFocus?: boolean;
 	className?: string;
 	step?: string;
+	onChange?: (value: string) => void;
+	onFocus?: (value: string) => void;
 };
 
 // eslint-disable-next-line react/display-name
@@ -56,10 +56,8 @@ export const ControlledInput = React.forwardRef<HTMLInputElement, Props>(
 			step={step}
 			type={type}
 			value={value}
-			onChange={(event) => onChange(event.target.value)}
-			onFocus={(event) => {
-				if (onFocus) onFocus(event.target.value);
-			}}
+			onChange={(event) => onChange?.(event.target.value)}
+			onFocus={(event) => onFocus?.(event.target.value)}
 			onKeyDown={(evt) => {
 				if (type === 'number' && ['e', 'E', '+', '-'].includes(evt.key)) {
 					evt.preventDefault();

@@ -10,13 +10,14 @@ import { getBranchMachineId, getBranchServerUrl } from '../utils/function';
 
 const useConnectivity = () => {
 	const [isEnabled, setIsEnabled] = useState(false);
-	const isConnected = useRef(null);
+	const isConnected = useRef<null | boolean>(null);
 
 	useQuery(
 		['useConnectivity', isEnabled],
-		() => SiteSettingsService.retrieve(null, getBranchServerUrl()),
+		() =>
+			SiteSettingsService.retrieve(undefined, getBranchServerUrl() as string),
 		{
-			enabled: isEnabled,
+			enabled: isEnabled && getBranchServerUrl() !== null,
 			refetchInterval: REFETCH_SYNC_INTERVAL_MS,
 			refetchOnWindowFocus: false,
 			retry: false,

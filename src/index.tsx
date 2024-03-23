@@ -11,6 +11,7 @@ import configureAxios from './configureAxios';
 import './index.scss';
 import * as serviceWorker from './serviceWorker';
 import history from './utils/history';
+import { ConfigProvider } from 'antd';
 
 // Configure timezone
 dayjs.extend(customParseFormat);
@@ -23,12 +24,21 @@ configureAxios();
 
 const queryClient = new QueryClient();
 
+ConfigProvider.config({
+	theme: {
+		primaryColor: '#20bf6b',
+		errorColor: '#fc5c65',
+	},
+});
+
 ReactDOM.render(
 	<React.StrictMode>
 		<QueryClientProvider client={queryClient}>
-			<Router history={history}>
-				<App />
-			</Router>
+			<ConfigProvider>
+				<Router history={history}>
+					<App />
+				</Router>
+			</ConfigProvider>
 		</QueryClientProvider>
 	</React.StrictMode>,
 	document.getElementById('root'),

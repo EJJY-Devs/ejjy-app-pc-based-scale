@@ -16,10 +16,10 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useCurrentTransactionStore } from 'stores';
 import { getBranchId, getBranchServerUrl } from 'utils/function';
-import { Buttons } from './components/Buttons/Buttons';
+import { Buttons } from './components/Buttons';
 import { CheckoutModal } from './components/Checkout/CheckoutModal';
 import { TemporaryCheckoutModal } from './components/Checkout/TemporaryCheckoutModal';
-import { MainTable } from './components/MainTable/MainTable';
+import { MainTable } from './components/MainTable';
 import { WeightDrawer } from './components/WeightDrawer';
 
 const Main = () => {
@@ -142,15 +142,15 @@ const Main = () => {
 				</div>
 			)}
 
-			<CheckoutModal
-				visible={checkoutModalVisible}
-				onClose={() => setCheckoutModalVisible(false)}
-			/>
+			{checkoutModalVisible && (
+				<CheckoutModal onClose={() => setCheckoutModalVisible(false)} />
+			)}
 
-			<TemporaryCheckoutModal
-				visible={temporaryCheckoutModalVisible}
-				onClose={() => setTemporaryCheckoutModalVisible(false)}
-			/>
+			{temporaryCheckoutModalVisible && (
+				<TemporaryCheckoutModal
+					onClose={() => setTemporaryCheckoutModalVisible(false)}
+				/>
+			)}
 		</Container>
 	);
 };

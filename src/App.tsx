@@ -18,6 +18,7 @@ import Main from './screens/Main';
 const App = () => {
 	// VARIABLES
 	const branchMachine = getBranchMachine(true);
+	const branchServerUrl = getBranchServerUrl();
 
 	// CUSTOM HOOKS
 	useSiteSettings({
@@ -35,10 +36,10 @@ const App = () => {
 		async () => {
 			await pingBranchMachine({
 				onlineBranchMachineId: branchMachine.id,
-				onlineApiUrlOverride: getBranchServerUrl(),
+				onlineApiUrlOverride: branchServerUrl as string,
 			});
 		},
-		branchMachine ? 5000 : null,
+		branchMachine && branchServerUrl !== undefined ? 5000 : null,
 	);
 
 	useEffect(() => {

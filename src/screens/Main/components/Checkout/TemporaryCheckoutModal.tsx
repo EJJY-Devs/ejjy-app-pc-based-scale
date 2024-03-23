@@ -7,21 +7,21 @@ import {
 } from 'ejjy-global';
 import { productCategoryTypes } from 'global';
 import { usePrintTransaction } from 'hooks';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { useCurrentTransactionStore, useUserStore } from 'stores';
 import {
 	formatPrintDetails,
 	formatZeroToO,
+	getBranchMachineId,
 	getBranchName,
 	getCompanyName,
 } from 'utils/function';
 
 type Props = {
-	visible: boolean;
 	onClose: () => void;
 };
 
-export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
+export const TemporaryCheckoutModal = ({ onClose }: Props) => {
 	// STATES
 	const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -34,14 +34,6 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 		useTransactionCreate();
 
 	// METHODS
-	useEffect(() => {
-		if (inputRef && inputRef.current) {
-			setTimeout(() => {
-				const input = inputRef.current;
-				input.focus();
-			}, 500);
-		}
-	}, [visible, inputRef]);
 
 	const getCheckoutProducts = useCallback(
 		() =>
@@ -74,8 +66,8 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 	const handleSubmit = async () => {
 		const checkedOutProducts = getCheckoutProducts();
 		const { data: transaction } = await createTransaction({
-			branchMachineId: null,
-			tellerId: user?.id, // TODO: Temporarily added a guard since login page is temporarily disabled
+			branchMachineId: Number(getBranchMachineId()),
+			tellerId: user?.id as number, // TODO: Temporarily added a guard since login page is temporarily disabled
 			products: checkedOutProducts.map((product) => ({
 				product_id: product.id,
 				quantity: Number(product.weight),
@@ -107,9 +99,9 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 		<Modal
 			footer={null}
 			title="Temporary Checkout"
-			visible={visible}
 			centered
 			closable
+			visible
 			onCancel={onClose}
 		>
 			<Spin spinning={isCreatingTransaction || isPrintingTransaction}>
@@ -133,14 +125,8 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 					onChange={() => null}
 				/>
 
-				<div className="custom-footer">
-					<Button
-						className="btn-cancel"
-						size="lg"
-						text="Cancel"
-						type="button"
-						onClick={onClose}
-					/>
+				<div className="mt-8 grid grid-cols-2 gap-x-5">
+					<Button size="lg" text="Cancel" type="button" onClick={onClose} />
 					<Button
 						size="lg"
 						text="Proceed"

@@ -22,11 +22,13 @@ export const getBranchMachineId = () =>
 
 export const getBranchMachine = (isParsed = false) => {
 	const branchMachine = localStorage.getItem(APP_BRANCH_MACHINE_KEY);
-	return isParsed ? JSON.parse(branchMachine) : branchMachine;
+	return isParsed ? JSON.parse(branchMachine || '') : branchMachine;
 };
 
-export const getBranchServerUrl = () =>
-	localStorage.getItem(APP_BRANCH_SERVER_URL_KEY);
+export const getBranchServerUrl = () => {
+	console.log('get branch server url');
+	return localStorage.getItem(APP_BRANCH_SERVER_URL_KEY) || undefined;
+};
 
 export const getAppBrightness = () => localStorage.getItem(APP_BRIGHTNESS_KEY);
 
@@ -36,19 +38,9 @@ export const getCompanyName = () =>
 export const getPriceCodeFeature = () =>
 	Number(localStorage.getItem(APP_PRICE_CODE_FEATURE_KEY));
 
-// Callbacks
-
-export const modifiedExtraCallback =
-	(callback, extraCallback = null) =>
-	(response) => {
-		callback(response);
-		if (extraCallback) {
-			extraCallback(response);
-		}
-	};
-
 // Formats
-export const formatZeroToO = (value) => _.toString(value)?.replace(/0/g, 'O');
+export const formatZeroToO = (value: number | string) =>
+	_.toString(value)?.replace(/0/g, 'O');
 
 export const formatPrintDetails = (detail: string) => {
 	let formattedDetail = '';

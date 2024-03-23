@@ -27,6 +27,16 @@ const columns: ColumnsType = [
 	},
 ];
 
+type TableRow = {
+	id: number;
+	title: string;
+	dataSource: {
+		id: number;
+		description: string;
+		action: React.ReactElement;
+	}[];
+};
+
 type Props = {
 	branchProducts: BranchProduct[];
 	onSelectProduct: (product: BranchProduct) => void;
@@ -39,7 +49,7 @@ export const WeightProductSelection = ({
 	// STATES
 	const [textcodeModalVisible, setTextcodeModalVisible] = useState(false);
 	const [lamasAmountModalVisible, setLamasAmountModalVisible] = useState(false);
-	const [dataSource, setDataSource] = useState([]);
+	const [dataSource, setDataSource] = useState<TableRow[]>([]);
 
 	// CUSTOM HOOKS
 	const { weight } = useWeightStore();
@@ -166,11 +176,12 @@ export const WeightProductSelection = ({
 				</div>
 			</div>
 
-			<WeightTextcodeModal
-				visible={textcodeModalVisible}
-				onClose={() => setTextcodeModalVisible(false)}
-				onSelectProduct={onSelectProduct}
-			/>
+			{textcodeModalVisible && (
+				<WeightTextcodeModal
+					onClose={() => setTextcodeModalVisible(false)}
+					onSelectProduct={onSelectProduct}
+				/>
+			)}
 
 			{lamasAmountModalVisible && (
 				<LamasAmountModal onClose={() => setLamasAmountModalVisible(false)} />
