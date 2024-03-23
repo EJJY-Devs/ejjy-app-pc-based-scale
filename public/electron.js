@@ -45,12 +45,10 @@ function createWindow() {
 	});
 
 	setTimeout(() => {
-		mainWindow.loadURL(
-			isDev
-				? 'http://localhost:3004'
-				: `file://${path.join(__dirname, '../build/index.html')}`,
-		);
-	}, 8000);
+		app.isPackaged
+			? mainWindow.loadFile(path.join(__dirname, 'index.html'))
+			: mainWindow.loadURL('http://localhost:3004');
+	}, 2000);
 
 	mainWindow.once('ready-to-show', () => {
 		splashWindow.destroy();

@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-wrap-multilines */
 import { message, Modal } from 'antd';
 import { ScaleButton } from 'components';
 import { Button, ControlledInput } from 'components/elements';
@@ -10,15 +9,16 @@ import {
 	getBranchName,
 	getCompanyName,
 } from 'utils/function';
-import './style.scss';
+import { cn } from 'utils';
 
 const DECIMAL_NUMBER_LIMIT = 2;
 const NUMPAD_CLEAR = -1;
 const NUMPAD_DOT = '.';
+const inputs = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0, NUMPAD_DOT];
 
-interface Props {
-	onClose: any;
-}
+type Props = {
+	onClose: () => void;
+};
 
 export const LamasAmountModal = ({ onClose }: Props) => {
 	// STATES
@@ -29,7 +29,7 @@ export const LamasAmountModal = ({ onClose }: Props) => {
 		usePrintTotal();
 
 	// METHODS
-	const handleNumpadClick = (key) => {
+	const handleNumpadInput = (key: number | string) => {
 		if (key === NUMPAD_CLEAR) {
 			setTextcode((value) =>
 				value.length > 0 ? value.substring(0, value.length - 1) : '',
@@ -66,7 +66,6 @@ export const LamasAmountModal = ({ onClose }: Props) => {
 
 	return (
 		<Modal
-			className="InputAmountModal"
 			footer={null}
 			title="Input Amount"
 			centered
@@ -74,95 +73,40 @@ export const LamasAmountModal = ({ onClose }: Props) => {
 			visible
 			onCancel={onClose}
 		>
-			<div className="InputAmountModal_textcodeNumbers">
+			<div className="grid w-full grid-cols-3 grid-rows-5 gap-3">
 				<ControlledInput
-					className="InputAmountModal_textcodeNumbers_input"
-					value={`₱${textcode}`}
+					className="col-span-3 col-start-1 text-center text-4xl font-bold text-dark"
+					value={textcode}
 					disabled
 					onChange={(value) => setTextcode(value)}
 				/>
 
-				<ScaleButton
-					className="InputAmountModal_textcodeNumbers_num"
-					disabled={isDigitsDisabled()}
-					title="7"
-					onClick={() => handleNumpadClick(7)}
-				/>
-				<ScaleButton
-					className="InputAmountModal_textcodeNumbers_num"
-					disabled={isDigitsDisabled()}
-					title="8"
-					onClick={() => handleNumpadClick(8)}
-				/>
-				<ScaleButton
-					className="InputAmountModal_textcodeNumbers_num"
-					disabled={isDigitsDisabled()}
-					title="9"
-					onClick={() => handleNumpadClick(9)}
-				/>
+				{inputs.map((number) => (
+					<ScaleButton
+						key={number}
+						className={
+							number === 0
+								? 'col-span-2 col-start-1 h-20 text-[2rem]'
+								: 'h-20 text-[2rem]'
+						}
+						disabled={isDigitsDisabled() || textcode.includes(NUMPAD_DOT)}
+						title={String(number)}
+						onClick={() => handleNumpadInput(number)}
+					/>
+				))}
 
 				<ScaleButton
-					className="InputAmountModal_textcodeNumbers_num"
-					disabled={isDigitsDisabled()}
-					title="4"
-					onClick={() => handleNumpadClick(4)}
-				/>
-				<ScaleButton
-					className="InputAmountModal_textcodeNumbers_num"
-					disabled={isDigitsDisabled()}
-					title="5"
-					onClick={() => handleNumpadClick(5)}
-				/>
-				<ScaleButton
-					className="InputAmountModal_textcodeNumbers_num"
-					disabled={isDigitsDisabled()}
-					title="6"
-					onClick={() => handleNumpadClick(6)}
-				/>
-
-				<ScaleButton
-					className="InputAmountModal_textcodeNumbers_num"
-					disabled={isDigitsDisabled()}
-					title="1"
-					onClick={() => handleNumpadClick(1)}
-				/>
-				<ScaleButton
-					className="InputAmountModal_textcodeNumbers_num"
-					disabled={isDigitsDisabled()}
-					title="2"
-					onClick={() => handleNumpadClick(2)}
-				/>
-				<ScaleButton
-					className="InputAmountModal_textcodeNumbers_num"
-					disabled={isDigitsDisabled()}
-					title="3"
-					onClick={() => handleNumpadClick(3)}
-				/>
-
-				<ScaleButton
-					className="InputAmountModal_textcodeNumbers_num"
-					disabled={isDigitsDisabled()}
-					title="0"
-					onClick={() => handleNumpadClick(0)}
-				/>
-
-				<ScaleButton
-					className="InputAmountModal_textcodeNumbers_num"
-					disabled={textcode.includes(NUMPAD_DOT)}
-					title={NUMPAD_DOT}
-					onClick={() => handleNumpadClick(NUMPAD_DOT)}
-				/>
-				<ScaleButton
-					className="InputAmountModal_textcodeNumbers_num InputAmountModal_textcodeNumbers_clear"
+					className={cn('col-span-3 h-20 text-[2rem]', {
+						'bg-red-500 text-white': textcode.length > 0,
+					})}
 					disabled={textcode.length === 0}
 					title="C"
-					onClick={() => handleNumpadClick(NUMPAD_CLEAR)}
+					onClick={() => handleNumpadInput(NUMPAD_CLEAR)}
 				/>
 			</div>
 
-			<div className="InputAmountModal_btnGroup">
+			<div className="mt-8 grid grid-cols-2 gap-x-5">
 				<Button
-					className="InputAmountModal_btnGroup_btnCancel"
 					disabled={isPrintingTotal}
 					size="lg"
 					text="Cancel"

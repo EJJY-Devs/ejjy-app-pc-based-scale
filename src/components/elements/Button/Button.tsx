@@ -1,7 +1,7 @@
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin, Tooltip } from 'antd';
 import { TooltipPlacement } from 'antd/lib/tooltip';
-import cn from 'classnames';
+import { cn } from 'utils';
 import * as React from 'react';
 import './style.scss';
 
@@ -9,7 +9,7 @@ const loadingIcon = (
 	<LoadingOutlined style={{ fontSize: 17, color: 'white' }} spin />
 );
 
-interface Props {
+type Props = {
 	text: string | React.ReactNode;
 	variant?: 'primary' | 'secondary' | 'default' | 'dark-gray';
 	size?: 'md' | 'lg';
@@ -24,10 +24,10 @@ interface Props {
 	tooltipPlacement?: TooltipPlacement;
 	tooltip?: string;
 	hasShortcutKey?: boolean;
-}
+};
 
 // eslint-disable-next-line react/display-name
-const Button = React.forwardRef<HTMLInputElement, Props>(
+const Button = React.forwardRef<HTMLButtonElement, Props>(
 	(
 		{
 			text,

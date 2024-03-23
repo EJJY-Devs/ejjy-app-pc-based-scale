@@ -1,17 +1,16 @@
-/* eslint-disable react/jsx-wrap-multilines */
 import { Col, message, Row, Space } from 'antd';
 import { ScaleButton } from 'components';
 import { ControlledInput, Label } from 'components/elements';
-import { discountTypes, markdownTypes } from 'global';
-import { useCurrentTransaction } from 'hooks';
+import { formatInPeso, markdownTypes } from 'ejjy-global';
+import { discountTypes } from 'global';
 import React, { useCallback } from 'react';
-import { useWeightStore } from 'stores';
-import { formatInPeso, formatWeight } from 'utils/function';
-import './style.scss';
+import { useCurrentTransactionStore, useWeightStore } from 'stores';
+import { formatWeight } from 'utils/function';
+import iconPrintAndAddCart from 'assets/images/icon-print-and-add-cart.svg';
 
-interface Props {
-	onPrint: any;
-}
+type Props = {
+	onPrint: (callback?: () => void) => void;
+};
 
 export const WeightProductDetails = ({ onPrint }: Props) => {
 	// STATES
@@ -21,15 +20,16 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 
 	// CUSTOM HOOKS
 	// const { validateUser, status: authStatus } = useAuth();
-	const weight = useWeightStore((state: any) => state.weight);
+	const { weight } = useWeightStore();
 	const { currentProduct, addProduct, setCurrentProduct } =
-		useCurrentTransaction();
-
+		useCurrentTransactionStore();
+	console.log('currentProduct', currentProduct);
 	// METHODS
 	const handlePrintAndAddCart = () => {
 		onPrint(() => {
 			addProduct({ ...currentProduct, weight });
 			setCurrentProduct(null);
+
 			message.success('Product successfully added.');
 		});
 	};
@@ -55,7 +55,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 		[currentProduct],
 	);
 
-	const onDiscountSuccess = (discountType) => {
+	const handleDiscountSuccess = (discountType) => {
 		const product = currentProduct;
 
 		if (product) {
@@ -113,46 +113,42 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 
 	return (
 		<>
-			<div className="WeightProductDetails">
-				<Space
-					className="WeightProductDetails_wrapper"
-					direction="vertical"
-					size={20}
-				>
-					<div className="WeightProductDetails_inputGroup">
+			<div>
+				<Space className="w-full" direction="vertical" size={20}>
+					<div>
 						<Label label="Total" spacing />
 						<ControlledInput
-							className="WeightProductDetails_inputGroup_inputAmount"
+							className="text-right text-[2.5rem] font-bold text-dark"
 							value={formatInPeso(weight * currentProduct.price_per_piece)}
 							disabled
 							onChange={() => null}
 						/>
 					</div>
 
-					<div className="WeightProductDetails_inputGroup">
+					<div>
 						<Label label="Name" spacing />
 						<ControlledInput
-							className="WeightProductDetails_inputGroup_input"
-							value={currentProduct.name}
+							className="text-2xl font-bold text-dark"
+							value={currentProduct.product.name}
 							disabled
 							onChange={() => null}
 						/>
 					</div>
 
-					<div className="WeightProductDetails_inputGroup">
+					<div>
 						<Label label="Weight" spacing />
 						<ControlledInput
-							className="WeightProductDetails_inputGroup_input"
+							className="text-2xl font-bold text-dark"
 							value={formatWeight(weight)}
 							disabled
 							onChange={() => null}
 						/>
 					</div>
 
-					<div className="WeightProductDetails_inputGroup">
+					<div>
 						<Label label="Price" spacing />
 						<ControlledInput
-							className="WeightProductDetails_inputGroup_input"
+							className="text-2xl font-bold text-dark"
 							value={formatInPeso(currentProduct.price_per_piece)}
 							disabled
 							onChange={() => null}
@@ -163,11 +159,11 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 						{isWithDiscount() ? (
 							<Col span={24}>
 								<ScaleButton
-									className="WeightProductDetails_btnDiscount__remove"
+									className="w-full border-b-4 border-[#ab363d] bg-red-500 text-white"
 									title="Remove Discount"
 									onClick={() => {
 										// setSelectedDiscountType(discountTypes.NO_DISCOUNT);
-										onDiscountSuccess(discountTypes.NO_DISCOUNT);
+										handleDiscountSuccess(discountTypes.NO_DISCOUNT);
 										// setDiscountAuthModalVisible(true);
 									}}
 								/>
@@ -176,22 +172,22 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 							<>
 								<Col span={12}>
 									<ScaleButton
-										className="WeightProductDetails_btnDiscount"
+										className="w-full"
 										title="Wholesale"
 										onClick={() => {
 											// setSelectedDiscountType(discountTypes.FIRST);
-											onDiscountSuccess(discountTypes.FIRST);
+											handleDiscountSuccess(discountTypes.FIRST);
 											// setDiscountAuthModalVisible(true);
 										}}
 									/>
 								</Col>
 								<Col span={12}>
 									<ScaleButton
-										className="WeightProductDetails_btnDiscount"
+										className="w-full"
 										title="Special"
 										onClick={() => {
 											// setSelectedDiscountType(discountTypes.SECOND);
-											onDiscountSuccess(discountTypes.SECOND);
+											handleDiscountSuccess(discountTypes.SECOND);
 											// setDiscountAuthModalVisible(true);
 										}}
 									/>
@@ -201,28 +197,25 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 					</Row>
 
 					<ScaleButton
-						className="WeightProductDetails_btnClear"
-						title="Remove Selected Product"
+						className="w-full border-2 border-red-500 bg-transparent text-base text-red-500 hover:bg-red-500 hover:text-white hover:opacity-100"
+						title="REMOVE SELECTED PRODUCT"
 						onClick={() => {
 							setCurrentProduct(null);
 						}}
 					/>
 				</Space>
 
-				<div className="WeightProductDetails_btnGroup">
+				<div className="absolute bottom-0 grid h-button w-full grid-cols-12 gap-x-3">
 					<ScaleButton
+						className="col-span-8"
 						disabled={weight === 0}
 						title="Print"
 						onClick={() => onPrint()}
 					/>
 					<ScaleButton
+						className="col-span-4"
 						disabled={weight === 0}
-						title={
-							<img
-								alt="icon"
-								src={require('../../../../assets/images/icon-print-and-add-cart.svg')}
-							/>
-						}
+						title={<img alt="icon" src={iconPrintAndAddCart} />}
 						onClick={handlePrintAndAddCart}
 					/>
 				</div>

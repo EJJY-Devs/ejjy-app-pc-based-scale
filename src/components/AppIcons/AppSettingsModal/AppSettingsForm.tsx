@@ -1,12 +1,17 @@
-import { Col, Divider, Input, Radio, Row, Select, Space } from 'antd';
+import { Col, Divider, Input, Radio, Row, Select, Slider, Space } from 'antd';
+import {
+	FieldError,
+	filterOption,
+	useBranches,
+	useBranchMachines,
+} from 'ejjy-global';
 import { ErrorMessage, Form, Formik } from 'formik';
-import { useBranches, useBranchMachines } from 'hooks';
 import React, { useCallback, useState } from 'react';
-import { filterOption } from 'utils/function';
+import { getBranchServerUrl } from 'utils/function';
 import * as Yup from 'yup';
-import { Button, FieldError, FormSlider, Label } from '../../elements';
+import { Button, Label } from '../../elements';
 
-interface Props {
+export interface FormData {
 	branchId: number;
 	branchMachine: string;
 	branchMachineId: number;
@@ -14,9 +19,12 @@ interface Props {
 	branchServerUrl: string;
 	brightness: string;
 	companyName: string;
-	onClose: any;
-	onSubmit: any;
 	priceCodeFeature: string | number;
+}
+
+interface Props extends FormData {
+	onClose: () => void;
+	onSubmit: (formData: FormData) => void;
 }
 
 export const AppSettingsForm = ({
@@ -27,35 +35,39 @@ export const AppSettingsForm = ({
 	branchServerUrl,
 	brightness,
 	companyName,
+	priceCodeFeature,
 	onClose,
 	onSubmit,
-	priceCodeFeature,
 }: Props) => {
 	// STATES
 	const [selectedBranchId, setSelectedBranchId] = useState(branchId);
 
 	// CUSTOM HOOKS
-	const {
-		isFetching: isFetchingBranches,
-		data: { branches },
-	} = useBranches();
-	const {
-		isFetching: isFetchingBranchMachines,
-		data: { branchMachines },
-	} = useBranchMachines({
-		params: { branchId: selectedBranchId },
+	const { data: branchesData, isFetching: isFetchingBranches } = useBranches({
+		serviceOptions: {
+			baseURL: getBranchServerUrl(),
+		},
 	});
+	const { data: branchMachinesData, isFetching: isFetchingBranchMachines } =
+		useBranchMachines({
+			params: {
+				branchId: selectedBranchId ?? undefined,
+			},
+			serviceOptions: {
+				baseURL: getBranchServerUrl(),
+			},
+		});
 
 	// METHODS
 	const getFormDetails = useCallback(
 		() => ({
 			DefaultValues: {
-				branchId: branchId || '',
+				branchId,
 				branchMachine: branchMachine || '',
-				branchMachineId: branchMachineId || '',
+				branchMachineId,
 				branchName: branchName || '',
 				branchServerUrl: branchServerUrl || '',
-				brightness: brightness || 100,
+				brightness: brightness || '100',
 				companyName: companyName || '',
 				priceCodeFeature: priceCodeFeature || '0',
 			},
@@ -76,12 +88,12 @@ export const AppSettingsForm = ({
 	};
 
 	return (
-		<Formik
+		<Formik<FormData>
 			initialValues={getFormDetails().DefaultValues}
 			validationSchema={getFormDetails().Schema}
 			enableReinitialize
-			onSubmit={async (values) => {
-				onSubmit(values);
+			onSubmit={async (formData) => {
+				onSubmit(formData);
 			}}
 		>
 			{({ setFieldValue, values }) => (
@@ -97,7 +109,7 @@ export const AppSettingsForm = ({
 							/>
 							<ErrorMessage
 								name="branchName"
-								render={(error) => <FieldError error={error} />}
+								render={(error) => <FieldError message={error} />}
 							/>
 						</Col>
 
@@ -111,7 +123,7 @@ export const AppSettingsForm = ({
 							/>
 							<ErrorMessage
 								name="companyName"
-								render={(error) => <FieldError error={error} />}
+								render={(error) => <FieldError message={error} />}
 							/>
 						</Col>
 
@@ -125,14 +137,14 @@ export const AppSettingsForm = ({
 							/>
 							<ErrorMessage
 								name="branchServerUrl"
-								render={(error) => <FieldError error={error} />}
+								render={(error) => <FieldError message={error} />}
 							/>
 						</Col>
 
 						<Col span={24}>
 							<Label id="branchId" label="Branch" spacing />
 							<Select
-								className="w-100"
+								className="w-full"
 								filterOption={filterOption}
 								loading={isFetchingBranches}
 								optionFilterProp="children"
@@ -144,7 +156,7 @@ export const AppSettingsForm = ({
 									setSelectedBranchId(Number(value));
 								}}
 							>
-								{branches.map((branch) => (
+								{branchesData?.list?.map((branch) => (
 									<Select.Option key={branch.id} value={branch.id}>
 										{branch.name}
 									</Select.Option>
@@ -152,7 +164,7 @@ export const AppSettingsForm = ({
 							</Select>
 							<ErrorMessage
 								name="branchId"
-								render={(error) => <FieldError error={error} />}
+								render={(error) => <FieldError message={error} />}
 							/>
 						</Col>
 
@@ -160,7 +172,7 @@ export const AppSettingsForm = ({
 							<Col span={24}>
 								<Label id="branchMachineId" label="Branch Machine" spacing />
 								<Select
-									className="w-100"
+									className="w-full"
 									filterOption={filterOption}
 									loading={isFetchingBranchMachines}
 									optionFilterProp="children"
@@ -170,9 +182,8 @@ export const AppSettingsForm = ({
 									onChange={(value) => {
 										setFieldValue('branchMachineId', value);
 
-										const selectedBranchMachine = branchMachines.find(
-											(bm) => bm.id === value,
-										);
+										const selectedBranchMachine =
+											branchMachinesData?.list?.find((bm) => bm.id === value);
 										if (selectedBranchMachine) {
 											setFieldValue(
 												'branchMachine',
@@ -181,7 +192,7 @@ export const AppSettingsForm = ({
 										}
 									}}
 								>
-									{branchMachines.map((bm) => (
+									{branchMachinesData?.list?.map((bm) => (
 										<Select.Option key={bm.id} value={bm.id}>
 											{bm.name}
 										</Select.Option>
@@ -189,17 +200,28 @@ export const AppSettingsForm = ({
 								</Select>
 								<ErrorMessage
 									name="branchMachineId"
-									render={(error) => <FieldError error={error} />}
+									render={(error) => <FieldError message={error} />}
 								/>
 							</Col>
 						)}
 
 						<Col span={24}>
 							<Label label="Brightness" spacing />
-							<FormSlider id="brightness" onChange={handleChangeSlider} />
+							<Slider
+								max={100}
+								min={10}
+								step={5}
+								tipFormatter={(value) => `${value}%`}
+								value={Number(values.brightness)}
+								onChange={(value) => {
+									setFieldValue('brightness', value);
+									handleChangeSlider(value);
+								}}
+							/>
+
 							<ErrorMessage
 								name="brightness"
-								render={(error) => <FieldError error={error} />}
+								render={(error) => <FieldError message={error} />}
 							/>
 						</Col>
 
@@ -222,7 +244,7 @@ export const AppSettingsForm = ({
 							/>
 							<ErrorMessage
 								name="priceCodeFeature"
-								render={(error) => <FieldError error={error} />}
+								render={(error) => <FieldError message={error} />}
 							/>
 						</Col>
 					</Row>

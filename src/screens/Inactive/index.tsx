@@ -2,7 +2,6 @@ import { Button, Result } from 'antd';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { getBranchServerUrl } from 'utils/function';
-import './style.scss';
 
 const Inactive = () => {
 	// VARIABLES
@@ -19,7 +18,7 @@ const Inactive = () => {
 	}, [history]);
 
 	return (
-		<div className="Inactive">
+		<div className="flex h-full w-full items-center justify-center">
 			<Result
 				extra={[
 					<Button

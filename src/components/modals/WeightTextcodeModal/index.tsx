@@ -1,20 +1,21 @@
-/* eslint-disable react/jsx-wrap-multilines */
 import { message, Modal } from 'antd';
 import { ScaleButton } from 'components';
 import { Button, ControlledInput } from 'components/elements';
-import { request } from 'global';
-import { useBranchProducts } from 'hooks/useBranchProducts';
-import { useCurrentTransaction } from 'hooks/useCurrentTransaction';
+import { BranchProduct, DEFAULT_PAGE, useBranchProducts } from 'ejjy-global';
+import { MAX_PAGE_SIZE } from 'global';
+import { useCurrentTransactionStore } from 'stores';
 import React, { useEffect, useState } from 'react';
-import './style.scss';
+import { getBranchId } from 'utils/function';
 
 const TEXTCODE_MAX_LENGTH = 10;
+const NUMPAD_CLEAR = -1;
+const inputs = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
 
-interface Props {
+type Props = {
 	visible: boolean;
-	onSelectProduct: any;
-	onClose: any;
-}
+	onSelectProduct: (product: BranchProduct) => void;
+	onClose: () => void;
+};
 
 export const WeightTextcodeModal = ({
 	visible,
@@ -25,35 +26,34 @@ export const WeightTextcodeModal = ({
 	const [textcode, setTextcode] = useState('');
 
 	// CUSTOM HOOKS
-	const { listBranchProducts, status: branchProductsStatus } =
-		useBranchProducts();
-	const { transactionProducts } = useCurrentTransaction();
+	const { transactionProducts } = useCurrentTransactionStore();
+	const { isFetching: isFetchingBranchProducts, refetch: fetchBranchProducts } =
+		useBranchProducts({
+			params: {
+				branchId: Number(getBranchId()),
+				isShownInScaleList: true,
+				ordering: '-product__textcode',
+				page: DEFAULT_PAGE,
+				pageSize: MAX_PAGE_SIZE,
+				search: textcode,
+			},
+			options: {
+				enabled: false,
+				refetchOnMount: false,
+				onSettled: (data, error) => {
+					if (error || !data?.list) {
+						message.error('An error occurred while searching the product.');
+						return;
+					}
 
-	// METHODS
-	useEffect(() => {
-		if (visible) {
-			setTextcode('');
-		}
-	}, [visible]);
-
-	const onNumpadInput = (key) => {
-		if (key === -1) {
-			// eslint-disable-next-line no-confusing-arrow
-			setTextcode((value) =>
-				value.length > 0 ? value.substring(0, value.length - 1) : '',
-			);
-		} else {
-			setTextcode((value) => `${value}${key}`);
-		}
-	};
-
-	const handleSubmit = () => {
-		if (textcode.length > 0) {
-			listBranchProducts({ search: textcode }, ({ status, data }) => {
-				if (status === request.SUCCESS) {
-					const branchProduct = data.find(
+					const branchProduct = data.list.find(
 						(item) => item.product.textcode === textcode,
 					);
+
+					if (!branchProduct) {
+						message.error('Product does not exist.');
+						return;
+					}
 
 					if (branchProduct) {
 						const transactionProduct = transactionProducts.find(
@@ -66,34 +66,52 @@ export const WeightTextcodeModal = ({
 						}
 
 						const {
-							product,
 							markdown_price_per_piece1,
 							markdown_price_per_piece2,
 							price_per_piece,
 						} = branchProduct;
 
 						onSelectProduct({
-							...product,
+							...branchProduct,
 							markdown_price_per_piece1,
 							markdown_price_per_piece2,
 							price_per_piece,
 						});
+
 						onClose();
-					} else {
-						message.error('Product does not exist.');
 					}
-				} else if (status === request.ERROR) {
-					message.error('An error occurred while searching the product.');
-				}
-			});
-		} else {
-			message.warning('Please input a textcode first.');
+				},
+			},
+		});
+
+	// METHODS
+	useEffect(() => {
+		if (visible) {
+			setTextcode('');
 		}
+	}, [visible]);
+
+	const handleNumpadInput = (key: number) => {
+		if (key === NUMPAD_CLEAR) {
+			setTextcode((value) =>
+				value.length > 0 ? value.substring(0, value.length - 1) : '',
+			);
+		} else {
+			setTextcode((value) => `${value}${key}`);
+		}
+	};
+
+	const handleSubmit = () => {
+		if (textcode.length === 0) {
+			message.warning('Please input a textcode first.');
+			return;
+		}
+
+		fetchBranchProducts();
 	};
 
 	return (
 		<Modal
-			className="WeightTextcodeModal"
 			footer={null}
 			title="Search Product By Textcode"
 			visible={visible}
@@ -101,94 +119,39 @@ export const WeightTextcodeModal = ({
 			closable
 			onCancel={onClose}
 		>
-			<div className="WeightTextcodeModal_textcodeNumbers">
+			<div className="grid w-full grid-cols-3 grid-rows-5 gap-3">
 				<ControlledInput
-					className="WeightTextcodeModal_textcodeNumbers_input"
+					className="col-span-3 col-start-1 text-center text-4xl font-bold text-dark"
 					value={textcode}
 					disabled
 					onChange={(value) => setTextcode(value)}
 				/>
 
-				<ScaleButton
-					className="WeightTextcodeModal_textcodeNumbers_num"
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
-					title="7"
-					onClick={() => onNumpadInput(7)}
-				/>
-				<ScaleButton
-					className="WeightTextcodeModal_textcodeNumbers_num"
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
-					title="8"
-					onClick={() => onNumpadInput(8)}
-				/>
-				<ScaleButton
-					className="WeightTextcodeModal_textcodeNumbers_num"
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
-					title="9"
-					onClick={() => onNumpadInput(9)}
-				/>
+				{inputs.map((number) => (
+					<ScaleButton
+						key={number}
+						className={
+							number === 0
+								? 'col-span-2 col-start-1 h-20 text-[2rem]'
+								: 'h-20 text-[2rem]'
+						}
+						disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
+						title={String(number)}
+						onClick={() => handleNumpadInput(number)}
+					/>
+				))}
 
-				<ScaleButton
-					className="WeightTextcodeModal_textcodeNumbers_num"
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
-					title="4"
-					onClick={() => onNumpadInput(4)}
-				/>
-				<ScaleButton
-					className="WeightTextcodeModal_textcodeNumbers_num"
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
-					title="5"
-					onClick={() => onNumpadInput(5)}
-				/>
-				<ScaleButton
-					className="WeightTextcodeModal_textcodeNumbers_num"
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
-					title="6"
-					onClick={() => onNumpadInput(6)}
-				/>
-
-				<ScaleButton
-					className="WeightTextcodeModal_textcodeNumbers_num"
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
-					title="1"
-					onClick={() => onNumpadInput(1)}
-				/>
-				<ScaleButton
-					className="WeightTextcodeModal_textcodeNumbers_num"
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
-					title="2"
-					onClick={() => onNumpadInput(2)}
-				/>
-				<ScaleButton
-					className="WeightTextcodeModal_textcodeNumbers_num"
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
-					title="3"
-					onClick={() => onNumpadInput(3)}
-				/>
-
-				<ScaleButton
-					className="WeightTextcodeModal_textcodeNumbers_num WeightTextcodeModal_textcodeNumbers_num0"
-					disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
-					title="0"
-					onClick={() => onNumpadInput(0)}
-				/>
 				<ScaleButton
 					disabled={textcode.length === 0}
 					title="C"
-					onClick={() => onNumpadInput(-1)}
+					onClick={() => handleNumpadInput(-1)}
 				/>
 			</div>
 
-			<div className="WeightTextcodeModal_btnGroup">
+			<div className="mt-8 grid grid-cols-2 gap-x-5">
+				<Button size="lg" text="Cancel" type="button" onClick={onClose} />
 				<Button
-					className="WeightTextcodeModal_btnGroup_btnCancel"
-					size="lg"
-					text="Cancel"
-					type="button"
-					onClick={onClose}
-				/>
-				<Button
-					loading={branchProductsStatus === request.REQUESTING}
+					loading={isFetchingBranchProducts}
 					size="lg"
 					text="Submit"
 					type="submit"

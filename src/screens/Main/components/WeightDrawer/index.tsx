@@ -1,12 +1,10 @@
-/* eslint-disable react/jsx-wrap-multilines */
 import { message, Spin } from 'antd';
-import { markdownTypes, priceCodes } from 'global';
+import { BranchProduct, markdownTypes, standardRound } from 'ejjy-global';
+import { priceCodes } from 'global';
 import { usePrintProduct, useWeight } from 'hooks';
-import { useAuth } from 'hooks/useAuth';
-import { useCurrentTransaction } from 'hooks/useCurrentTransaction';
 import _ from 'lodash';
 import React, { useEffect } from 'react';
-import { useWeightStore } from 'stores';
+import { useCurrentTransactionStore, useWeightStore } from 'stores';
 import {
 	formatPrintDetails,
 	formatWeight,
@@ -14,25 +12,25 @@ import {
 	getBranchName,
 	getCompanyName,
 	getPriceCodeFeature,
-	standardRound,
 } from 'utils/function';
-import './style.scss';
 import { WeightProductDetails } from './WeightProductDetails';
 import { WeightProductSelection } from './WeightProductSelection';
 
-interface Props {
-	branchProducts: any;
-}
+type Props = {
+	branchProducts: BranchProduct[];
+};
 
 export const WeightDrawer = ({ branchProducts }: Props) => {
 	// CUSTOM HOOKS
-	const weight = useWeightStore((state: any) => state.weight);
-
-	const { user } = useAuth();
+	const { weight } = useWeightStore();
 	const { mutateAsync: printProduct, isLoading: isPrintingProduct } =
-		usePrintProduct();
+		usePrintProduct({
+			onError: () => {
+				message.error('An error occurred while printing the product details');
+			},
+		});
 	const { transactionProducts, currentProduct, setCurrentProduct } =
-		useCurrentTransaction();
+		useCurrentTransactionStore();
 	useWeight();
 
 	// METHODS
@@ -42,21 +40,22 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		}
 	}, [weight]);
 
-	const handleSelectProduct = (product) => {
+	const handleSelectProduct = (branchProduct: BranchProduct) => {
 		const foundProduct = transactionProducts.find(
-			({ id }) => id === product.id,
+			({ id }) => id === branchProduct.id,
 		);
 
 		if (!foundProduct) {
-			setCurrentProduct({ ...product, isCheckedOut: false });
+			setCurrentProduct({ ...branchProduct, isCheckedOut: false });
 		} else {
 			message.error('Product already in the list.');
 		}
 	};
 
-	const handlePrint = (onSuccess = null) => {
+	const handlePrint = async (onSuccess?: () => void) => {
 		// Get total
 		const total = standardRound(currentProduct.price_per_piece * weight);
+
 		// Get weight
 		const roundedWeight = formatWeight(weight);
 		const formattedWeight = _.padStart(
@@ -64,6 +63,7 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 			6,
 			'0',
 		);
+
 		// Get price code
 		let priceCode = '';
 		if (getPriceCodeFeature()) {
@@ -73,10 +73,13 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 				markdownTypes.REGULAR;
 			priceCode = priceCodes[type] || '';
 		}
+
 		// Get code
-		const code = currentProduct.selling_barcode || currentProduct.barcode;
-		console.log('print product', {
-			name: formatPrintDetails(currentProduct.name),
+		const code =
+			currentProduct.product.selling_barcode || currentProduct.product.barcode;
+
+		await printProduct({
+			name: formatPrintDetails(currentProduct.product.name),
 			weight: `${formatZeroToO(roundedWeight)}kg`,
 			price: `P${formatZeroToO(currentProduct.price_per_piece.toFixed(2))}`,
 			totalPrice: `P${formatZeroToO(total)}`,
@@ -85,27 +88,13 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 			companyName: formatPrintDetails(getCompanyName()),
 		});
 
-		printProduct({
-			name: formatPrintDetails(currentProduct.name),
-			weight: `${formatZeroToO(roundedWeight)}kg`,
-			price: `P${formatZeroToO(currentProduct.price_per_piece.toFixed(2))}`,
-			totalPrice: `P${formatZeroToO(total)}`,
-			code: `${priceCode}${code}${formattedWeight}`,
-			branchName: formatPrintDetails(getBranchName()),
-			companyName: formatPrintDetails(getCompanyName()),
-		})
-			.then(() => {
-				message.success('Successfully printed product details.');
-				onSuccess?.();
-			})
-			.catch(() => {
-				message.error('An error occurred while printing the product details');
-			});
+		message.success('Successfully printed product details.');
+		onSuccess?.();
 	};
 
 	return (
-		<Spin spinning={isPrintingProduct} wrapperClassName="WeightDrawer">
-			<div className="WeightDrawer_container">
+		<Spin spinning={isPrintingProduct} wrapperClassName="h-full">
+			<div className="flex h-[inherit] flex-col">
 				{currentProduct ? (
 					<WeightProductDetails onPrint={handlePrint} />
 				) : (

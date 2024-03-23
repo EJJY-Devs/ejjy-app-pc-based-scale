@@ -9,6 +9,7 @@ import {
 	APP_COMPANY_NAME_KEY,
 	APP_PRICE_CODE_FEATURE_KEY,
 } from 'global';
+import _ from 'lodash';
 import React from 'react';
 import {
 	getAppBrightness,
@@ -20,31 +21,37 @@ import {
 	getCompanyName,
 	getPriceCodeFeature,
 } from 'utils/function';
-import { AppSettingsForm } from './AppSettingsForm';
+import { AppSettingsForm, FormData } from './AppSettingsForm';
 
-interface Props {
-	onClose: any;
-}
+type Props = {
+	onClose: () => void;
+};
 
 export const AppSettingsModal = ({ onClose }: Props) => {
-	const handleSubmit = (formData) => {
-		localStorage.setItem(APP_BRANCH_ID_KEY, formData.branchId);
-		localStorage.setItem(APP_BRANCH_MACHINE_ID_KEY, formData.branchMachineId);
+	const handleSubmit = (formData: FormData) => {
+		localStorage.setItem(APP_BRANCH_ID_KEY, _.toString(formData.branchId));
+		localStorage.setItem(
+			APP_BRANCH_MACHINE_ID_KEY,
+			_.toString(formData.branchMachineId),
+		);
 		localStorage.setItem(APP_BRANCH_MACHINE_KEY, formData.branchMachine);
 		localStorage.setItem(APP_BRANCH_NAME_KEY, formData.branchName);
 		localStorage.setItem(APP_BRANCH_SERVER_URL_KEY, formData.branchServerUrl);
 		localStorage.setItem(APP_BRIGHTNESS_KEY, formData.brightness);
 		localStorage.setItem(APP_COMPANY_NAME_KEY, formData.companyName);
-		localStorage.setItem(APP_PRICE_CODE_FEATURE_KEY, formData.priceCodeFeature);
+		localStorage.setItem(
+			APP_PRICE_CODE_FEATURE_KEY,
+			_.toString(formData.priceCodeFeature),
+		);
 
 		message.success('App settings were updated successfully');
 		handleClose();
 	};
 
 	const handleClose = () => {
-		document.querySelector(
-			'html',
-		).style.filter = `brightness(${getAppBrightness()}%)`;
+		document.querySelector('html').style.filter =
+			`brightness(${getAppBrightness()}%)`;
+
 		onClose();
 	};
 

@@ -1,27 +1,32 @@
 {
 	"env": {
 		"browser": true,
-		"es2021": true
+		"es2021": true,
 	},
 	"extends": [
-		"airbnb",
 		"plugin:@typescript-eslint/recommended",
 		"plugin:prettier/recommended",
 		"plugin:react/recommended",
 		"plugin:import/errors",
 		"plugin:import/warnings",
 		"plugin:import/typescript",
-		"prettier/@typescript-eslint"
+		"prettier/@typescript-eslint",
 	],
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
 		"ecmaFeatures": {
-			"jsx": true
+			"jsx": true,
 		},
 		"ecmaVersion": 12,
-		"sourceType": "module"
+		"sourceType": "module",
 	},
-	"plugins": ["react", "react-hooks", "@typescript-eslint", "prettier"],
+	"plugins": [
+		"react",
+		"react-hooks",
+		"@typescript-eslint",
+		"prettier",
+		"jsx-a11y",
+	],
 	"rules": {
 		"camelcase": "off",
 		"consistent-return": "off",
@@ -47,8 +52,8 @@
 				"callbacksLast": true,
 				"ignoreCase": true,
 				"reservedFirst": true,
-				"shorthandLast": true
-			}
+				"shorthandLast": true,
+			},
 		],
 		"react/jsx-wrap-multilines": "off",
 		"react/no-array-index-key": "off",
@@ -59,11 +64,12 @@
 			"ignorePackages",
 			{
 				"ts": "never",
-				"tsx": "never"
-			}
+				"tsx": "never",
+			},
 		],
 		"import/no-cycle": "off",
 		"import/prefer-default-export": "off",
+		"import/no-named-as-default-member": "off",
 		"@typescript-eslint/explicit-function-return-type": "off",
 		"@typescript-eslint/no-explicit-any": "off",
 		"@typescript-eslint/explicit-module-boundary-types": "off",
@@ -74,24 +80,25 @@
 			{
 				"allowShortCircuit": true,
 				"allowTernary": true,
-				"allowTaggedTemplates": true
-			}
+				"allowTaggedTemplates": true,
+			},
 		],
 		"@typescript-eslint/no-unused-expressions": [
 			"off",
 			{
 				"allowShortCircuit": true,
 				"allowTernary": true,
-				"allowTaggedTemplates": true
-			}
+				"allowTaggedTemplates": true,
+			},
 		],
 		"no-console": "off",
-		"dot-notation": "off"
+		"dot-notation": "off",
+		"jsx-a11y/no-autofocus": "off",
 	},
 	"settings": {
 		"import/resolver": {
-			"typescript": {}
-		}
+			"typescript": {},
+		},
 	},
-	"ignorePatterns": ["/*.js", "node_modules", "dist", "public"]
+	"ignorePatterns": ["/*.js", "node_modules", "dist", "public"],
 }

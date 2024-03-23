@@ -1,38 +1,37 @@
 import { message, Modal, Spin } from 'antd';
 import { Button, ControlledInput, Label } from 'components/elements';
-import { productCategoryTypes, request } from 'global';
 import {
-	useAuth,
-	useCurrentTransaction,
-	usePrintTransaction,
-	useTransactions,
-} from 'hooks';
+	formatNumberWithCommas,
+	standardRound,
+	useTransactionCreate,
+} from 'ejjy-global';
+import { productCategoryTypes } from 'global';
+import { usePrintTransaction } from 'hooks';
 import React, { useCallback, useEffect, useRef } from 'react';
+import { useCurrentTransactionStore, useUserStore } from 'stores';
 import {
 	formatPrintDetails,
 	formatZeroToO,
 	getBranchName,
 	getCompanyName,
-	numberWithCommas,
-	standardRound,
 } from 'utils/function';
-import './style.scss';
 
-interface Props {
+type Props = {
 	visible: boolean;
-	onClose: any;
-}
+	onClose: () => void;
+};
 
 export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 	// STATES
-	const inputRef = useRef(null);
+	const inputRef = useRef<HTMLInputElement | null>(null);
 
 	// CUSTOM HOOKS
-	const { user } = useAuth();
+	const { user } = useUserStore();
 	const { mutateAsync: printTransaction, isLoading: isPrintingTransaction } =
 		usePrintTransaction();
-	const { transactionProducts, editProduct } = useCurrentTransaction();
-	const { createTransaction, status: transactionStatus } = useTransactions();
+	const { transactionProducts, updateProduct } = useCurrentTransactionStore();
+	const { mutateAsync: createTransaction, isLoading: isCreatingTransaction } =
+		useTransactionCreate();
 
 	// METHODS
 	useEffect(() => {
@@ -47,9 +46,9 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 	const getCheckoutProducts = useCallback(
 		() =>
 			transactionProducts.filter(
-				(product) =>
-					!product.isCheckedOut &&
-					product.product_category === productCategoryTypes.GULAY,
+				(tp) =>
+					!tp.isCheckedOut &&
+					tp.product.product_category === productCategoryTypes.GULAY,
 			),
 		[transactionProducts],
 	);
@@ -61,62 +60,51 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 			0,
 		);
 
-		return numberWithCommas(standardRound(total));
+		return formatNumberWithCommas(standardRound(total));
 	}, [getCheckoutProducts]);
 
 	const updateCheckedOutProducts = () => {
 		getCheckoutProducts().forEach((product) => {
-			editProduct({
-				id: product.id,
+			updateProduct(product.id, {
 				isCheckedOut: true,
 			});
 		});
 	};
 
-	const onSubmit = () => {
-		createTransaction(
-			{
-				branchMachineId: null,
-				tellerId: user?.id, // TODO: Temporarily added a guard since login page is temporarily disabled
-				products: getCheckoutProducts().map((product) => ({
-					product_id: product.id,
-					quantity: Number(product.weight),
-					price_per_piece: product.price_per_piece,
-					discount_per_piece: product?.discount || 0,
-				})),
-			},
-			({ status: createTransactionStatus, response }) => {
-				if (createTransactionStatus === request.SUCCESS) {
-					const total = getCheckoutProducts().reduce(
-						(prev: number, { weight, price_per_piece }) =>
-							Number(weight) * Number(price_per_piece) + prev,
-						0,
-					);
+	const handleSubmit = async () => {
+		const checkedOutProducts = getCheckoutProducts();
+		const { data: transaction } = await createTransaction({
+			branchMachineId: null,
+			tellerId: user?.id, // TODO: Temporarily added a guard since login page is temporarily disabled
+			products: checkedOutProducts.map((product) => ({
+				product_id: product.id,
+				quantity: Number(product.weight),
+				price_per_piece: product.price_per_piece,
+				discount_per_piece: product?.discount || 0,
+			})),
+		});
 
-					printTransaction({
-						branchName: formatPrintDetails(getBranchName()),
-						companyName: formatPrintDetails(getCompanyName()),
-						totalPrice: `P${formatZeroToO(standardRound(total))}`,
-						transactionId: `T_${response.id}`,
-					})
-						.then(() => {
-							updateCheckedOutProducts();
-							onClose();
-							message.success('Transaction was created successfully.');
-						})
-						.catch(() => {
-							message.error('An error occurred while printing transaction.');
-						});
-				} else if (createTransactionStatus === request.ERROR) {
-					message.error('An error occurred while creating transaction.');
-				}
-			},
+		const total = checkedOutProducts.reduce(
+			(prev: number, { weight, price_per_piece }) =>
+				Number(weight) * Number(price_per_piece) + prev,
+			0,
 		);
+
+		await printTransaction({
+			branchName: formatPrintDetails(getBranchName()),
+			companyName: formatPrintDetails(getCompanyName()),
+			totalPrice: `P${formatZeroToO(standardRound(total))}`,
+			transactionId: `T_${transaction.id}`,
+		});
+
+		updateCheckedOutProducts();
+
+		onClose();
+		message.success('Transaction was created successfully.');
 	};
 
 	return (
 		<Modal
-			className="TemporaryCheckoutModal"
 			footer={null}
 			title="Temporary Checkout"
 			visible={visible}
@@ -124,46 +112,42 @@ export const TemporaryCheckoutModal = ({ visible, onClose }: Props) => {
 			closable
 			onCancel={onClose}
 		>
-			<Spin
-				spinning={
-					[transactionStatus].includes(request.REQUESTING) ||
-					isPrintingTransaction
-				}
-			>
-				<div className="form">
-					<div className="product-list">
-						<Label className="quantity-label" label="Products" spacing />
-						<ul>
-							{getCheckoutProducts().map(({ name }) => (
-								<li key={name}>{name}</li>
-							))}
-						</ul>
-					</div>
+			<Spin spinning={isCreatingTransaction || isPrintingTransaction}>
+				<div className="mb-4">
+					<Label className="text-xl" label="Products" spacing />
+					<ul>
+						{getCheckoutProducts().map((tp) => (
+							<li key={tp.id} className="text-base text-dark">
+								{tp.product.name}
+							</li>
+						))}
+					</ul>
+				</div>
 
-					<Label className="quantity-label" label="Amount Due (₱)" spacing />
-					<ControlledInput
-						className="amount-due-input"
-						value={getTotal()}
-						disabled
-						onChange={() => null}
+				<Label className="text-xl" label="Amount Due (₱)" spacing />
+				<ControlledInput
+					ref={inputRef}
+					className="text-center text-7xl font-bold text-dark"
+					value={getTotal()}
+					disabled
+					onChange={() => null}
+				/>
+
+				<div className="custom-footer">
+					<Button
+						className="btn-cancel"
+						size="lg"
+						text="Cancel"
+						type="button"
+						onClick={onClose}
 					/>
-
-					<div className="custom-footer">
-						<Button
-							className="btn-cancel"
-							size="lg"
-							text="Cancel"
-							type="button"
-							onClick={onClose}
-						/>
-						<Button
-							size="lg"
-							text="Proceed"
-							type="submit"
-							variant="primary"
-							onClick={onSubmit}
-						/>
-					</div>
+					<Button
+						size="lg"
+						text="Proceed"
+						type="submit"
+						variant="primary"
+						onClick={handleSubmit}
+					/>
 				</div>
 			</Spin>
 		</Modal>

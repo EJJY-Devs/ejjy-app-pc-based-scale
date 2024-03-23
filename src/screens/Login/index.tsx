@@ -1,47 +1,55 @@
-/* eslint-disable react/jsx-one-expression-per-line */
-import { AuthForm, RequestErrors } from 'components';
-import { Box } from 'components/elements';
-import { request } from 'global/types';
-import { useAuth } from 'hooks/useAuth';
-import { isEmpty } from 'lodash';
+import { AuthForm } from 'components';
+import { FormData } from 'components/AuthForm';
+import { convertIntoArray, RequestErrors, useAuthLogin } from 'ejjy-global';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { convertIntoArray } from 'utils/function';
-import './style.scss';
+import { useUserStore } from 'stores';
 
 const Login = () => {
-	// CUSTOM HOOKS
 	const history = useHistory();
-	const { user, login, status: authStatus, errors } = useAuth();
+	const { user, setUser } = useUserStore();
+	const {
+		mutateAsync: login,
+		isLoading: isLoggingIn,
+		error: loginError,
+	} = useAuthLogin();
 
-	// METHODS
 	useEffect(() => {
-		if (!isEmpty(user)) {
+		if (!user) {
 			history.replace('main');
 		}
 	}, [user]);
 
+	const handleLoginSubmit = async (formData: FormData) => {
+		const { data: loggedInUser } = await login({
+			login: formData.username,
+			password: formData.password,
+		});
+
+		setUser(loggedInUser);
+	};
+
 	return (
-		<section className="Login">
-			<Box className="Login_box">
+		<section className="flex h-full items-center justify-center bg-background">
+			<div className="mx-10 my-12 mb-7 flex w-[400px] flex-col items-center justify-center overflow-hidden rounded-2xl bg-background shadow-lg">
 				<img
 					alt="logo"
-					className="Login_logo"
+					className="mb-10 w-[200px]"
 					src={require('assets/images/logo.png')}
 				/>
 
 				<RequestErrors
-					className="Login_requestErrors"
-					errors={convertIntoArray(errors)}
+					className="w-full"
+					errors={convertIntoArray(loginError.errors)}
 					withSpaceBottom
 				/>
 
 				<AuthForm
-					loading={authStatus === request.REQUESTING}
+					loading={isLoggingIn}
 					submitText="Start Sesssion"
-					onSubmit={login}
+					onSubmit={handleLoginSubmit}
 				/>
-			</Box>
+			</div>
 		</section>
 	);
 };

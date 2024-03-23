@@ -1,32 +1,36 @@
-import { Divider, Table, Tabs } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { Divider, Spin, Table, Tabs } from 'antd';
 import { ColumnsType } from 'antd/lib/table/interface';
 import { LamasAmountModal, ScaleButton, WeightTextcodeModal } from 'components';
 import { ButtonIcon, ControlledInput, Label } from 'components/elements';
-import { useCurrentTransaction, useSiteSettings } from 'hooks';
-import { useProductCategories } from 'hooks/useProductCategories';
+import {
+	BranchProduct,
+	convertIntoArray,
+	formatDateTime,
+	RequestErrors,
+	useProductCategories,
+	useSiteSettings,
+} from 'ejjy-global';
 import React, { useEffect, useState } from 'react';
-import { useWeightStore } from 'stores';
-import { formatDateTime, formatWeight } from 'utils/function';
-import './style.scss';
+import { useCurrentTransactionStore, useWeightStore } from 'stores';
+import { formatWeight } from 'utils/function';
 
 const columns: ColumnsType = [
 	{
 		title: 'Description',
 		dataIndex: 'description',
-		key: 'description',
 		width: 350,
 	},
 	{
 		title: 'Action',
 		dataIndex: 'action',
-		key: 'action',
 	},
 ];
 
-interface Props {
-	branchProducts: any;
-	onSelectProduct: any;
-}
+type Props = {
+	branchProducts: BranchProduct[];
+	onSelectProduct: (product: BranchProduct) => void;
+};
 
 export const WeightProductSelection = ({
 	branchProducts,
@@ -38,53 +42,65 @@ export const WeightProductSelection = ({
 	const [dataSource, setDataSource] = useState([]);
 
 	// CUSTOM HOOKS
-	const weight = useWeightStore((state: any) => state.weight);
-	const { productCategories } = useProductCategories();
-	const { transactionProducts } = useCurrentTransaction();
+	const { weight } = useWeightStore();
+	const { transactionProducts } = useCurrentTransactionStore();
 	const { data: siteSettings } = useSiteSettings();
+	const {
+		data: productCategoriesData,
+		isFetching: isFetchingProductCategories,
+		error: productCategoriesError,
+	} = useProductCategories({
+		options: { refetchOnMount: false },
+	});
 
 	// METHODS
 	useEffect(() => {
-		const addedProductIds = transactionProducts.map(({ id }) => id);
-		const availableProducts = branchProducts.filter(
-			({ product }) => !addedProductIds.includes(product.id),
-		);
+		if (productCategoriesData?.list) {
+			const addedProductIds = transactionProducts.map(({ id }) => id);
+			const availableProducts = branchProducts.filter(
+				({ product }) => !addedProductIds.includes(product.id),
+			);
 
-		setDataSource(
-			productCategories
-				.map(({ id, name }) => ({
-					id,
-					title: name,
-					dataSource: getProductsByCategory(availableProducts, name),
-				}))
-				.filter(({ dataSource: data }) => data.length > 0),
-		);
-	}, [branchProducts, transactionProducts, productCategories]);
+			setDataSource(
+				productCategoriesData.list
+					.map((productCategory) => ({
+						id: productCategory.id,
+						title: productCategory.name,
+						dataSource: getProductsByCategory(
+							availableProducts,
+							productCategory.name,
+						),
+					}))
+					.filter(({ dataSource: data }) => data.length > 0),
+			);
+		}
+	}, [branchProducts, transactionProducts, productCategoriesData?.list]);
 
-	const getProductsByCategory = (products, category) =>
-		products
+	const getProductsByCategory = (
+		availableBranchProducts: BranchProduct[],
+		category: string,
+	) =>
+		availableBranchProducts
 			.filter(({ product }) => product?.product_category === category)
-			.map(
-				({
+			.map((branchProduct) => {
+				const {
 					product,
 					price_markdown,
 					markdown_price_per_piece1,
 					markdown_price_per_piece2,
 					price_per_piece,
-				}) => ({
+				} = branchProduct;
+
+				return {
+					id: branchProduct.id,
 					description: product.name,
 					action: (
 						<ButtonIcon
-							icon={
-								<img
-									alt="icon"
-									src={require('../../../../assets/images/icon-add.svg')}
-								/>
-							}
+							icon={<PlusOutlined className="text-lg !text-green-400" />}
 							tooltip="Add"
 							onClick={() => {
 								onSelectProduct({
-									...product,
+									...branchProduct,
 									markdown_price_per_piece1,
 									markdown_price_per_piece2,
 									price_per_piece,
@@ -93,34 +109,39 @@ export const WeightProductSelection = ({
 							}}
 						/>
 					),
-				}),
-			);
+				};
+			});
 
 	return (
-		<>
-			<div className="WeightProductSelection">
+		<Spin
+			spinning={isFetchingProductCategories}
+			tip="Fetching product categories..."
+		>
+			<RequestErrors errors={convertIntoArray(productCategoriesError)} />
+			<div className="flex h-full flex-1 flex-col">
 				<Label id="weight" label="Weight" spacing />
 				<ControlledInput
-					className="WeightProductSelection_inputWeight"
+					className="mb-4 text-[2.5rem] font-bold text-dark"
 					value={formatWeight(weight)}
 					disabled
 					onChange={() => null}
 				/>
 
 				{siteSettings?.datetime_last_updated_products && (
-					<p className="WeightProductSelection_productUpdateInfo">
+					<p className="mb-4 text-center text-sm text-secondary">
 						Product last updated:{' '}
 						<b>{formatDateTime(siteSettings.datetime_last_updated_products)}</b>
 					</p>
 				)}
 
-				<Tabs className="WeightProductSelection_tabs" type="card">
+				<Tabs className="flex-1" type="card">
 					{dataSource.map((data) => (
 						<Tabs.TabPane key={data.id} tab={data.title}>
 							<Table
 								columns={columns}
 								dataSource={data.dataSource}
 								pagination={false}
+								rowKey="id"
 								scroll={{ y: 285 }}
 							/>
 						</Tabs.TabPane>
@@ -129,16 +150,16 @@ export const WeightProductSelection = ({
 
 				<Divider />
 
-				<div className="WeightProductSelection_btnWrapper">
+				<div className="grid grid-cols-12 gap-x-4">
 					<ScaleButton
-						className="WeightProductSelection_btnInputTextcode"
+						className="col-span-8 h-button"
 						disabled={weight === 0}
 						title="Input Textcode"
 						onClick={() => setTextcodeModalVisible(true)}
 					/>
 
 					<ScaleButton
-						className="WeightProductSelection_btnInputAmount"
+						className="col-span-4 h-button"
 						title="Input Amount"
 						onClick={() => setLamasAmountModalVisible(true)}
 					/>
@@ -154,6 +175,6 @@ export const WeightProductSelection = ({
 			{lamasAmountModalVisible && (
 				<LamasAmountModal onClose={() => setLamasAmountModalVisible(false)} />
 			)}
-		</>
+		</Spin>
 	);
 };

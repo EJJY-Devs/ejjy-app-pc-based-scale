@@ -1,39 +1,40 @@
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
+import { formatInPeso } from 'ejjy-global';
 import React from 'react';
-import { formatInPeso, formatWeight } from 'utils/function';
-import './style.scss';
+import { ScaleProduct } from 'stores';
+import { formatWeight } from 'utils/function';
 
-interface Props {
-	product: any;
-}
+type Props = {
+	scaleProduct: ScaleProduct;
+};
 
-export const MainTableName = ({ product }: Props) => {
-	const { weight, price_per_piece, discount } = product;
+export const MainTableName = ({ scaleProduct }: Props) => {
+	const { weight, price_per_piece, discount } = scaleProduct;
 	const price = formatInPeso(price_per_piece);
 	const productDiscount =
 		discount > 0 ? (
-			<span className="MainTableName_quantities_discount">
-				{`(${formatInPeso(product.price_per_piece + product.discount)})`}
+			<span className="ml-1 text-sm line-through">
+				{`(${formatInPeso(scaleProduct.price_per_piece + scaleProduct.discount)})`}
 			</span>
 		) : null;
 
 	return (
-		<div className="MainTableName">
-			<div className="MainTableName_info">
-				<span>{product.name}</span>
+		<>
+			<>
+				<span>{scaleProduct.product.name}</span>
 
-				{product?.isCheckedOut && (
+				{scaleProduct?.isCheckedOut && (
 					<Tooltip title="Item already checked out">
-						<ShoppingCartOutlined className="MainTableName_info_icon" />
+						<ShoppingCartOutlined className="ml-2 text-primary" />
 					</Tooltip>
 				)}
-			</div>
+			</>
 
-			<div className="MainTableName_quantities">
+			<div className="mt-1">
 				{`${formatWeight(weight)} x ${price}`}
 				{productDiscount}
 			</div>
-		</div>
+		</>
 	);
 };

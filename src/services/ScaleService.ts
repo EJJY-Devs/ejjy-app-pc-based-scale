@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { EXPRESS_API_URL } from '.';
 
-interface PrintProduct {
+export interface PrintProduct {
 	branchName: string;
 	code: string;
 	companyName: string;
@@ -11,35 +11,42 @@ interface PrintProduct {
 	weight: string;
 }
 
-interface PrintTransaction {
+export interface PrintTransaction {
 	branchName: string;
 	companyName: string;
 	totalPrice: string;
-	transactionId: number;
+	transactionId: string;
 }
 
-interface PrintTotal {
+export interface PrintTotal {
 	branchName: string;
 	companyName: string;
 	totalPrice: string;
 }
 
 const service = {
-	retrieveWeight: async () =>
-		axios.get('/weight', { baseURL: EXPRESS_API_URL }),
+	retrieveWeight: async () => {
+		const response = await axios.get('/weight', { baseURL: EXPRESS_API_URL });
 
-	tare: async () => axios.post('/tare', {}, { baseURL: EXPRESS_API_URL }),
+		return response.data;
+	},
 
-	zero: async () => axios.post('/zero', {}, { baseURL: EXPRESS_API_URL }),
+	tare: async () =>
+		axios.post<boolean>('/tare', {}, { baseURL: EXPRESS_API_URL }),
+
+	zero: async () =>
+		axios.post<boolean>('/zero', {}, { baseURL: EXPRESS_API_URL }),
 
 	printProduct: async (body: PrintProduct) =>
-		axios.post('/print-product', body, { baseURL: EXPRESS_API_URL }),
+		axios.post<boolean>('/print-product', body, { baseURL: EXPRESS_API_URL }),
 
 	printTransaction: async (body: PrintTransaction) =>
-		axios.post('/print-transaction', body, { baseURL: EXPRESS_API_URL }),
+		axios.post<boolean>('/print-transaction', body, {
+			baseURL: EXPRESS_API_URL,
+		}),
 
 	printTotal: async (body: PrintTotal) =>
-		axios.post('/print-total', body, { baseURL: EXPRESS_API_URL }),
+		axios.post<boolean>('/print-total', body, { baseURL: EXPRESS_API_URL }),
 };
 
 export default service;

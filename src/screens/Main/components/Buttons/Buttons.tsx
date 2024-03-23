@@ -1,23 +1,17 @@
-/* eslint-disable react/jsx-one-expression-per-line */
-/* eslint-disable react/jsx-wrap-multilines */
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { message, Modal } from 'antd';
 import { ScaleButton } from 'components';
-import {
-	discountTypes,
-	markdownTypes,
-	NO_INDEX_SELECTED,
-	productCategoryTypes,
-} from 'global';
+import { markdownTypes } from 'ejjy-global';
+import { discountTypes, NO_INDEX_SELECTED, productCategoryTypes } from 'global';
 import { useTare, useZero } from 'hooks';
-import { useCurrentTransaction } from 'hooks/useCurrentTransaction';
+import { useCurrentTransactionStore } from 'stores';
 import React, { useCallback } from 'react';
 import './style.scss';
 
-interface Props {
-	onOpenCheckoutModal: any;
-	onOpenTemporaryCheckoutModal: any;
-}
+type Props = {
+	onOpenCheckoutModal: () => void;
+	onOpenTemporaryCheckoutModal: () => void;
+};
 
 export const Buttons = ({
 	onOpenCheckoutModal,
@@ -33,9 +27,9 @@ export const Buttons = ({
 	const {
 		transactionProducts,
 		selectedProductIndex,
-		editProduct,
+		updateProduct,
 		resetTransaction,
-	} = useCurrentTransaction();
+	} = useCurrentTransactionStore();
 	const { mutateAsync: tare } = useTare();
 	const { mutateAsync: zero } = useZero();
 
@@ -43,9 +37,9 @@ export const Buttons = ({
 	const isTempCheckoutDisabled = useCallback(
 		() =>
 			!transactionProducts.some(
-				(product) =>
-					!product.isCheckedOut &&
-					product.product_category === productCategoryTypes.GULAY,
+				(tp) =>
+					!tp.isCheckedOut &&
+					tp.product.product_category === productCategoryTypes.GULAY,
 			),
 		[transactionProducts],
 	);
@@ -75,7 +69,7 @@ export const Buttons = ({
 	// 	return discount >= 0 ? formatInPeso(discount) : EMPTY_CELL;
 	// }, [transactionProducts, selectedProductIndex, selectedDiscountType]);
 
-	const onDiscountSuccess = (discountType) => {
+	const handleDiscountSuccess = (discountType) => {
 		const selectedProduct = transactionProducts?.[selectedProductIndex];
 
 		if (selectedProduct) {
@@ -101,8 +95,7 @@ export const Buttons = ({
 					? newPricePerPiece - currentDiscount
 					: currentDiscount;
 
-			editProduct({
-				id: selectedProduct.id,
+			updateProduct(selectedProduct.id, {
 				discount: newDiscountPerPiece,
 				price_per_piece:
 					currentDiscount > 0 ? currentDiscount : newPricePerPiece,
@@ -145,10 +138,10 @@ export const Buttons = ({
 
 	return (
 		<>
-			<div className="Buttons">
-				<div className="Buttons_btnWrapper">
+			<div className="grid gap-2">
+				<div className="flex gap-2">
 					<ScaleButton
-						className="Buttons_btnTare"
+						className="flex-1 border-b-4 border-red-500 border-b-[#ab363d] bg-red-500 text-white"
 						title="Tare"
 						onClick={() => {
 							tare()
@@ -162,7 +155,7 @@ export const Buttons = ({
 					/>
 
 					<ScaleButton
-						className="Buttons_btnZero"
+						className="flex-1 border-b-4 border-red-500 border-b-[#ab363d] bg-red-500 text-white"
 						title="Zero"
 						onClick={() => {
 							zero()
@@ -178,11 +171,11 @@ export const Buttons = ({
 
 				{isWithDiscount() ? (
 					<ScaleButton
-						className="Buttons_btnRemoveDiscount"
+						className="border-b-4 border-[#ab363d] bg-red-500 text-white"
 						title="Remove Discount"
 						onClick={() => {
 							// setSelectedDiscountType(discountTypes.NO_DISCOUNT);
-							onDiscountSuccess(discountTypes.NO_DISCOUNT);
+							handleDiscountSuccess(discountTypes.NO_DISCOUNT);
 						}}
 					/>
 				) : (
@@ -195,7 +188,7 @@ export const Buttons = ({
 							title="Wholesale"
 							onClick={() => {
 								// setSelectedDiscountType(discountTypes.FIRST);
-								onDiscountSuccess(discountTypes.FIRST);
+								handleDiscountSuccess(discountTypes.FIRST);
 							}}
 						/>
 
@@ -207,7 +200,7 @@ export const Buttons = ({
 							title="Special"
 							onClick={() => {
 								// setSelectedDiscountType(discountTypes.SECOND);
-								onDiscountSuccess(discountTypes.SECOND);
+								handleDiscountSuccess(discountTypes.SECOND);
 							}}
 						/>
 					</>

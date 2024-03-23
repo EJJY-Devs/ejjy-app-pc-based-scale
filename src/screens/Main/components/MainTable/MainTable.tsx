@@ -1,13 +1,11 @@
-/* eslint-disable react/jsx-wrap-multilines */
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { CloseOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
+import { TableProducts } from 'components';
+import { ButtonIcon } from 'components/elements';
+import { formatInPeso } from 'ejjy-global';
 import React, { useEffect, useState } from 'react';
-import { TableProducts } from '../../../../components';
-import { ButtonIcon } from '../../../../components/elements';
-import { useCurrentTransaction } from '../../../../hooks/useCurrentTransaction';
-import { formatInPeso } from '../../../../utils/function';
+import { ScaleProduct, useCurrentTransactionStore } from 'stores';
 import { MainTableName } from './MainTableName';
-import './style.scss';
 
 const columns = [
 	{ name: '', width: '1px' },
@@ -17,56 +15,51 @@ const columns = [
 
 export const MainTable = () => {
 	// STATES
-	const [data, setData] = useState([]);
+	const [dataSource, setDataSource] = useState([]);
 
 	// CUSTOM HOOKS
 	const {
 		transactionProducts,
 		selectedProductIndex,
-		removeProduct,
-		setSelectedProduct,
-	} = useCurrentTransaction();
+		deleteProduct,
+		setSelectedProductIndex,
+	} = useCurrentTransactionStore();
 
 	// METHODS
 	useEffect(() => {
-		const formattedProducts = transactionProducts.map((product) => [
+		const formattedProducts = transactionProducts.map((scaleProduct) => [
 			<ButtonIcon
 				key="remove"
-				icon={
-					<img
-						alt="icon"
-						src={require('../../../../assets/images/icon-cancel.svg')}
-					/>
-				}
+				icon={<CloseOutlined className="text-lg !text-red-500" />}
 				tooltip="Remove"
-				onClick={() => onRemoveProductConfirmation(product)}
+				onClick={() => handleDeleteProduct(scaleProduct)}
 			/>,
-			<MainTableName key="table" product={product} />,
-			formatInPeso(product.weight * product.price_per_piece),
+			<MainTableName key="table" scaleProduct={scaleProduct} />,
+			formatInPeso(scaleProduct.weight * scaleProduct.price_per_piece),
 		]);
 
-		setData(formattedProducts);
+		setDataSource(formattedProducts);
 	}, [transactionProducts]);
 
-	const onRemoveProductConfirmation = (product) => {
+	const handleDeleteProduct = (scaleProduct: ScaleProduct) => {
 		Modal.confirm({
 			className: 'EJJYModal',
 			title: 'Delete Confirmation',
 			icon: <ExclamationCircleOutlined />,
-			content: `Are you sure you want to delete ${product.name}?`,
+			content: `Are you sure you want to delete ${scaleProduct.product.name}?`,
 			okText: 'Delete',
 			cancelText: 'Cancel',
-			onOk: () => removeProduct(product.id),
+			onOk: () => deleteProduct(scaleProduct.id),
 		});
 	};
 
 	return (
-		<div className="MainTable">
+		<div className="flex-1 pb-5">
 			<TableProducts
 				activeRow={selectedProductIndex}
 				columns={columns}
-				data={data}
-				onClick={setSelectedProduct}
+				data={dataSource}
+				onClick={setSelectedProductIndex}
 			/>
 		</div>
 	);
