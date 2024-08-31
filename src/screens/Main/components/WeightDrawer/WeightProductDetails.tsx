@@ -4,7 +4,11 @@ import { ControlledInput, Label } from 'components/elements';
 import { formatInPeso, markdownTypes } from 'ejjy-global';
 import { discountTypes } from 'global';
 import React, { useCallback } from 'react';
-import { useCurrentTransactionStore, useWeightStore } from 'stores';
+import {
+	useCurrentTransactionStore,
+	useWeightStore,
+	usePriceStore,
+} from 'stores';
 import { formatWeight } from 'utils/function';
 import iconPrintAndAddCart from 'assets/images/icon-print-and-add-cart.svg';
 
@@ -24,6 +28,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 	const { currentProduct, addProduct, setCurrentProduct } =
 		useCurrentTransactionStore();
 	console.log('currentProduct', currentProduct);
+	const { price, resetPrice } = usePriceStore();
 	// METHODS
 	const handlePrintAndAddCart = () => {
 		onPrint(() => {
@@ -119,7 +124,9 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 						<Label label="Total" spacing />
 						<ControlledInput
 							className="text-right text-[2.5rem] font-bold text-dark"
-							value={formatInPeso(weight * currentProduct.price_per_piece)}
+							value={formatInPeso(
+								weight * currentProduct?.price_per_piece || weight * price,
+							)}
 							disabled
 							onChange={() => null}
 						/>
@@ -129,7 +136,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 						<Label label="Name" spacing />
 						<ControlledInput
 							className="text-2xl font-bold text-dark"
-							value={currentProduct.product.name}
+							value={currentProduct?.product.name}
 							disabled
 							onChange={() => null}
 						/>
@@ -149,7 +156,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 						<Label label="Price" spacing />
 						<ControlledInput
 							className="text-2xl font-bold text-dark"
-							value={formatInPeso(currentProduct.price_per_piece)}
+							value={formatInPeso(currentProduct?.price_per_piece || price)}
 							disabled
 							onChange={() => null}
 						/>
@@ -173,6 +180,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 								<Col span={12}>
 									<ScaleButton
 										className="w-full"
+										disabled={!!price}
 										title="Wholesale"
 										onClick={() => {
 											// setSelectedDiscountType(discountTypes.FIRST);
@@ -184,6 +192,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 								<Col span={12}>
 									<ScaleButton
 										className="w-full"
+										disabled={!!price}
 										title="Special"
 										onClick={() => {
 											// setSelectedDiscountType(discountTypes.SECOND);
@@ -198,9 +207,10 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 
 					<ScaleButton
 						className="w-full border-2 border-red-500 bg-transparent text-base text-red-500 hover:bg-red-500 hover:text-white hover:opacity-100"
-						title="REMOVE SELECTED PRODUCT"
+						title={price ? 'RESET' : 'REMOVE SELECTED PRODUCT'}
 						onClick={() => {
 							setCurrentProduct(null);
+							resetPrice();
 						}}
 					/>
 				</Space>
