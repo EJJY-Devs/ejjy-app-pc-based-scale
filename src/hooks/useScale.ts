@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import dayjs from 'dayjs';
+import { wrapServiceWithCatch } from 'ejjy-global';
 import { AxiosErrorResponse } from 'ejjy-global/dist/services/interfaces';
-import { wrapServiceWithCatch } from 'hooks/helper';
 import { useRef } from 'react';
 import { UseMutationOptions, useMutation, useQuery } from 'react-query';
 import { useHistory } from 'react-router-dom';
@@ -29,7 +29,7 @@ export const useWeight = () => {
 	const counter = useRef(0);
 	const previousValue = useRef(0);
 	const refetchInterval = useRef(REFETCH_INTERVAL_SHORT_MS);
-	const dateInactive = useRef(null);
+	const dateInactive = useRef<dayjs.Dayjs | null>(null);
 
 	return useQuery<number>(
 		'useWeight',

@@ -3,8 +3,9 @@ import { ScaleButton } from 'components';
 import { Button, ControlledInput } from 'components/elements';
 import { BranchProduct, DEFAULT_PAGE, useBranchProducts } from 'ejjy-global';
 import { MAX_PAGE_SIZE } from 'global';
+import React, { useState } from 'react';
 import { useCurrentTransactionStore } from 'stores';
-import React, { useEffect, useState } from 'react';
+import { cn } from 'utils';
 import { getBranchId } from 'utils/function';
 
 const TEXTCODE_MAX_LENGTH = 10;
@@ -12,16 +13,11 @@ const NUMPAD_CLEAR = -1;
 const inputs = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
 
 type Props = {
-	visible: boolean;
 	onSelectProduct: (product: BranchProduct) => void;
 	onClose: () => void;
 };
 
-export const WeightTextcodeModal = ({
-	visible,
-	onSelectProduct,
-	onClose,
-}: Props) => {
+export const WeightTextcodeModal = ({ onSelectProduct, onClose }: Props) => {
 	// STATES
 	const [textcode, setTextcode] = useState('');
 
@@ -85,12 +81,6 @@ export const WeightTextcodeModal = ({
 		});
 
 	// METHODS
-	useEffect(() => {
-		if (visible) {
-			setTextcode('');
-		}
-	}, [visible]);
-
 	const handleNumpadInput = (key: number) => {
 		if (key === NUMPAD_CLEAR) {
 			setTextcode((value) =>
@@ -114,9 +104,9 @@ export const WeightTextcodeModal = ({
 		<Modal
 			footer={null}
 			title="Search Product By Textcode"
-			visible={visible}
 			centered
 			closable
+			visible
 			onCancel={onClose}
 		>
 			<div className="grid w-full grid-cols-3 grid-rows-5 gap-3">
@@ -124,17 +114,15 @@ export const WeightTextcodeModal = ({
 					className="col-span-3 col-start-1 text-center text-4xl font-bold text-dark"
 					value={textcode}
 					disabled
-					onChange={(value) => setTextcode(value)}
+					onChange={(value: string) => setTextcode(value)}
 				/>
 
 				{inputs.map((number) => (
 					<ScaleButton
 						key={number}
-						className={
-							number === 0
-								? 'col-span-2 col-start-1 h-20 text-[2rem]'
-								: 'h-20 text-[2rem]'
-						}
+						className={cn('h-20 text-[2rem]', {
+							'col-span-2 col-start-1': number === 0,
+						})}
 						disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
 						title={String(number)}
 						onClick={() => handleNumpadInput(number)}
@@ -142,6 +130,9 @@ export const WeightTextcodeModal = ({
 				))}
 
 				<ScaleButton
+					className={cn('h-20 text-[2rem]', {
+						'bg-red-500  text-white': textcode.length > 0,
+					})}
 					disabled={textcode.length === 0}
 					title="C"
 					onClick={() => handleNumpadInput(-1)}

@@ -13,7 +13,7 @@ export interface ScaleProduct extends BranchProduct {
 interface State {
 	transactionProducts: ScaleProduct[];
 	selectedProductIndex: number;
-	currentProduct: ScaleProduct;
+	currentProduct: ScaleProduct | null;
 }
 
 interface Store extends State {
@@ -22,6 +22,7 @@ interface Store extends State {
 	deleteProduct: (id: number) => void;
 	setSelectedProductIndex: (index: number) => void;
 	setCurrentProduct: (product: Partial<ScaleProduct>) => void;
+	resetCurrentProduct: () => void;
 	resetTransaction: () => void;
 }
 
@@ -89,6 +90,12 @@ export const useCurrentTransactionStore = create(
 				set((state) => ({
 					...state,
 					currentProduct: product as ScaleProduct,
+				}));
+			},
+			resetCurrentProduct: () => {
+				set((state) => ({
+					...state,
+					currentProduct: null,
 				}));
 			},
 

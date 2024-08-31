@@ -6,7 +6,6 @@ import { discountTypes, NO_INDEX_SELECTED, productCategoryTypes } from 'global';
 import { useTare, useZero } from 'hooks';
 import { useCurrentTransactionStore } from 'stores';
 import React, { useCallback } from 'react';
-import './style.scss';
 
 type Props = {
 	onOpenCheckoutModal: () => void;
@@ -69,7 +68,7 @@ export const Buttons = ({
 	// 	return discount >= 0 ? formatInPeso(discount) : EMPTY_CELL;
 	// }, [transactionProducts, selectedProductIndex, selectedDiscountType]);
 
-	const handleDiscountSuccess = (discountType) => {
+	const handleDiscountSuccess = (discountType: string) => {
 		const selectedProduct = transactionProducts?.[selectedProductIndex];
 
 		if (selectedProduct) {
@@ -99,7 +98,7 @@ export const Buttons = ({
 				discount: newDiscountPerPiece,
 				price_per_piece:
 					currentDiscount > 0 ? currentDiscount : newPricePerPiece,
-				markdownType,
+				markdownType: markdownType as string,
 			});
 
 			message.success('Sucessfully applied discount to product.');
@@ -138,7 +137,7 @@ export const Buttons = ({
 
 	return (
 		<>
-			<div className="grid gap-2">
+			<div className="grid-rows-buttons grid grid-cols-4 gap-2">
 				<div className="flex gap-2">
 					<ScaleButton
 						className="flex-1 border-b-4 border-red-500 border-b-[#ab363d] bg-red-500 text-white"
@@ -171,7 +170,7 @@ export const Buttons = ({
 
 				{isWithDiscount() ? (
 					<ScaleButton
-						className="border-b-4 border-[#ab363d] bg-red-500 text-white"
+						className="col-span-2 border-b-4 border-[#ab363d] bg-red-500 text-white"
 						title="Remove Discount"
 						onClick={() => {
 							// setSelectedDiscountType(discountTypes.NO_DISCOUNT);
@@ -214,14 +213,14 @@ export const Buttons = ({
 				/>
 
 				<ScaleButton
-					className="Buttons_btnTempCheckout"
+					className="col-span-2"
 					disabled={isTempCheckoutDisabled()}
 					title="Temp Checkout"
 					onClick={onOpenTemporaryCheckoutModal}
 				/>
 
 				<ScaleButton
-					className="Buttons_btnCheckout"
+					className="col-span-2"
 					disabled={transactionProducts.length === 0}
 					title="Checkout"
 					onClick={onOpenCheckoutModal}

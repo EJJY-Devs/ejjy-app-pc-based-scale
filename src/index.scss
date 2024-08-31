@@ -1,5 +1,111 @@
 @use 'assets/styles' as *;
-@import '~antd/dist/antd.css';
+@import '~antd/dist/antd.variable.min.css';
+
+@font-face {
+	font-family: 'Roboto';
+	font-weight: 300;
+	src:
+		local('Roboto'),
+		url(assets/fonts/Roboto-Light.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto';
+	font-weight: 400;
+	src:
+		local('Roboto'),
+		url(assets/fonts/Roboto-Regular.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto';
+	font-weight: 500;
+	src:
+		local('Roboto'),
+		url(assets/fonts/Roboto-Medium.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto';
+	font-weight: 600;
+	src:
+		local('Roboto'),
+		url(assets/fonts/Roboto-Medium.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto';
+	font-weight: 700;
+	src:
+		local('Roboto'),
+		url(assets/fonts/Roboto-Bold.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto';
+	font-weight: 900;
+	src:
+		local('Roboto'),
+		url(assets/fonts/Roboto-Black.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto';
+	font-weight: 300;
+	font-style: italic;
+	src:
+		local('Roboto'),
+		url(assets/fonts/Roboto-LightItalic.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto';
+	font-weight: 400;
+	font-style: italic;
+	src:
+		local('Roboto'),
+		url(assets/fonts/Roboto-Italic.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto';
+	font-weight: 500;
+	font-style: italic;
+	src:
+		local('Roboto'),
+		url(assets/fonts/Roboto-MediumItalic.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto';
+	font-weight: 600;
+	font-style: italic;
+	src:
+		local('Roboto'),
+		url(assets/fonts/Roboto-MediumItalic.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto';
+	font-weight: 700;
+	font-style: italic;
+	src:
+		local('Roboto'),
+		url(assets/fonts/Roboto-BoldItalic.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto';
+	font-weight: 900;
+	font-style: italic;
+	src:
+		local('Roboto'),
+		url(assets/fonts/Roboto-BlackItalic.ttf) format('truetype');
+}
+
+/********************
+*    HTML, BODY
+*********************/
 
 html,
 body {
@@ -7,7 +113,7 @@ body {
 }
 
 body {
-	background-color: $color-background;
+	background-color: white;
 	font-family: 'Roboto';
 	color: $color-dark;
 }
@@ -17,6 +123,9 @@ body {
 	height: 100%;
 }
 
+/********************
+*      MODAL
+*********************/
 .ant-modal-root {
 	.ant-modal {
 		margin-top: 25px;
@@ -24,7 +133,8 @@ body {
 
 	.ant-modal-header {
 		.ant-modal-title {
-			@include font(25px, bold);
+			font-size: 1.5rem;
+			font-weight: bold;
 		}
 	}
 
@@ -47,15 +157,6 @@ body {
 	}
 }
 
-.ant-spin-container {
-	width: inherit;
-	height: inherit;
-}
-
-.ant-spin-nested-loading {
-	height: 100%;
-}
-
 .ant-modal {
 	.custom-footer {
 		margin-top: 25px;
@@ -69,18 +170,6 @@ body {
 	}
 }
 
-.ant-message {
-	.ant-message-custom-content {
-		span {
-			font-size: 20px;
-		}
-	}
-}
-
-.WeightDrawer > * {
-	transition-duration: 0ms, 0ms !important;
-}
-
 .EJJYModal {
 	.ant-modal-confirm-title {
 		font-weight: bold;
@@ -92,13 +181,47 @@ body {
 	}
 
 	.ant-modal-confirm-btns {
-		@include flex(center, center);
 		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
 		.ant-btn {
 			flex: 1;
 			height: 60px !important;
 			font-size: 25px !important;
 		}
+	}
+}
+
+/********************
+*      SPINNER
+*********************/
+.ant-spin-container {
+	width: inherit;
+	height: inherit;
+}
+
+.ant-spin-nested-loading {
+	height: 100%;
+}
+
+/********************
+*      MESSAGE
+*********************/
+.ant-message {
+	.ant-message-custom-content {
+		span {
+			font-size: 20px;
+		}
+	}
+}
+
+/********************
+*     TOOLTIP
+*********************/
+.ButtonTooltip {
+	.ant-tooltip-inner {
+		text-align: center;
 	}
 }

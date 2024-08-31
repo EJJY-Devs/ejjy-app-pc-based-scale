@@ -25,15 +25,16 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 	// CUSTOM HOOKS
 	// const { validateUser, status: authStatus } = useAuth();
 	const { weight } = useWeightStore();
-	const { currentProduct, addProduct, setCurrentProduct } =
+	const { currentProduct, addProduct, setCurrentProduct, resetCurrentProduct } =
 		useCurrentTransactionStore();
-	console.log('currentProduct', currentProduct);
+
 	const { price, resetPrice } = usePriceStore();
+
 	// METHODS
 	const handlePrintAndAddCart = () => {
 		onPrint(() => {
 			addProduct({ ...currentProduct, weight });
-			setCurrentProduct(null);
+			resetCurrentProduct();
 
 			message.success('Product successfully added.');
 		});
@@ -56,11 +57,11 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 	// }, [currentProduct, selectedDiscountType]);
 
 	const isWithDiscount = useCallback(
-		() => currentProduct?.discount > 0,
+		() => Number(currentProduct?.discount) > 0,
 		[currentProduct],
 	);
 
-	const handleDiscountSuccess = (discountType) => {
+	const handleDiscountSuccess = (discountType: string) => {
 		const product = currentProduct;
 
 		if (product) {
@@ -91,7 +92,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 				discount: newDiscountPerPiece,
 				price_per_piece:
 					currentDiscount > 0 ? currentDiscount : newPricePerPiece,
-				markdownType,
+				markdownType: markdownType as string,
 			});
 
 			message.success('Sucessfully applied discount to product.');
@@ -182,13 +183,15 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 										className="w-full"
 										disabled={!!price}
 										title="Wholesale"
+
 										onClick={() => {
-											// setSelectedDiscountType(discountTypes.FIRST);
-											handleDiscountSuccess(discountTypes.FIRST);
+											// setSelectedDiscountType(discountTypes.NO_DISCOUNT);
+											handleDiscountSuccess(discountTypes.NO_DISCOUNT);
 											// setDiscountAuthModalVisible(true);
 										}}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<ScaleButton
 										className="w-full"
@@ -229,9 +232,8 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 						onClick={handlePrintAndAddCart}
 					/>
 				</div>
-			</div>
 
-			{/* {discountAuthModalVisible && (
+				{/* {discountAuthModalVisible && (
 				<DiscountModal
 					discount={getDiscount()}
 					isLoading={authStatus === request.REQUESTING}
@@ -239,6 +241,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 					onClose={() => setDiscountAuthModalVisible(false)}
 				/>
 			)} */}
-		</>
+			</>
+		)
 	);
 };

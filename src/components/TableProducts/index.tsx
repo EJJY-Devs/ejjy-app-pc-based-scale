@@ -28,7 +28,7 @@ export const TableProducts = ({
 	onClick,
 }: Props) => {
 	// METHODS
-	const getStyleAlignment = (alignment) =>
+	const getStyleAlignment = (alignment: string | undefined) =>
 		({
 			textAlign: alignment || 'left',
 		}) as React.CSSProperties;
@@ -61,27 +61,33 @@ export const TableProducts = ({
 						</tr>
 					</thead>
 					<tbody>
-						{data?.map((row, rowIndex) => (
-							<tr
-								key={`tr-${rowIndex}`}
-								className={cn(
-									'cursor-pointer border-0 border-b border-solid border-gray',
-									{ 'bg-[#20bf6b33]': activeRow === rowIndex },
-								)}
-								style={{ height: `${ROW_HEIGHT}px` }}
-								onClick={() => onClick(rowIndex)}
-							>
-								{row.map((item, colIndex) => (
-									<td
-										key={`td-${colIndex}`}
-										className="px-4 py-2 text-base font-semibold text-darkGray"
-										style={getStyleAlignment(columns?.[colIndex]?.alignment)}
-									>
-										{item}
-									</td>
-								))}
-							</tr>
-						))}
+						{data?.map(
+							(row: (React.ReactElement | string)[], rowIndex: number) => (
+								<tr
+									key={`tr-${rowIndex}`}
+									className={cn(
+										'cursor-pointer border-0 border-b border-solid border-gray',
+										{ 'bg-[#20bf6b33]': activeRow === rowIndex },
+									)}
+									style={{ height: `${ROW_HEIGHT}px` }}
+									onClick={() => onClick(rowIndex)}
+								>
+									{row.map(
+										(item: React.ReactElement | string, colIndex: number) => (
+											<td
+												key={`td-${colIndex}`}
+												className="px-4 py-2 text-base font-semibold text-darkGray"
+												style={getStyleAlignment(
+													columns?.[colIndex]?.alignment,
+												)}
+											>
+												{item}
+											</td>
+										),
+									)}
+								</tr>
+							),
+						)}
 					</tbody>
 				</table>
 			</div>
