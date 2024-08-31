@@ -1,7 +1,12 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Divider, Spin, Table, Tabs } from 'antd';
 import { ColumnsType } from 'antd/lib/table/interface';
-import { LamasAmountModal, ScaleButton, WeightTextcodeModal } from 'components';
+import {
+	LamasAmountModal,
+	ScaleButton,
+	WeightTextcodeModal,
+	PriceAmountModal,
+} from 'components';
 import { ButtonIcon, ControlledInput, Label } from 'components/elements';
 import {
 	BranchProduct,
@@ -49,7 +54,9 @@ export const WeightProductSelection = ({
 	// STATES
 	const [textcodeModalVisible, setTextcodeModalVisible] = useState(false);
 	const [lamasAmountModalVisible, setLamasAmountModalVisible] = useState(false);
-	const [dataSource, setDataSource] = useState<TableRow[]>([]);
+	const [priceAmountModalVisible, setPriceAmountModalVisible] = useState(false);
+	const [dataSource, setDataSource] = useState([]);
+
 
 	// CUSTOM HOOKS
 	const { weight } = useWeightStore();
@@ -162,10 +169,15 @@ export const WeightProductSelection = ({
 
 				<div className="grid grid-cols-12 gap-x-4">
 					<ScaleButton
-						className="col-span-8 h-button"
+						className="col-span-4 h-button"
 						disabled={weight === 0}
 						title="Input Textcode"
 						onClick={() => setTextcodeModalVisible(true)}
+					/>
+					<ScaleButton
+						className="col-span-4 h-button"
+						title="Input Price"
+						onClick={() => setPriceAmountModalVisible(true)}
 					/>
 
 					<ScaleButton
@@ -186,6 +198,11 @@ export const WeightProductSelection = ({
 			{lamasAmountModalVisible && (
 				<LamasAmountModal onClose={() => setLamasAmountModalVisible(false)} />
 			)}
+
+			<PriceAmountModal
+				visible={priceAmountModalVisible}
+				onClose={() => setPriceAmountModalVisible(false)}
+			/>
 		</Spin>
 	);
 };

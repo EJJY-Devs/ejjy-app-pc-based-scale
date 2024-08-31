@@ -4,7 +4,11 @@ import { priceCodes } from 'global';
 import { usePrintProduct, useWeight } from 'hooks';
 import _ from 'lodash';
 import React, { useEffect } from 'react';
-import { useCurrentTransactionStore, useWeightStore } from 'stores';
+import {
+	useCurrentTransactionStore,
+	useWeightStore,
+	usePriceStore,
+} from 'stores';
 import {
 	formatPrintDetails,
 	formatWeight,
@@ -37,6 +41,8 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 	} = useCurrentTransactionStore();
 	useWeight();
 
+	const { price } = usePriceStore();
+
 	// METHODS
 	useEffect(() => {
 		if (weight === 0 && currentProduct) {
@@ -46,7 +52,7 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 
 	const handleSelectProduct = (branchProduct: BranchProduct) => {
 		const foundProduct = transactionProducts.find(
-			({ id }) => id === branchProduct.id,
+			({ id }) => id === branchProduct?.id,
 		);
 
 		if (!foundProduct) {
@@ -63,7 +69,9 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		}
 
 		// Get total
-		const total = standardRound(currentProduct.price_per_piece * weight);
+		const total = standardRound(
+			weight * (currentProduct?.price_per_piece ?? price),
+		);
 
 		// Get weight
 		const roundedWeight = formatWeight(weight);
@@ -77,20 +85,21 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		let priceCode = '';
 		if (getPriceCodeFeature()) {
 			const type =
-				currentProduct.price_markdown?.type ||
-				currentProduct.markdownType ||
+				currentProduct?.price_markdown?.type ||
+				currentProduct?.markdownType ||
 				markdownTypes.REGULAR;
 			priceCode = priceCodes[type] || '';
 		}
 
 		// Get code
 		const code =
-			currentProduct.product.selling_barcode || currentProduct.product.barcode;
+			currentProduct?.product.selling_barcode ||
+			currentProduct?.product.barcode;
 
 		await printProduct({
-			name: formatPrintDetails(currentProduct.product.name),
+			name: formatPrintDetails(currentProduct?.product.name),
 			weight: `${formatZeroToO(roundedWeight)}kg`,
-			price: `P${formatZeroToO(currentProduct.price_per_piece.toFixed(2))}`,
+			price: `P${formatZeroToO(currentProduct?.price_per_piece?.toFixed(2) || price?.toFixed(2))}`,
 			totalPrice: `P${formatZeroToO(total)}`,
 			code: `${priceCode}${code}${formattedWeight}`,
 			branchName: formatPrintDetails(getBranchName()),
@@ -104,7 +113,7 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 	return (
 		<Spin spinning={isPrintingProduct} wrapperClassName="h-full">
 			<div className="flex h-[inherit] flex-col">
-				{currentProduct ? (
+				{currentProduct || price ? (
 					<WeightProductDetails onPrint={handlePrint} />
 				) : (
 					<WeightProductSelection
