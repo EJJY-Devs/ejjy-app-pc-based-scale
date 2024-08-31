@@ -70,7 +70,7 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 
 		// Get total
 		const total = standardRound(
-			currentProduct?.price_per_piece * weight || price * weight,
+			weight * (currentProduct?.price_per_piece ?? price),
 		);
 
 		// Get weight

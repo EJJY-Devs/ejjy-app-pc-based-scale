@@ -95,7 +95,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 				markdownType: markdownType as string,
 			});
 
-			message.success('Sucessfully applied discount to product.');
+			message.success('Successfully applied discount to product.');
 		} else {
 			message.error('An error occurred while setting discount to a product');
 		}
@@ -126,7 +126,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 						<ControlledInput
 							className="text-right text-[2.5rem] font-bold text-dark"
 							value={formatInPeso(
-								weight * currentProduct?.price_per_piece || weight * price,
+								weight * (currentProduct?.price_per_piece ?? price),
 							)}
 							disabled
 							onChange={() => null}
@@ -183,7 +183,6 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 										className="w-full"
 										disabled={!!price}
 										title="Wholesale"
-
 										onClick={() => {
 											// setSelectedDiscountType(discountTypes.NO_DISCOUNT);
 											handleDiscountSuccess(discountTypes.NO_DISCOUNT);
@@ -241,7 +240,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 					onClose={() => setDiscountAuthModalVisible(false)}
 				/>
 			)} */}
-			</>
-		)
+			</div>
+		</>
 	);
 };
