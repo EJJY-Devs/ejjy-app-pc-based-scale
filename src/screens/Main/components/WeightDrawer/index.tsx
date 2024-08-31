@@ -104,7 +104,7 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 	return (
 		<Spin spinning={isPrintingProduct} wrapperClassName="h-full">
 			<div className="flex h-[inherit] flex-col">
-				{price ? (
+				{currentProduct || price ? (
 					<WeightProductDetails onPrint={handlePrint} />
 				) : (
 					<WeightProductSelection
