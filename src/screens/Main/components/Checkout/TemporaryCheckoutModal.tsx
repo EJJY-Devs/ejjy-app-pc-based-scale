@@ -74,6 +74,7 @@ export const TemporaryCheckoutModal = ({ onClose }: Props) => {
 				price_per_piece: product.price_per_piece,
 				discount_per_piece: product?.discount || 0,
 			})),
+			invoiceType: '',
 		});
 
 		const total = checkedOutProducts.reduce(
