@@ -57,7 +57,6 @@ export const WeightProductSelection = ({
 	const [priceAmountModalVisible, setPriceAmountModalVisible] = useState(false);
 	const [dataSource, setDataSource] = useState([]);
 
-
 	// CUSTOM HOOKS
 	const { weight } = useWeightStore();
 	const { transactionProducts } = useCurrentTransactionStore();
