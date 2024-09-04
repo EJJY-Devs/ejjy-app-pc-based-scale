@@ -84,7 +84,7 @@ export const PriceAmountModal = ({ visible, onClose }: Props) => {
 							key={input}
 							className={
 								input === 0
-									? 'col-span-2 col-start-1 h-20 text-[2rem]'
+									? 'col-span-1 col-start-1 h-20 text-[2rem]'
 									: 'h-20 text-[2rem]'
 							}
 							disabled={
@@ -98,7 +98,7 @@ export const PriceAmountModal = ({ visible, onClose }: Props) => {
 					))}
 
 					<ScaleButton
-						className={cn('col-span-3 h-20 text-[2rem]', {
+						className={cn('col-span-1 h-20 text-[2rem]', {
 							'bg-red-500 text-white': textcode.length > 0,
 						})}
 						disabled={textcode.length === 0}
