@@ -45,8 +45,6 @@ const App = () => {
 
 	useEffect(() => {
 		document.title = `${APP_TITLE} (v${npmPackage.version})`;
-
-		document.documentElement.requestFullscreen();
 	}, []);
 
 	return (
