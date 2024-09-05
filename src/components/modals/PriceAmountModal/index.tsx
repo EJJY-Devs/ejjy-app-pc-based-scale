@@ -4,6 +4,7 @@ import { Button, ControlledInput } from 'components/elements';
 import React, { useEffect, useState } from 'react';
 import { usePriceStore } from 'stores/usePriceStore';
 import { cn } from 'utils';
+import { formatInPeso } from 'ejjy-global';
 
 const TEXTCODE_MAX_LENGTH = 10;
 const NUMPAD_CLEAR = -1;
@@ -17,49 +18,44 @@ type Props = {
 
 export const PriceAmountModal = ({ visible, onClose }: Props) => {
 	// STATES
-	const [textcode, setTextcode] = useState('');
-
+	const [rawInput, setRawInput] = useState('0');
 	const { setPrice } = usePriceStore();
 
 	// METHODS
 	const handleNumpadInput = (key: number | string) => {
-		if (key === NUMPAD_CLEAR) {
-			setTextcode((value) =>
-				value.length > 0 ? value.substring(0, value.length - 1) : '',
-			);
-		} else if (key === NUMPAD_DECIMAL) {
-			// Prevent multiple decimal points or leading decimal points
-			setTextcode((value) => {
-				if (value.includes('.') || value.length === 0) return value;
-				return `${value}${key}`;
-			});
-		} else {
-			setTextcode((value) => `${value}${key}`);
-		}
+		setRawInput((value) => {
+			if (key === NUMPAD_CLEAR) {
+				return value.length > 1 ? value.slice(0, -1) : '0';
+			}
+
+			// Handle decimal point input
+			if (key === NUMPAD_DECIMAL && value.includes('.')) return value;
+			if (key === NUMPAD_DECIMAL) return `${value}${key}`;
+
+			// Avoid leading zeros
+			return value === '0' ? `${key}` : `${value}${key}`;
+		});
 	};
 
 	useEffect(() => {
 		if (visible) {
-			setTextcode('');
+			setRawInput('0');
 		}
 	}, [visible]);
 
 	const handleSubmit = () => {
-		if (textcode.length === 0) {
-			message.warning('Please input a price first.');
-			return;
-		}
-
-		const price = parseFloat(textcode);
+		const price = parseFloat(rawInput);
 		if (isNaN(price)) {
 			message.error('Invalid price. Please enter a valid number.');
 			return;
 		}
 
 		setPrice(price);
-
 		onClose();
 	};
+
+	const displayValue =
+		rawInput === '0' ? formatInPeso(0) : formatInPeso(rawInput);
 
 	return (
 		<Modal
@@ -74,9 +70,7 @@ export const PriceAmountModal = ({ visible, onClose }: Props) => {
 				<div className="grid w-full grid-cols-3 grid-rows-5 gap-3">
 					<ControlledInput
 						className="col-span-3 col-start-1 text-center text-4xl font-bold text-dark"
-						value={textcode}
-						disabled
-						onChange={(value) => setTextcode(value)}
+						value={displayValue}
 					/>
 
 					{inputs.map((input) => (
@@ -88,9 +82,10 @@ export const PriceAmountModal = ({ visible, onClose }: Props) => {
 									: 'h-20 text-[2rem]'
 							}
 							disabled={
-								(textcode.length >= TEXTCODE_MAX_LENGTH &&
+								(rawInput.length >= TEXTCODE_MAX_LENGTH &&
 									input !== NUMPAD_CLEAR) ||
-								(input === NUMPAD_DECIMAL && textcode.includes('.'))
+								(input === NUMPAD_DECIMAL && rawInput.includes('.')) || //Prevent multiple decimal points
+								(rawInput.includes('.') && rawInput.split('.')[1].length >= 2) // Disable if two decimals
 							}
 							title={String(input)}
 							onClick={() => handleNumpadInput(input)}
@@ -99,9 +94,9 @@ export const PriceAmountModal = ({ visible, onClose }: Props) => {
 
 					<ScaleButton
 						className={cn('col-span-1 h-20 text-[2rem]', {
-							'bg-red-500 text-white': textcode.length > 0,
+							'bg-red-500 text-white': rawInput.length > 0,
 						})}
-						disabled={textcode.length === 0}
+						disabled={rawInput === '0'}
 						title="C"
 						onClick={() => handleNumpadInput(NUMPAD_CLEAR)}
 					/>
