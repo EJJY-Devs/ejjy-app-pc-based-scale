@@ -178,8 +178,8 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 								/>
 							</Col>
 						) : (
-							<>
-								{!price && (
+							!price && (
+								<>
 									<div className="flex">
 										<Col span={12}>
 											<ScaleButton
@@ -203,8 +203,8 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 											/>
 										</Col>
 									</div>
-								)}
-							</>
+								</>
+							)
 						)}
 					</Row>
 					{!price && (
