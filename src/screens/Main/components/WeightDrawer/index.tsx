@@ -41,12 +41,13 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 	} = useCurrentTransactionStore();
 	useWeight();
 
-	const { price } = usePriceStore();
+	const { price, resetPrice } = usePriceStore();
 
 	// METHODS
 	useEffect(() => {
-		if (weight === 0 && currentProduct) {
+		if (weight === 0) {
 			resetCurrentProduct();
+			resetPrice();
 		}
 	}, [weight]);
 
