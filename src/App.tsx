@@ -14,6 +14,7 @@ import { AppIcons } from './components';
 import { APP_TITLE } from './global/constants';
 import './index.css';
 import Main from './screens/Main';
+import { request } from 'http';
 
 const App = () => {
 	// VARIABLES
@@ -44,6 +45,8 @@ const App = () => {
 
 	useEffect(() => {
 		document.title = `${APP_TITLE} (v${npmPackage.version})`;
+
+		document.documentElement.requestFullscreen();
 	}, []);
 
 	return (
