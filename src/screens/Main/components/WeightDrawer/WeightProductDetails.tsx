@@ -124,7 +124,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 					<div>
 						<Label label="Total" spacing />
 						<ControlledInput
-							className="text-right text-[2.5rem] font-bold text-dark"
+							className={`text-right font-bold text-dark ${price ? 'text-[4.5rem]' : 'text-[2.5rem]'}`}
 							value={formatInPeso(
 								weight * (currentProduct?.price_per_piece ?? price),
 							)}
@@ -147,7 +147,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 					<div>
 						<Label label="Weight" spacing />
 						<ControlledInput
-							className="text-2xl font-bold text-dark"
+							className={`font-bold text-dark ${price ? 'text-5xl' : 'text-2xl'}`}
 							value={formatWeight(weight)}
 							disabled
 							onChange={() => null}
@@ -157,7 +157,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 					<div>
 						<Label label="Price" spacing />
 						<ControlledInput
-							className="text-2xl font-bold text-dark"
+							className={`font-bold text-dark ${price ? 'text-5xl' : 'text-2xl'}`}
 							value={formatInPeso(currentProduct?.price_per_piece || price)}
 							disabled
 							onChange={() => null}
