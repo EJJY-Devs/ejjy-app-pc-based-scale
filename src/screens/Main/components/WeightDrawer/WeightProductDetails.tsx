@@ -132,16 +132,17 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 							onChange={() => null}
 						/>
 					</div>
-
-					<div>
-						<Label label="Name" spacing />
-						<ControlledInput
-							className="text-2xl font-bold text-dark"
-							value={currentProduct?.product.name}
-							disabled
-							onChange={() => null}
-						/>
-					</div>
+					{!price && (
+						<div>
+							<Label label="Name" spacing />
+							<ControlledInput
+								className="text-2xl font-bold text-dark"
+								value={currentProduct?.product.name}
+								disabled
+								onChange={() => null}
+							/>
+						</div>
+					)}
 
 					<div>
 						<Label label="Weight" spacing />
@@ -178,31 +179,31 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 							</Col>
 						) : (
 							<>
-								<Col span={12}>
-									<ScaleButton
-										className="w-full"
-										disabled={!!price}
-										title="Wholesale"
-										onClick={() => {
-											// setSelectedDiscountType(discountTypes.NO_DISCOUNT);
-											handleDiscountSuccess(discountTypes.NO_DISCOUNT);
-											// setDiscountAuthModalVisible(true);
-										}}
-									/>
-								</Col>
+								{!price && (
+									<div className="flex">
+										<Col span={12}>
+											<ScaleButton
+												className="w-full"
+												title="Wholesale"
+												onClick={() => {
+													handleDiscountSuccess(discountTypes.NO_DISCOUNT);
+													// setDiscountAuthModalVisible(true);
+												}}
+											/>
+										</Col>
 
-								<Col span={12}>
-									<ScaleButton
-										className="w-full"
-										disabled={!!price}
-										title="Special"
-										onClick={() => {
-											// setSelectedDiscountType(discountTypes.SECOND);
-											handleDiscountSuccess(discountTypes.SECOND);
-											// setDiscountAuthModalVisible(true);
-										}}
-									/>
-								</Col>
+										<Col span={12}>
+											<ScaleButton
+												className="w-full"
+												title="Special"
+												onClick={() => {
+													handleDiscountSuccess(discountTypes.SECOND);
+													// setDiscountAuthModalVisible(true);
+												}}
+											/>
+										</Col>
+									</div>
+								)}
 							</>
 						)}
 					</Row>
@@ -217,20 +218,22 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 					/>
 				</Space>
 
-				<div className="absolute bottom-0 grid h-button w-full grid-cols-12 gap-x-3">
-					<ScaleButton
-						className="col-span-8"
-						disabled={weight === 0}
-						title="Print"
-						onClick={() => onPrint()}
-					/>
-					<ScaleButton
-						className="col-span-4"
-						disabled={weight === 0}
-						title={<img alt="icon" src={iconPrintAndAddCart} />}
-						onClick={handlePrintAndAddCart}
-					/>
-				</div>
+				{!price && (
+					<div className="absolute bottom-0 grid h-button w-full grid-cols-12 gap-x-3">
+						<ScaleButton
+							className="col-span-8"
+							disabled={weight === 0}
+							title="Print"
+							onClick={() => onPrint()}
+						/>
+						<ScaleButton
+							className="col-span-4"
+							disabled={weight === 0}
+							title={<img alt="icon" src={iconPrintAndAddCart} />}
+							onClick={handlePrintAndAddCart}
+						/>
+					</div>
+				)}
 
 				{/* {discountAuthModalVisible && (
 				<DiscountModal
