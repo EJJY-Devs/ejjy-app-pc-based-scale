@@ -8,7 +8,6 @@ import {
 	RequestErrors,
 	useBranchProducts,
 	useProductCategories,
-	useSiteSettings,
 } from 'ejjy-global';
 import { useNetwork } from 'hooks';
 import _ from 'lodash';
@@ -34,7 +33,6 @@ const Main = () => {
 	// CUSTOM HOOKS
 	const history = useHistory();
 	const { currentProduct, setCurrentProduct } = useCurrentTransactionStore();
-	const { data: siteSettings } = useSiteSettings();
 	const { isFetching: isConnectingNetwork, isSuccess: isNetworkSuccess } =
 		useNetwork(branchServerURL);
 	const {
@@ -133,14 +131,6 @@ const Main = () => {
 					<WeightDrawer branchProducts={branchProductsData?.list || []} />
 				</div>
 			</section>
-
-			{siteSettings && (
-				<div className="mt-6 flex items-center justify-center">
-					<h1 className="mb-0 text-center text-3xl font-bold text-neutral-500">
-						{siteSettings?.store_name}
-					</h1>
-				</div>
-			)}
 
 			{checkoutModalVisible && (
 				<CheckoutModal onClose={() => setCheckoutModalVisible(false)} />

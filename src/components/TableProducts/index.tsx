@@ -2,6 +2,7 @@ import { Spin, Tooltip } from 'antd';
 import { cn } from 'utils';
 import React, { ReactNode } from 'react';
 import { NO_INDEX_SELECTED, ROW_HEIGHT } from '../../global/constants';
+import { useSiteSettings } from 'ejjy-global';
 
 type Column = {
 	name: string | ReactNode;
@@ -32,6 +33,8 @@ export const TableProducts = ({
 		({
 			textAlign: alignment || 'left',
 		}) as React.CSSProperties;
+
+	const { data: siteSettings } = useSiteSettings();
 
 	return (
 		<Spin spinning={loading}>
@@ -89,6 +92,15 @@ export const TableProducts = ({
 							),
 						)}
 					</tbody>
+					{siteSettings && (
+						<tfoot className="absolute bottom-0 left-0 right-0 flex w-full items-center justify-center">
+							<div>
+								<h1 className="mb-0 justify-center p-4 text-center text-3xl font-bold text-neutral-500">
+									{siteSettings?.store_name}
+								</h1>
+							</div>
+						</tfoot>
+					)}
 				</table>
 			</div>
 		</Spin>
