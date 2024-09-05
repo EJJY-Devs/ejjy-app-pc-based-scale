@@ -207,34 +207,31 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 							)
 						)}
 					</Row>
-					{!price && (
-						<ScaleButton
-							className="w-full border-2 border-red-500 bg-transparent text-base text-red-500 hover:bg-red-500 hover:text-white hover:opacity-100"
-							title={'REMOVE SELECTED PRODUCT'}
-							onClick={() => {
-								setCurrentProduct(null);
-								resetPrice();
-							}}
-						/>
-					)}
+
+					<ScaleButton
+						className="w-full border-2 border-red-500 bg-transparent text-base text-red-500 hover:bg-red-500 hover:text-white hover:opacity-100"
+						title={price ? 'RESET' : 'REMOVE SELECTED PRODUCT'}
+						onClick={() => {
+							setCurrentProduct(null);
+							resetPrice();
+						}}
+					/>
 				</Space>
 
-				{!price && (
-					<div className="absolute bottom-0 grid h-button w-full grid-cols-12 gap-x-3">
-						<ScaleButton
-							className="col-span-8"
-							disabled={weight === 0}
-							title="Print"
-							onClick={() => onPrint()}
-						/>
-						<ScaleButton
-							className="col-span-4"
-							disabled={weight === 0}
-							title={<img alt="icon" src={iconPrintAndAddCart} />}
-							onClick={handlePrintAndAddCart}
-						/>
-					</div>
-				)}
+				<div className="absolute bottom-0 grid h-button w-full grid-cols-12 gap-x-3">
+					<ScaleButton
+						className="col-span-8"
+						disabled={weight === 0 || !!price}
+						title="Print"
+						onClick={() => onPrint()}
+					/>
+					<ScaleButton
+						className="col-span-4"
+						disabled={weight === 0 || !!price}
+						title={<img alt="icon" src={iconPrintAndAddCart} />}
+						onClick={handlePrintAndAddCart}
+					/>
+				</div>
 
 				{/* {discountAuthModalVisible && (
 				<DiscountModal
