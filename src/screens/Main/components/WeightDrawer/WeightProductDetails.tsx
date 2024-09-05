@@ -207,15 +207,16 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 							</>
 						)}
 					</Row>
-
-					<ScaleButton
-						className="w-full border-2 border-red-500 bg-transparent text-base text-red-500 hover:bg-red-500 hover:text-white hover:opacity-100"
-						title={price ? 'RESET' : 'REMOVE SELECTED PRODUCT'}
-						onClick={() => {
-							setCurrentProduct(null);
-							resetPrice();
-						}}
-					/>
+					{!price && (
+						<ScaleButton
+							className="w-full border-2 border-red-500 bg-transparent text-base text-red-500 hover:bg-red-500 hover:text-white hover:opacity-100"
+							title={'REMOVE SELECTED PRODUCT'}
+							onClick={() => {
+								setCurrentProduct(null);
+								resetPrice();
+							}}
+						/>
+					)}
 				</Space>
 
 				{!price && (

@@ -175,6 +175,7 @@ export const WeightProductSelection = ({
 					/>
 					<ScaleButton
 						className="col-span-4 h-button"
+						disabled={weight === 0}
 						title="Input Price"
 						onClick={() => setPriceAmountModalVisible(true)}
 					/>
