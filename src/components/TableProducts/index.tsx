@@ -95,7 +95,7 @@ export const TableProducts = ({
 					{siteSettings && (
 						<tfoot className="absolute bottom-0 left-0 right-0 flex w-full items-center justify-center">
 							<div>
-								<h1 className="mb-0 justify-center p-4 text-center text-3xl font-bold text-neutral-500">
+								<h1 className="mb-0 justify-center p-4 text-center text-2xl font-bold text-neutral-500">
 									{siteSettings?.store_name}
 								</h1>
 							</div>
