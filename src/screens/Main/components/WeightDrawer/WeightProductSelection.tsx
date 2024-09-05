@@ -195,9 +195,10 @@ export const WeightProductSelection = ({
 				/>
 			)}
 
-			{lamasAmountModalVisible && (
-				<LamasAmountModal onClose={() => setLamasAmountModalVisible(false)} />
-			)}
+			<LamasAmountModal
+				visible={lamasAmountModalVisible}
+				onClose={() => setLamasAmountModalVisible(false)}
+			/>
 
 			<PriceAmountModal
 				visible={priceAmountModalVisible}
