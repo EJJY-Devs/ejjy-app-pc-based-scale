@@ -180,7 +180,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 						) : (
 							!price && (
 								<>
-									<div className="flex">
+									<div className="flex w-full">
 										<Col span={12}>
 											<ScaleButton
 												className="w-full"
