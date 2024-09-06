@@ -138,7 +138,7 @@ export const Buttons = ({
 	return (
 		<>
 			<div className="grid-rows-buttons grid grid-cols-4 gap-2">
-				<div className="flex gap-2">
+				<div className="flex flex-wrap gap-2">
 					<ScaleButton
 						className="flex-1 border-b-4 border-red-500 border-b-[#ab363d] bg-red-500 text-white"
 						title="Tare"
