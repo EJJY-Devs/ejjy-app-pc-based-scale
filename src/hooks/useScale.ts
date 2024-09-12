@@ -47,7 +47,7 @@ export const useWeight = () => {
 					previousValue.current === data &&
 					counter.current > THRESHOLD_LENGTH
 				) {
-					refetchInterval.current = REFETCH_INTERVAL_LONG_MS;
+					refetchInterval.current = REFETCH_INTERVAL_SHORT_MS;
 
 					if (dateInactive.current === null) {
 						dateInactive.current = dayjs();
