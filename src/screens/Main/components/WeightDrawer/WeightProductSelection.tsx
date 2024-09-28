@@ -24,7 +24,12 @@ const columns: ColumnsType = [
 	{
 		title: 'Description',
 		dataIndex: 'description',
-		width: 350,
+		width: 300,
+	},
+	{
+		title: 'SKU/Textcode',
+		dataIndex: 'textcode',
+		width: 300,
 	},
 	{
 		title: 'Action',
@@ -110,6 +115,7 @@ export const WeightProductSelection = ({
 				return {
 					id: branchProduct.id,
 					description: product.name,
+					textcode: product.textcode,
 					action: (
 						<ButtonIcon
 							icon={<PlusOutlined className="text-lg !text-green-400" />}
