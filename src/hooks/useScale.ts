@@ -18,7 +18,7 @@ const REFETCH_INTERVAL_SHORT_MS = 10;
 const REFETCH_INTERVAL_LONG_MS = 1000;
 
 const THRESHOLD_LENGTH_MS = 5000;
-const THRESHOLD_LENGTH = THRESHOLD_LENGTH_MS / REFETCH_INTERVAL_SHORT_MS;
+const THRESHOLD_LENGTH = (THRESHOLD_LENGTH_MS / REFETCH_INTERVAL_SHORT_MS) * 3;
 
 const INACTIVE_MINUTES = 10;
 
@@ -47,7 +47,7 @@ export const useWeight = () => {
 					previousValue.current === data &&
 					counter.current > THRESHOLD_LENGTH
 				) {
-					refetchInterval.current = REFETCH_INTERVAL_SHORT_MS;
+					refetchInterval.current = THRESHOLD_LENGTH;
 
 					if (dateInactive.current === null) {
 						dateInactive.current = dayjs();
