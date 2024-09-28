@@ -124,7 +124,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 					<div>
 						<Label label="Total" spacing />
 						<ControlledInput
-							className={`text-right font-bold text-dark ${price ? 'text-[4.5rem]' : 'text-[2.5rem]'}`}
+							className={`text-right text-[5.5rem] font-bold text-dark text-red-500`}
 							value={formatInPeso(
 								weight * (currentProduct?.price_per_piece ?? price),
 							)}
