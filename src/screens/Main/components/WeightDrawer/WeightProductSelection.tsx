@@ -24,12 +24,10 @@ const columns: ColumnsType = [
 	{
 		title: 'Description',
 		dataIndex: 'description',
-		width: 300,
 	},
 	{
 		title: 'SKU/Textcode',
 		dataIndex: 'textcode',
-		width: 300,
 	},
 	{
 		title: 'Action',
