@@ -117,19 +117,21 @@ export const WeightProductSelection = ({
 					description: product.name,
 					textcode: product.textcode,
 					action: (
-						<ButtonIcon
-							icon={<PlusOutlined className="text-lg !text-green-400" />}
-							tooltip="Add"
-							onClick={() => {
-								onSelectProduct({
-									...branchProduct,
-									markdown_price_per_piece1,
-									markdown_price_per_piece2,
-									price_per_piece,
-									price_markdown,
-								});
-							}}
-						/>
+						<div className="flex items-center justify-center">
+							<ButtonIcon
+								icon={<PlusOutlined className="text-lg !text-green-400" />}
+								tooltip="Add"
+								onClick={() => {
+									onSelectProduct({
+										...branchProduct,
+										markdown_price_per_piece1,
+										markdown_price_per_piece2,
+										price_per_piece,
+										price_markdown,
+									});
+								}}
+							/>
+						</div>
 					),
 				};
 			});
