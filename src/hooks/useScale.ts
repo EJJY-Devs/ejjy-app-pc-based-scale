@@ -14,7 +14,7 @@ import {
 import { useWeightStore } from 'stores';
 import { CamelCasedProperties } from 'type-fest';
 
-const REFETCH_INTERVAL_SHORT_MS = 10;
+const REFETCH_INTERVAL_SHORT_MS = 5;
 
 const THRESHOLD_LENGTH_MS = 5000;
 const THRESHOLD_LENGTH = THRESHOLD_LENGTH_MS / REFETCH_INTERVAL_SHORT_MS;
