@@ -28,10 +28,12 @@ const columns: ColumnsType = [
 	{
 		title: 'SKU/Textcode',
 		dataIndex: 'textcode',
+		align: 'center',
 	},
 	{
 		title: 'Action',
 		dataIndex: 'action',
+		align: 'center',
 	},
 ];
 
