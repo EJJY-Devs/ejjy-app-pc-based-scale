@@ -24,7 +24,9 @@ const INACTIVE_MINUTES = 10;
 
 export const useWeight = () => {
 	const history = useHistory();
-	const { setWeight } = useWeightStore();
+	const { setWeight, weight } = useWeightStore();
+
+	console.log(weight);
 
 	const counter = useRef(0);
 	const previousValue = useRef(0);
