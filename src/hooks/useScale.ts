@@ -14,7 +14,8 @@ import {
 import { useWeightStore } from 'stores';
 import { CamelCasedProperties } from 'type-fest';
 
-const REFETCH_INTERVAL_SHORT_MS = 5;
+const REFETCH_INTERVAL_SHORT_MS = 10;
+const REFETCH_INTERVAL_LONG_MS = 1000;
 
 const THRESHOLD_LENGTH_MS = 5000;
 const THRESHOLD_LENGTH = THRESHOLD_LENGTH_MS / REFETCH_INTERVAL_SHORT_MS;
@@ -27,6 +28,7 @@ export const useWeight = () => {
 
 	const counter = useRef(0);
 	const previousValue = useRef(0);
+	const refetchInterval = useRef(REFETCH_INTERVAL_SHORT_MS);
 	const dateInactive = useRef<dayjs.Dayjs | null>(null);
 
 	return useQuery<number>(
@@ -37,26 +39,32 @@ export const useWeight = () => {
 			);
 
 			if (response) {
+				counter.current += 1;
+
 				const { data } = response;
 
-				if (previousValue.current === data) {
-					counter.current += 1;
+				if (
+					previousValue.current === data &&
+					counter.current > THRESHOLD_LENGTH
+				) {
+					refetchInterval.current = REFETCH_INTERVAL_LONG_MS;
 
-					if (counter.current > THRESHOLD_LENGTH) {
-						if (dateInactive.current === null) {
-							dateInactive.current = dayjs();
-						} else if (
-							dayjs().diff(dateInactive.current, 'minute') >= INACTIVE_MINUTES
-						) {
-							history.push({
-								pathname: 'inactive',
-								state: true,
-							});
-						}
+					if (dateInactive.current === null) {
+						dateInactive.current = dayjs();
+					} else if (
+						dayjs().diff(dateInactive.current, 'minute') >= INACTIVE_MINUTES
+					) {
+						history.push({
+							pathname: 'inactive',
+							state: true,
+						});
 					}
-				} else {
+				}
+
+				if (previousValue.current !== data) {
 					previousValue.current = data;
 					counter.current = 0;
+					refetchInterval.current = REFETCH_INTERVAL_SHORT_MS;
 					dateInactive.current = null;
 				}
 			}
@@ -64,7 +72,7 @@ export const useWeight = () => {
 			return response;
 		},
 		{
-			refetchInterval: REFETCH_INTERVAL_SHORT_MS,
+			refetchInterval: () => refetchInterval.current,
 			refetchIntervalInBackground: true,
 			notifyOnChangeProps: [],
 			onSuccess: (newWeight) => {
