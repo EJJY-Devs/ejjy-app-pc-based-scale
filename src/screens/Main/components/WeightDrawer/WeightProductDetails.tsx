@@ -3,7 +3,7 @@ import { ScaleButton } from 'components';
 import { ControlledInput, Label } from 'components/elements';
 import { formatInPeso, markdownTypes } from 'ejjy-global';
 import { discountTypes } from 'global';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
 	useCurrentTransactionStore,
 	useWeightStore,
@@ -30,6 +30,8 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 
 	const { price, resetPrice } = usePriceStore();
 
+	const [displayedWeight, setDisplayedWeight] = useState(weight); // State for displayed weight
+
 	// METHODS
 	const handlePrintAndAddCart = () => {
 		onPrint(() => {
@@ -39,6 +41,21 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 			message.success('Product successfully added.');
 		});
 	};
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setDisplayedWeight((prev) => {
+				if (weight > prev) {
+					return Math.min(prev + 0.1, weight); // Increase towards actual weight
+				} else if (weight < prev) {
+					return Math.max(prev - 0.1, weight); // Decrease towards actual weight
+				}
+				return prev; // No change if already equal
+			});
+		}, 10); // Adjust timing as needed
+
+		return () => clearInterval(interval); // Cleanup on unmount
+	}, [weight]); // Depend only on weight
 
 	// const getDiscount = useCallback(() => {
 	// 	let discount = 0;
@@ -126,7 +143,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 						<ControlledInput
 							className={`text-right text-[5.5rem] font-bold text-dark text-red-500`}
 							value={formatInPeso(
-								weight * (currentProduct?.price_per_piece ?? price),
+								displayedWeight * (currentProduct?.price_per_piece ?? price),
 							)}
 							disabled
 							onChange={() => null}
@@ -148,7 +165,7 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 						<Label label="Weight" spacing />
 						<ControlledInput
 							className={`font-bold text-dark ${price ? 'text-5xl' : 'text-2xl'}`}
-							value={formatWeight(weight)}
+							value={formatWeight(displayedWeight)}
 							disabled
 							onChange={() => null}
 						/>
@@ -221,13 +238,13 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 				<div className="absolute bottom-0 grid h-button w-full grid-cols-12 gap-x-3">
 					<ScaleButton
 						className="col-span-8"
-						disabled={weight === 0 || !!price}
+						disabled={displayedWeight === 0 || !!price}
 						title="Print"
 						onClick={() => onPrint()}
 					/>
 					<ScaleButton
 						className="col-span-4"
-						disabled={weight === 0 || !!price}
+						disabled={displayedWeight === 0 || !!price}
 						title={<img alt="icon" src={iconPrintAndAddCart} />}
 						onClick={handlePrintAndAddCart}
 					/>
