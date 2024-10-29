@@ -26,12 +26,10 @@ export const useWeight = () => {
 	const history = useHistory();
 	const { setWeight, weight } = useWeightStore();
 
-	console.log(weight);
-
 	const counter = useRef(0);
 	const refetchInterval = useRef(REFETCH_INTERVAL_SHORT_MS);
 	const dateInactive = useRef<dayjs.Dayjs | null>(null);
-	const [virtualWeight, setVirtualWeight] = useState(weight); // Store virtual weight
+	const virtualWeightRef = useRef(weight || 0); // Use a ref to store the virtual weight
 
 	return useQuery<number>(
 		'useWeight',
@@ -62,16 +60,16 @@ export const useWeight = () => {
 					}
 				} else {
 					// Update the virtual weight with increments of 0.1
-					setVirtualWeight((prevWeight) => {
-						const newWeight = parseFloat(data.toFixed(3));
+					const newWeight = parseFloat(data);
 
-						if (newWeight > prevWeight + 0.1) {
-							return parseFloat((prevWeight + 0.1).toFixed(3)); // Increment by 0.1
-						} else if (newWeight < prevWeight) {
-							return newWeight; // Allow adjustment down to actual weight
-						}
-						return parseFloat(prevWeight.toFixed(3)); // No change
-					});
+					if (newWeight > virtualWeightRef.current + 0.1) {
+						virtualWeightRef.current += 0.1; // Increment by 0.1
+					} else if (newWeight < virtualWeightRef.current) {
+						virtualWeightRef.current = newWeight; // Adjust down to actual weight
+					}
+
+					// Update weight in store
+					setWeight(virtualWeightRef.current);
 
 					counter.current = 0;
 					refetchInterval.current = REFETCH_INTERVAL_SHORT_MS;
@@ -86,7 +84,7 @@ export const useWeight = () => {
 			refetchIntervalInBackground: true,
 			notifyOnChangeProps: [],
 			onSuccess: (newWeight) => {
-				setWeight(newWeight);
+				// Optional: Update weight here if needed
 			},
 		},
 	);
