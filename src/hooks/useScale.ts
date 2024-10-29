@@ -29,7 +29,6 @@ export const useWeight = () => {
 	console.log(weight);
 
 	const counter = useRef(0);
-	const previousValue = useRef(0);
 	const refetchInterval = useRef(REFETCH_INTERVAL_SHORT_MS);
 	const dateInactive = useRef<dayjs.Dayjs | null>(null);
 
@@ -41,30 +40,27 @@ export const useWeight = () => {
 			);
 
 			if (response) {
-				counter.current += 1;
-
 				const { data } = response;
 
-				if (
-					previousValue.current === data &&
-					counter.current > THRESHOLD_LENGTH
-				) {
-					refetchInterval.current = REFETCH_INTERVAL_LONG_MS;
+				if (data === 0) {
+					counter.current += 1;
 
-					if (dateInactive.current === null) {
-						dateInactive.current = dayjs();
-					} else if (
-						dayjs().diff(dateInactive.current, 'minute') >= INACTIVE_MINUTES
-					) {
-						history.push({
-							pathname: 'inactive',
-							state: true,
-						});
+					if (counter.current > THRESHOLD_LENGTH) {
+						refetchInterval.current = REFETCH_INTERVAL_LONG_MS;
+
+						if (dateInactive.current === null) {
+							dateInactive.current = dayjs();
+						} else if (
+							dayjs().diff(dateInactive.current, 'minute') >= INACTIVE_MINUTES
+						) {
+							history.push({
+								pathname: 'inactive',
+								state: true,
+							});
+						}
 					}
-				}
-
-				if (previousValue.current !== data) {
-					previousValue.current = data;
+				} else {
+					// Reset the counter and inactivity tracking when data is not 0
 					counter.current = 0;
 					refetchInterval.current = REFETCH_INTERVAL_SHORT_MS;
 					dateInactive.current = null;
