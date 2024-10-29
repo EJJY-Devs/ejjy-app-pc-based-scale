@@ -59,7 +59,7 @@ module.exports = function (scaleAndPrinterPath) {
 		handleProcess({
 			res,
 			onSuccess: function (data) {
-				const weight = _.round(parseFloat(data.toString()), 3);
+				const weight = parseFloat(data.toString());
 				res.json(weight);
 			},
 		});
