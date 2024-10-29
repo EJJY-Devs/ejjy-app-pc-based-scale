@@ -26,7 +26,6 @@ export const getBranchMachine = (isParsed = false) => {
 };
 
 export const getBranchServerUrl = () => {
-	console.log('get branch server url');
 	return localStorage.getItem(APP_BRANCH_SERVER_URL_KEY) || undefined;
 };
 
