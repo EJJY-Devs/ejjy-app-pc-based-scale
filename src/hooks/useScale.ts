@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import dayjs from 'dayjs';
 import { wrapServiceWithCatch } from 'ejjy-global';
 import { AxiosErrorResponse } from 'ejjy-global/dist/services/interfaces';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { UseMutationOptions, useMutation, useQuery } from 'react-query';
 import { useHistory } from 'react-router-dom';
 import { ScaleService } from 'services';
@@ -25,8 +25,9 @@ const INACTIVE_MINUTES = 10;
 export const useWeight = () => {
 	const history = useHistory();
 	const { setWeight, weight } = useWeightStore();
+	const [virtualWeight, setVirtualWeight] = useState(weight); // Store virtual weight
 
-	console.log(weight);
+	console.log(weight, virtualWeight);
 
 	const counter = useRef(0);
 	const refetchInterval = useRef(REFETCH_INTERVAL_SHORT_MS);
@@ -60,7 +61,18 @@ export const useWeight = () => {
 						}
 					}
 				} else {
-					// Reset the counter and inactivity tracking when data is not 0
+					// Update the virtual weight smoothly
+					setVirtualWeight((prevWeight) => {
+						// Calculate new virtual weight
+						let newWeight = Math.round(data * 10) / 10; // Keep it to 1 decimal place
+						if (newWeight > prevWeight + 0.5) {
+							return prevWeight + 0.5; // Prevent jumps larger than 0.5
+						} else if (newWeight < prevWeight) {
+							return newWeight; // Adjust down to actual weight
+						}
+						return prevWeight; // No change
+					});
+
 					counter.current = 0;
 					refetchInterval.current = REFETCH_INTERVAL_SHORT_MS;
 					dateInactive.current = null;
