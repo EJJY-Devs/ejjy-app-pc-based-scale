@@ -25,13 +25,13 @@ const INACTIVE_MINUTES = 10;
 export const useWeight = () => {
 	const history = useHistory();
 	const { setWeight, weight } = useWeightStore();
-	const [virtualWeight, setVirtualWeight] = useState(weight); // Store virtual weight
 
-	console.log(weight, virtualWeight);
+	console.log(weight);
 
 	const counter = useRef(0);
 	const refetchInterval = useRef(REFETCH_INTERVAL_SHORT_MS);
 	const dateInactive = useRef<dayjs.Dayjs | null>(null);
+	const [virtualWeight, setVirtualWeight] = useState(weight); // Store virtual weight
 
 	return useQuery<number>(
 		'useWeight',
@@ -61,16 +61,16 @@ export const useWeight = () => {
 						}
 					}
 				} else {
-					// Update the virtual weight smoothly
+					// Update the virtual weight with increments of 0.1
 					setVirtualWeight((prevWeight) => {
-						// Calculate new virtual weight
-						let newWeight = Math.round(data * 10) / 10; // Keep it to 1 decimal place
-						if (newWeight > prevWeight + 0.5) {
-							return prevWeight + 0.5; // Prevent jumps larger than 0.5
+						const newWeight = parseFloat(data.toFixed(3));
+
+						if (newWeight > prevWeight + 0.1) {
+							return parseFloat((prevWeight + 0.1).toFixed(3)); // Increment by 0.1
 						} else if (newWeight < prevWeight) {
-							return newWeight; // Adjust down to actual weight
+							return newWeight; // Allow adjustment down to actual weight
 						}
-						return prevWeight; // No change
+						return parseFloat(prevWeight.toFixed(3)); // No change
 					});
 
 					counter.current = 0;
