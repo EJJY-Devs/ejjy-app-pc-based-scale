@@ -38,15 +38,11 @@ export const useWeight = () => {
 			const response = await wrapServiceWithCatch(
 				ScaleService.retrieveWeight(),
 			);
-			return response; // Assuming this is a number directly
-		},
-		{
-			refetchInterval: () => refetchInterval.current,
-			refetchIntervalInBackground: true,
-			notifyOnChangeProps: [],
-			onSuccess: (newWeight) => {
-				// Check if newWeight is undefined or 0
-				if (newWeight === undefined || newWeight === 0) {
+
+			if (response) {
+				const { data } = response;
+
+				if (data === 0) {
 					counter.current += 1;
 
 					console.log('Counter:', counter.current);
@@ -66,12 +62,21 @@ export const useWeight = () => {
 						}
 					}
 				} else {
-					setWeight(newWeight);
-
+					// Reset the counter and inactivity tracking when data is not 0
 					counter.current = 0;
 					refetchInterval.current = REFETCH_INTERVAL_SHORT_MS;
 					dateInactive.current = null;
 				}
+			}
+
+			return response;
+		},
+		{
+			refetchInterval: () => refetchInterval.current,
+			refetchIntervalInBackground: true,
+			notifyOnChangeProps: [],
+			onSuccess: (newWeight) => {
+				setWeight(newWeight);
 			},
 		},
 	);
