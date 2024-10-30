@@ -24,12 +24,13 @@ const INACTIVE_MINUTES = 10;
 
 export const useWeight = () => {
 	const history = useHistory();
-	const { setWeight, weight } = useWeightStore();
+	const { weight, setWeight } = useWeightStore();
 
 	const counter = useRef(0);
 	const refetchInterval = useRef(REFETCH_INTERVAL_SHORT_MS);
 	const dateInactive = useRef<dayjs.Dayjs | null>(null);
-	const virtualWeightRef = useRef(weight || 0); // Use a ref to store the virtual weight
+
+	console.log('Weight', weight);
 
 	return useQuery<number>(
 		'useWeight',
@@ -37,12 +38,18 @@ export const useWeight = () => {
 			const response = await wrapServiceWithCatch(
 				ScaleService.retrieveWeight(),
 			);
-
-			if (response) {
-				const { data } = response;
-
-				if (data === 0) {
+			return response; // Assuming this is a number directly
+		},
+		{
+			refetchInterval: () => refetchInterval.current,
+			refetchIntervalInBackground: true,
+			notifyOnChangeProps: [],
+			onSuccess: (newWeight) => {
+				// Check if newWeight is undefined or 0
+				if (newWeight === undefined || newWeight === 0) {
 					counter.current += 1;
+
+					console.log('Counter:', counter.current);
 
 					if (counter.current > THRESHOLD_LENGTH) {
 						refetchInterval.current = REFETCH_INTERVAL_LONG_MS;
@@ -59,32 +66,12 @@ export const useWeight = () => {
 						}
 					}
 				} else {
-					// Update the virtual weight with increments of 0.1
-					const newWeight = parseFloat(data);
-
-					if (newWeight > virtualWeightRef.current + 0.1) {
-						virtualWeightRef.current += 0.1; // Increment by 0.1
-					} else if (newWeight < virtualWeightRef.current) {
-						virtualWeightRef.current = newWeight; // Adjust down to actual weight
-					}
-
-					// Update weight in store
-					setWeight(virtualWeightRef.current);
+					setWeight(newWeight);
 
 					counter.current = 0;
 					refetchInterval.current = REFETCH_INTERVAL_SHORT_MS;
 					dateInactive.current = null;
 				}
-			}
-
-			return response;
-		},
-		{
-			refetchInterval: () => refetchInterval.current,
-			refetchIntervalInBackground: true,
-			notifyOnChangeProps: [],
-			onSuccess: (newWeight) => {
-				// Optional: Update weight here if needed
 			},
 		},
 	);
