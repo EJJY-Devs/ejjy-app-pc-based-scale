@@ -39,33 +39,31 @@ export const useWeight = () => {
 				ScaleService.retrieveWeight(),
 			);
 
-			if (response) {
-				if (weight === 0) {
-					counter.current += 1;
+			if (weight === 0) {
+				counter.current += 1;
 
-					if (counter.current > THRESHOLD_LENGTH) {
-						refetchInterval.current = REFETCH_INTERVAL_LONG_MS;
+				if (counter.current > THRESHOLD_LENGTH) {
+					refetchInterval.current = REFETCH_INTERVAL_LONG_MS;
 
-						if (dateInactive.current === null) {
-							dateInactive.current = dayjs();
-						} else if (
-							dayjs().diff(dateInactive.current, 'minute') >= INACTIVE_MINUTES
-						) {
-							history.push({
-								pathname: 'inactive',
-								state: true,
-							});
-						}
+					if (dateInactive.current === null) {
+						dateInactive.current = dayjs();
+					} else if (
+						dayjs().diff(dateInactive.current, 'minute') >= INACTIVE_MINUTES
+					) {
+						history.push({
+							pathname: 'inactive',
+							state: true,
+						});
 					}
-				} else {
-					// Reset the counter and inactivity tracking when data is not 0
-					counter.current = 0;
-					refetchInterval.current = REFETCH_INTERVAL_SHORT_MS;
-					dateInactive.current = null;
 				}
-
-				console.log('Counter:', counter.current);
+			} else {
+				// Reset the counter and inactivity tracking when data is not 0
+				counter.current = 0;
+				refetchInterval.current = REFETCH_INTERVAL_SHORT_MS;
+				dateInactive.current = null;
 			}
+
+			console.log('Counter:', counter.current);
 
 			return response;
 		},
