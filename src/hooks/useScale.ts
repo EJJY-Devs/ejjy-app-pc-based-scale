@@ -14,11 +14,11 @@ import {
 import { useWeightStore } from 'stores';
 import { CamelCasedProperties } from 'type-fest';
 
-const REFETCH_INTERVAL_SHORT_MS = 5;
+const REFETCH_INTERVAL_SHORT_MS = 8;
 const REFETCH_INTERVAL_LONG_MS = 1000;
 
 const THRESHOLD_LENGTH_MS = 5000;
-const THRESHOLD_LENGTH = THRESHOLD_LENGTH_MS / REFETCH_INTERVAL_SHORT_MS;
+const THRESHOLD_LENGTH = 1000;
 
 const INACTIVE_MINUTES = 10;
 
@@ -40,12 +40,8 @@ export const useWeight = () => {
 			);
 
 			if (response) {
-				const { data } = response;
-
-				if (data === 0) {
+				if (weight === 0) {
 					counter.current += 1;
-
-					console.log('Counter:', counter.current);
 
 					if (counter.current > THRESHOLD_LENGTH) {
 						refetchInterval.current = REFETCH_INTERVAL_LONG_MS;
@@ -67,6 +63,8 @@ export const useWeight = () => {
 					refetchInterval.current = REFETCH_INTERVAL_SHORT_MS;
 					dateInactive.current = null;
 				}
+
+				console.log('Counter:', counter.current);
 			}
 
 			return response;
