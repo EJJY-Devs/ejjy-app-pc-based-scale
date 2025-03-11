@@ -1,8 +1,5 @@
 {
 	"editor.formatOnSave": true,
-	"search.exclude": {
-		"**/api": true
-	},
 	"typescript.preferences.importModuleSpecifier": "non-relative",
 	"tailwindCSS.experimental.classRegex": [
 		["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
