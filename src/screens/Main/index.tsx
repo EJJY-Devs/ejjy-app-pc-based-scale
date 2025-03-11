@@ -72,7 +72,7 @@ const Main = () => {
 	useEffect(() => {
 		if (currentProduct && branchProductsData?.list) {
 			const branchProduct = branchProductsData?.list.find(
-				({ product }) => product.id === currentProduct.id,
+				({ product }) => product?.id === currentProduct?.product?.id,
 			);
 
 			if (branchProduct) {
