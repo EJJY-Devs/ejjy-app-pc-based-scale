@@ -98,9 +98,7 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		}
 
 		// Get code
-		const code =
-			currentProduct?.product.selling_barcode ||
-			currentProduct?.product.barcode;
+		const code = '*' + currentProduct?.product.barcode;
 
 		await printProduct({
 			name: formatPrintDetails(currentProduct?.product.name),
