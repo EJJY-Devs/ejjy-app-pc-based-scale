@@ -98,14 +98,14 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		}
 
 		// Get code
-		const code = '*' + currentProduct?.product.barcode;
+		const code = currentProduct?.product.barcode;
 
 		await printProduct({
 			name: formatPrintDetails(currentProduct?.product.name),
 			weight: `${formatZeroToO(roundedWeight)}kg`,
 			price: `P${formatZeroToO(currentProduct?.price_per_piece?.toFixed(2) || price?.toFixed(2))}`,
 			totalPrice: `P${formatZeroToO(total)}`,
-			code: `${priceCode}${code}${formattedWeight}`,
+			code: `*${priceCode}${code}${formattedWeight}`,
 			branchName: formatPrintDetails(getBranchName()),
 			companyName: formatPrintDetails(getCompanyName()),
 		});
