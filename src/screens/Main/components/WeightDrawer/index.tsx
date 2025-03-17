@@ -94,7 +94,7 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 				currentProduct?.price_markdown?.type ||
 				currentProduct?.markdownType ||
 				markdownTypes.REGULAR;
-			priceCode = priceCodes[type] || '';
+			priceCode = priceCodes[type] || 'R';
 		}
 
 		// Get code
@@ -105,7 +105,7 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 			weight: `${formatZeroToO(roundedWeight)}kg`,
 			price: `P${formatZeroToO(currentProduct?.price_per_piece?.toFixed(2) || price?.toFixed(2))}`,
 			totalPrice: `P${formatZeroToO(total)}`,
-			code: `*${priceCode}${code}${formattedWeight}`,
+			code: `W${code}${formattedWeight}`,
 			branchName: formatPrintDetails(getBranchName()),
 			companyName: formatPrintDetails(getCompanyName()),
 		});
