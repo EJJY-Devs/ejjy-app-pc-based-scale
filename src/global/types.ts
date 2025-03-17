@@ -11,7 +11,7 @@ export const discountTypes = {
 };
 
 export const priceCodes = {
-	[markdownTypes.REGULAR]: 'W',
+	[markdownTypes.REGULAR]: 'R',
 	[markdownTypes.WHOLESALE]: 'X',
 	[markdownTypes.SPECIAL]: 'Y',
 	[markdownTypes.CUSTOM]: 'Z',
