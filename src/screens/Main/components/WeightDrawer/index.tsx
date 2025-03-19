@@ -81,10 +81,12 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		);
 
 		// Get weight
-		const roundedWeight = formatWeight(weight); // Always 3 decimal places
-		const weightStr = roundedWeight.replace('.', ''); // Remove decimal
-		const formattedWeight = _.padStart(weightStr, 5, '0') + '0'; // Ensure 6 digits
-
+		const roundedWeight = formatWeight(weight);
+		const formattedWeight = _.padStart(
+			`${roundedWeight.replace('.', '')}`,
+			6,
+			'0',
+		);
 		// Get price code
 		// let priceCode = '';
 		// if (getPriceCodeFeature()) {
@@ -98,16 +100,12 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		// Get code
 		const code = currentProduct?.product.textcode;
 
-		const formattedCode = String(code).padStart(6, '0');
-
-		console.log(`${formattedCode}${formattedWeight}`);
-
 		await printProduct({
 			name: formatPrintDetails(currentProduct?.product.name),
 			weight: `${formatZeroToO(roundedWeight)}kg`,
 			price: `P${formatZeroToO(currentProduct?.price_per_piece?.toFixed(2) || price?.toFixed(2))}`,
 			totalPrice: `P${formatZeroToO(total)}`,
-			code: `111${formattedCode}${formattedWeight}`,
+			code: `1111${code}${formattedWeight}`,
 			branchName: formatPrintDetails(getBranchName()),
 			companyName: formatPrintDetails(getCompanyName()),
 		});
