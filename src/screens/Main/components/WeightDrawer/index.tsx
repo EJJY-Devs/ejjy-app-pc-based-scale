@@ -26,9 +26,8 @@ type Props = {
 
 export const WeightDrawer = ({ branchProducts }: Props) => {
 	// CUSTOM HOOKS
-	// const { weight } = useWeightStore();
+	const { weight } = useWeightStore();
 
-	const weight = 100;
 	const { mutateAsync: printProduct, isLoading: isPrintingProduct } =
 		usePrintProduct({
 			onError: () => {
@@ -46,17 +45,17 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 	const { price, resetPrice } = usePriceStore();
 
 	// METHODS
-	// useEffect(() => {
-	// 	if (weight === 0) {
-	// 		if (currentProduct) {
-	// 			resetCurrentProduct();
-	// 		}
+	useEffect(() => {
+		if (weight === 0) {
+			if (currentProduct) {
+				resetCurrentProduct();
+			}
 
-	// 		if (price) {
-	// 			resetPrice();
-	// 		}
-	// 	}
-	// }, [weight]);
+			if (price) {
+				resetPrice();
+			}
+		}
+	}, [weight]);
 
 	const handleSelectProduct = (branchProduct: BranchProduct) => {
 		const foundProduct = transactionProducts.find(
@@ -102,12 +101,14 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		// Get code
 		const code = currentProduct?.product.barcode;
 
+		const formattedCode = String(code).padStart(6, '0');
+
 		await printProduct({
 			name: formatPrintDetails(currentProduct?.product.name),
 			weight: `${formatZeroToO(roundedWeight)}kg`,
 			price: `P${formatZeroToO(currentProduct?.price_per_piece?.toFixed(2) || price?.toFixed(2))}`,
 			totalPrice: `P${formatZeroToO(total)}`,
-			code: String(`OOI${code}${formattedWeight}`),
+			code: `111${formattedCode}${formattedWeight}`,
 			branchName: formatPrintDetails(getBranchName()),
 			companyName: formatPrintDetails(getCompanyName()),
 		});
