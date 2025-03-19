@@ -96,11 +96,11 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		// }
 
 		// Get code
-		const code = currentProduct?.product.barcode;
+		const code = currentProduct?.product.textcode;
 
 		const formattedCode = String(code).padStart(6, '0');
 
-		console.log(`${code}${formattedWeight}`);
+		console.log(`${formattedCode}${formattedWeight}`);
 
 		await printProduct({
 			name: formatPrintDetails(currentProduct?.product.name),
