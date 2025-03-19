@@ -24,7 +24,9 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 
 	// CUSTOM HOOKS
 	// const { validateUser, status: authStatus } = useAuth();
-	const { weight } = useWeightStore();
+	// const { weight } = useWeightStore();
+
+	const weight = 100;
 	const { currentProduct, addProduct, setCurrentProduct, resetCurrentProduct } =
 		useCurrentTransactionStore();
 
@@ -42,20 +44,20 @@ export const WeightProductDetails = ({ onPrint }: Props) => {
 		});
 	};
 
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setDisplayedWeight((prev) => {
-				if (weight > prev) {
-					return Math.min(prev + 0.1, weight); // Increase towards actual weight
-				} else if (weight < prev) {
-					return Math.max(prev - 0.1, weight); // Decrease towards actual weight
-				}
-				return prev; // No change if already equal
-			});
-		}, 10); // Adjust timing as needed
+	// useEffect(() => {
+	// 	const interval = setInterval(() => {
+	// 		setDisplayedWeight((prev) => {
+	// 			if (weight > prev) {
+	// 				return Math.min(prev + 0.1, weight); // Increase towards actual weight
+	// 			} else if (weight < prev) {
+	// 				return Math.max(prev - 0.1, weight); // Decrease towards actual weight
+	// 			}
+	// 			return prev; // No change if already equal
+	// 		});
+	// 	}, 10); // Adjust timing as needed
 
-		return () => clearInterval(interval); // Cleanup on unmount
-	}, [weight]); // Depend only on weight
+	// 	return () => clearInterval(interval); // Cleanup on unmount
+	// }, [weight]); // Depend only on weight
 
 	// const getDiscount = useCallback(() => {
 	// 	let discount = 0;

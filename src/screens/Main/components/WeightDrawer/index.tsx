@@ -26,7 +26,9 @@ type Props = {
 
 export const WeightDrawer = ({ branchProducts }: Props) => {
 	// CUSTOM HOOKS
-	const { weight } = useWeightStore();
+	// const { weight } = useWeightStore();
+
+	const weight = 100;
 	const { mutateAsync: printProduct, isLoading: isPrintingProduct } =
 		usePrintProduct({
 			onError: () => {
@@ -44,17 +46,17 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 	const { price, resetPrice } = usePriceStore();
 
 	// METHODS
-	useEffect(() => {
-		if (weight === 0) {
-			if (currentProduct) {
-				resetCurrentProduct();
-			}
+	// useEffect(() => {
+	// 	if (weight === 0) {
+	// 		if (currentProduct) {
+	// 			resetCurrentProduct();
+	// 		}
 
-			if (price) {
-				resetPrice();
-			}
-		}
-	}, [weight]);
+	// 		if (price) {
+	// 			resetPrice();
+	// 		}
+	// 	}
+	// }, [weight]);
 
 	const handleSelectProduct = (branchProduct: BranchProduct) => {
 		const foundProduct = transactionProducts.find(
@@ -88,14 +90,14 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		);
 
 		// Get price code
-		let priceCode = '';
-		if (getPriceCodeFeature()) {
-			const type =
-				currentProduct?.price_markdown?.type ||
-				currentProduct?.markdownType ||
-				markdownTypes.REGULAR;
-			priceCode = priceCodes[type] || 'R';
-		}
+		// let priceCode = '';
+		// if (getPriceCodeFeature()) {
+		// 	const type =
+		// 		currentProduct?.price_markdown?.type ||
+		// 		currentProduct?.markdownType ||
+		// 		markdownTypes.REGULAR;
+		// 	priceCode = priceCodes[type] || 'R';
+		// }
 
 		// Get code
 		const code = currentProduct?.product.barcode;
@@ -105,7 +107,7 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 			weight: `${formatZeroToO(roundedWeight)}kg`,
 			price: `P${formatZeroToO(currentProduct?.price_per_piece?.toFixed(2) || price?.toFixed(2))}`,
 			totalPrice: `P${formatZeroToO(total)}`,
-			code: `W${priceCode}${code}${formattedWeight}`,
+			code: `001${code}${formattedWeight}`,
 			branchName: formatPrintDetails(getBranchName()),
 			companyName: formatPrintDetails(getCompanyName()),
 		});
