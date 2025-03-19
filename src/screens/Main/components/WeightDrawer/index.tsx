@@ -107,7 +107,7 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 			weight: `${formatZeroToO(roundedWeight)}kg`,
 			price: `P${formatZeroToO(currentProduct?.price_per_piece?.toFixed(2) || price?.toFixed(2))}`,
 			totalPrice: `P${formatZeroToO(total)}`,
-			code: `001${code}${formattedWeight}`,
+			code: String(`OOI${code}${formattedWeight}`),
 			branchName: formatPrintDetails(getBranchName()),
 			companyName: formatPrintDetails(getCompanyName()),
 		});
