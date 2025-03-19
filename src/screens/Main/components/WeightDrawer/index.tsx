@@ -81,12 +81,9 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		);
 
 		// Get weight
-		const roundedWeight = formatWeight(weight);
-		const formattedWeight = _.padStart(
-			`${roundedWeight.replace('.', '')}0`,
-			6,
-			'0',
-		);
+		const roundedWeight = formatWeight(weight); // Always 3 decimal places
+		const weightStr = roundedWeight.replace('.', ''); // Remove decimal
+		const formattedWeight = _.padStart(weightStr, 5, '0') + '0'; // Ensure 6 digits
 
 		// Get price code
 		// let priceCode = '';
@@ -102,6 +99,8 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		const code = currentProduct?.product.barcode;
 
 		const formattedCode = String(code).padStart(6, '0');
+
+		console.log(`${code}${formattedWeight}`);
 
 		await printProduct({
 			name: formatPrintDetails(currentProduct?.product.name),
