@@ -83,7 +83,8 @@ export const WeightProductSelection = ({
 			);
 
 			setDataSource(
-				productCategoriesData.list
+				[...productCategoriesData.list]
+					.sort((a, b) => a.priority_level - b.priority_level) // Ascending by priority_level
 					.map((productCategory) => ({
 						id: productCategory.id,
 						title: productCategory.name,
