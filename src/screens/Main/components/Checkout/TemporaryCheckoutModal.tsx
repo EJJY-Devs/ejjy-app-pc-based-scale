@@ -68,12 +68,12 @@ export const TemporaryCheckoutModal = ({ onClose }: Props) => {
 		const { data: transaction } = await createTransaction({
 			branchMachineId: Number(getBranchMachineId()),
 			tellerId: user?.id as number, // TODO: Temporarily added a guard since login page is temporarily disabled
-			products: checkedOutProducts.map((product) => ({
-				product_id: product.id,
-				quantity: Number(product.weight),
-				price_per_piece: product.price_per_piece,
-				discount_per_piece: product?.discount || 0,
-			})),
+			// products: checkedOutProducts.map((product) => ({
+			// 	product_id: product.id,
+			// 	quantity: Number(product.weight),
+			// 	price_per_piece: product.price_per_piece,
+			// 	discount_per_piece: product?.discount || 0,
+			// })),
 			invoiceType: '',
 		});
 

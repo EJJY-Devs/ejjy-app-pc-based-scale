@@ -51,5 +51,5 @@ export const formatPrintDetails = (detail: string) => {
 	return formattedDetail;
 };
 
-export const formatWeight = (weight: string | number) =>
-	Number(weight).toFixed(3);
+export const formatWeight = (weight: string | number): string =>
+	(Math.floor(Number(weight) * 1000) / 1000).toFixed(3);

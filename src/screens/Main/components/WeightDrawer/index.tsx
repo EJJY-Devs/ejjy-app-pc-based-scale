@@ -1,6 +1,5 @@
 import { message, Spin } from 'antd';
-import { BranchProduct, markdownTypes, standardRound } from 'ejjy-global';
-import { priceCodes } from 'global';
+import { BranchProduct, standardRound } from 'ejjy-global';
 import { usePrintProduct, useWeight } from 'hooks';
 import _ from 'lodash';
 import React, { useEffect } from 'react';
@@ -15,7 +14,6 @@ import {
 	formatZeroToO,
 	getBranchName,
 	getCompanyName,
-	getPriceCodeFeature,
 } from 'utils/function';
 import { WeightProductDetails } from './WeightProductDetails';
 import { WeightProductSelection } from './WeightProductSelection';
@@ -98,14 +96,14 @@ export const WeightDrawer = ({ branchProducts }: Props) => {
 		// }
 
 		// Get code
-		const code = currentProduct?.product.textcode;
+		const code = currentProduct?.product.scale_code;
 
 		await printProduct({
 			name: formatPrintDetails(currentProduct?.product.name),
 			weight: `${formatZeroToO(roundedWeight)}kg`,
 			price: `P${formatZeroToO(currentProduct?.price_per_piece?.toFixed(2) || price?.toFixed(2))}`,
 			totalPrice: `P${formatZeroToO(total)}`,
-			code: `1111${code}${formattedWeight}`,
+			code: `111${code}${formattedWeight}`,
 			branchName: formatPrintDetails(getBranchName()),
 			companyName: formatPrintDetails(getCompanyName()),
 		});
