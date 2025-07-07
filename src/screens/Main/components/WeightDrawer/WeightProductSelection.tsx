@@ -4,7 +4,7 @@ import { ColumnsType } from 'antd/lib/table/interface';
 import {
 	LamasAmountModal,
 	ScaleButton,
-	WeightTextcodeModal,
+	WeightScaleCodeModal,
 	PriceAmountModal,
 } from 'components';
 import { ButtonIcon, ControlledInput, Label } from 'components/elements';
@@ -37,16 +37,6 @@ const columns: ColumnsType = [
 	},
 ];
 
-type TableRow = {
-	id: number;
-	title: string;
-	dataSource: {
-		id: number;
-		description: string;
-		action: React.ReactElement;
-	}[];
-};
-
 type Props = {
 	branchProducts: BranchProduct[];
 	onSelectProduct: (product: BranchProduct) => void;
@@ -57,7 +47,7 @@ export const WeightProductSelection = ({
 	onSelectProduct,
 }: Props) => {
 	// STATES
-	const [textcodeModalVisible, setTextcodeModalVisible] = useState(false);
+	const [scaleCodeModalVisible, setScaleCodeModalVisible] = useState(false);
 	const [lamasAmountModalVisible, setLamasAmountModalVisible] = useState(false);
 	const [priceAmountModalVisible, setPriceAmountModalVisible] = useState(false);
 	const [dataSource, setDataSource] = useState([]);
@@ -179,8 +169,8 @@ export const WeightProductSelection = ({
 					<ScaleButton
 						className="col-span-4 h-button"
 						disabled={weight === 0}
-						title="Input Textcode"
-						onClick={() => setTextcodeModalVisible(true)}
+						title="Input Scale Code"
+						onClick={() => setScaleCodeModalVisible(true)}
 					/>
 					<ScaleButton
 						className="col-span-4 h-button"
@@ -197,9 +187,9 @@ export const WeightProductSelection = ({
 				</div>
 			</div>
 
-			{textcodeModalVisible && (
-				<WeightTextcodeModal
-					onClose={() => setTextcodeModalVisible(false)}
+			{scaleCodeModalVisible && (
+				<WeightScaleCodeModal
+					onClose={() => setScaleCodeModalVisible(false)}
 					onSelectProduct={onSelectProduct}
 				/>
 			)}

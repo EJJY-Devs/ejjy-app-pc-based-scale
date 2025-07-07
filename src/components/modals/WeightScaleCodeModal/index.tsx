@@ -8,7 +8,7 @@ import { useCurrentTransactionStore } from 'stores';
 import { cn } from 'utils';
 import { getBranchId } from 'utils/function';
 
-const TEXTCODE_MAX_LENGTH = 10;
+const SCALECODE_MAX_LENGTH = 10;
 const NUMPAD_CLEAR = -1;
 const inputs = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
 
@@ -17,9 +17,9 @@ type Props = {
 	onClose: () => void;
 };
 
-export const WeightTextcodeModal = ({ onSelectProduct, onClose }: Props) => {
+export const WeightScaleCodeModal = ({ onSelectProduct, onClose }: Props) => {
 	// STATES
-	const [textcode, setTextcode] = useState('');
+	const [scaleCode, setScaleCode] = useState('');
 
 	// CUSTOM HOOKS
 	const { transactionProducts } = useCurrentTransactionStore();
@@ -28,10 +28,10 @@ export const WeightTextcodeModal = ({ onSelectProduct, onClose }: Props) => {
 			params: {
 				branchId: Number(getBranchId()),
 				isShownInScaleList: true,
-				ordering: '-product__textcode',
 				page: DEFAULT_PAGE,
 				pageSize: MAX_PAGE_SIZE,
-				search: textcode,
+				search: scaleCode,
+				searchBy: 'scale_code',
 			},
 			options: {
 				enabled: false,
@@ -43,7 +43,7 @@ export const WeightTextcodeModal = ({ onSelectProduct, onClose }: Props) => {
 					}
 
 					const branchProduct = data.list.find(
-						(item) => item.product.textcode === textcode,
+						(item) => item.product.scale_code === scaleCode,
 					);
 
 					if (!branchProduct) {
@@ -83,17 +83,17 @@ export const WeightTextcodeModal = ({ onSelectProduct, onClose }: Props) => {
 	// METHODS
 	const handleNumpadInput = (key: number) => {
 		if (key === NUMPAD_CLEAR) {
-			setTextcode((value) =>
+			setScaleCode((value) =>
 				value.length > 0 ? value.substring(0, value.length - 1) : '',
 			);
 		} else {
-			setTextcode((value) => `${value}${key}`);
+			setScaleCode((value) => `${value}${key}`);
 		}
 	};
 
 	const handleSubmit = () => {
-		if (textcode.length === 0) {
-			message.warning('Please input a textcode first.');
+		if (scaleCode.length === 0) {
+			message.warning('Please input a scale code first.');
 			return;
 		}
 
@@ -103,7 +103,7 @@ export const WeightTextcodeModal = ({ onSelectProduct, onClose }: Props) => {
 	return (
 		<Modal
 			footer={null}
-			title="Search Product By Textcode"
+			title="Search Product By Scale Code"
 			centered
 			closable
 			visible
@@ -112,9 +112,9 @@ export const WeightTextcodeModal = ({ onSelectProduct, onClose }: Props) => {
 			<div className="grid w-full grid-cols-3 grid-rows-5 gap-3">
 				<ControlledInput
 					className="col-span-3 col-start-1 text-center text-4xl font-bold text-dark"
-					value={textcode}
+					value={scaleCode}
 					disabled
-					onChange={(value: string) => setTextcode(value)}
+					onChange={(value: string) => setScaleCode(value)}
 				/>
 
 				{inputs.map((number) => (
@@ -123,7 +123,7 @@ export const WeightTextcodeModal = ({ onSelectProduct, onClose }: Props) => {
 						className={cn('h-20 text-[2rem]', {
 							'col-span-2 col-start-1': number === 0,
 						})}
-						disabled={textcode.length >= TEXTCODE_MAX_LENGTH}
+						disabled={scaleCode.length >= SCALECODE_MAX_LENGTH}
 						title={String(number)}
 						onClick={() => handleNumpadInput(number)}
 					/>
@@ -131,9 +131,9 @@ export const WeightTextcodeModal = ({ onSelectProduct, onClose }: Props) => {
 
 				<ScaleButton
 					className={cn('h-20 text-[2rem]', {
-						'bg-red-500  text-white': textcode.length > 0,
+						'bg-red-500  text-white': scaleCode.length > 0,
 					})}
-					disabled={textcode.length === 0}
+					disabled={scaleCode.length === 0}
 					title="C"
 					onClick={() => handleNumpadInput(-1)}
 				/>
