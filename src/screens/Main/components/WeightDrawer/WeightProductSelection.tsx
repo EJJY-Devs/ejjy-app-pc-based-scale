@@ -26,8 +26,8 @@ const columns: ColumnsType = [
 		dataIndex: 'description',
 	},
 	{
-		title: 'SKU/Textcode',
-		dataIndex: 'textcode',
+		title: 'Scale Code',
+		dataIndex: 'scaleCode',
 		align: 'center',
 	},
 	{
@@ -93,7 +93,10 @@ export const WeightProductSelection = ({
 		category: string,
 	) =>
 		availableBranchProducts
-			.filter(({ product }) => product?.product_category === category)
+			.filter(
+				({ product }) =>
+					product?.product_category === category && product?.scale_code,
+			)
 			.map((branchProduct) => {
 				const {
 					product,
@@ -106,7 +109,7 @@ export const WeightProductSelection = ({
 				return {
 					id: branchProduct.id,
 					description: product.name,
-					textcode: product.textcode,
+					scaleCode: product.scale_code,
 					action: (
 						<div className="flex items-center justify-center">
 							<ButtonIcon
